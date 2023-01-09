@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Basic ThreeJS APP</title>
+    <style>
+        body {
+            /* set margin to 0 and overflow to hidden, to use the complete page */
+            margin: 0;
+            overflow: hidden;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- HTML body will hold the Output -->
+
+    <script type="module">
+        import * as THREE from './libs/three.module.js';
+        import * as CONTROLS from './libs/OrbitControls.js';
+        import * as BufferGeometryUtils from './libs/BufferGeometryUtils.js';
+
+        let camera, scene, renderer;
+        let treeTronk, treeTronk2, treeTronk3;
+        let treeGalho, treeGalho2, treeGalho3;
+        let treeFolhas, treeFolhas2, treeFolhas3, treeFolhas4, treeFolhas5, treeFolhas6, treeFolhas7, treeFolhas8;
+
+        let materialTronk, materialFolhas;
+
+        let controls;
+
+        window.onload = function init() {
+            
+            scene = new THREE.Scene();
+
+            const aspect = window.innerWidth / window.innerHeight;
+            camera = new THREE.PerspectiveCamera(75, aspect, 0.1, 10);
+            camera.position.y = 2;
+            camera.position.z = 8;
+            camera.lookAt(scene.position);
+            
+            
+            renderer = new THREE.WebGLRenderer({ antialias: false }); 
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            
+            controls = new CONTROLS.OrbitControls(camera, renderer.domElement)
+            
+            renderer.setClearColor("#000000");
+            document.body.appendChild(renderer.domElement);
+
+            // troonco
+            materialTronk = new THREE.MeshNormalMaterial({ wireframe: false });
+
+            let geometryTronk1 = new THREE.CylinderGeometry(0.1,0.15,1.5,7)
+            treeTronk = new THREE.Mesh(geometryTronk1, materialTronk);
+            treeTronk.position.set(0,0,0)
+            treeTronk.rotation.z = 0.1
+            
+            let geometryTronk2 = new THREE.CylinderGeometry(0.09,0.1,1,5)
+            treeTronk2 = new THREE.Mesh(geometryTronk2, materialTronk);
+            treeTronk2.position.set(0.24,1.15,0)
+            treeTronk.add(treeTronk2)
+            treeTronk2.rotation.z = -0.5
+            
+            let geometryTronk3 = new THREE.CylinderGeometry(0.04,0.08,1.2, 5)
+            treeTronk3 = new THREE.Mesh(geometryTronk3, materialTronk);
+            treeTronk3.position.set(-0.12,1.05,0)
+            treeTronk2.add(treeTronk3)
+            treeTronk3.rotation.z = 0.2
+
+            let geometryTreeGalho = new THREE.CylinderGeometry(0.03,0.07,0.9,7)
+            treeGalho = new THREE.Mesh(geometryTreeGalho, materialTronk)
+            treeGalho.position.set(-0.27,0.3,-0.28)
+            treeGalho.rotation.z = 1.2
+            treeGalho.rotation.y = -0.8
+            treeTronk2.add(treeGalho)
+
+            let geometryTreeGalho2 = new THREE.CylinderGeometry(0.04,0.07,0.9,7)
+            treeGalho2 = new THREE.Mesh(geometryTreeGalho2, materialTronk)
+            treeGalho2.position.set(0.2,0.55,0.25)
+            treeGalho2.rotation.z = 1
+            treeGalho2.rotation.y = 2.2
+            treeTronk.add(treeGalho2)
+
+            let geometryTreeGalho3 = new THREE.CylinderGeometry(0.03,0.04,0.55,7)
+            treeGalho3 = new THREE.Mesh(geometryTreeGalho3, materialTronk)
+            treeGalho3.position.set(0.12,0.65,0)
+            treeGalho3.rotation.z = -0.5
+            treeGalho3.rotation.y = 0
+            treeGalho2.add(treeGalho3)
+
+            // folhas
+            materialFolhas = new THREE.MeshNormalMaterial({ wireframe: false });
+            const geometryFolhas = []
+
+            let geometryTreeFolhas = new THREE.IcosahedronGeometry(1, 0);
+            treeFolhas = new THREE.Mesh(geometryTreeFolhas, materialFolhas)
+            treeFolhas.position.set(1.75,0.25,0)
+            treeGalho.add(treeFolhas)
+            geometryFolhas.push(geometryTreeFolhas)
+            
+            let geometryTreeFolhas2 = new THREE.IcosahedronGeometry(0.7, 0);
+            treeFolhas2 = new THREE.Mesh(geometryTreeFolhas2, materialFolhas)
+            treeFolhas2.position.set(-0.7,0.4,0)
+            treeFolhas2.rotation.z = 2.4
+            treeFolhas.add(treeFolhas2)
+            geometryFolhas.push(geometryTreeFolhas2)
+            
+            let geometryTreeFolhas3 = new THREE.IcosahedronGeometry(0.75, 0);
+            treeFolhas3 = new THREE.Mesh(geometryTreeFolhas3, materialFolhas)
+            treeFolhas3.position.set(-0.2,-0.6,-0.6)
+            treeFolhas3.rotation.z = 0.4
+            treeFolhas.add(treeFolhas3)
+            geometryFolhas.push(geometryTreeFolhas3)
+            
+            let geometryTreeFolhas4 = new THREE.IcosahedronGeometry(0.85, 0);
+            treeFolhas4 = new THREE.Mesh(geometryTreeFolhas4, materialFolhas)
+            treeFolhas4.position.set(-0.7,0.4,0.7)
+            treeFolhas4.rotation.z = -1.4
+            treeFolhas.add(treeFolhas4)
+            geometryFolhas.push(geometryTreeFolhas4)
+            
+            let geometryTreeFolhas5 = new THREE.IcosahedronGeometry(0.65, 0);
+            treeFolhas5 = new THREE.Mesh(geometryTreeFolhas5, materialFolhas)
+            treeFolhas5.position.set(-1.3,0.2,1.2)
+            treeFolhas5.rotation.z = -2
+            treeFolhas.add(treeFolhas5)
+            geometryFolhas.push(geometryTreeFolhas5)
+            
+            let geometryTreeFolhas6 = new THREE.IcosahedronGeometry(0.5, 0);
+            treeFolhas6 = new THREE.Mesh(geometryTreeFolhas6, materialFolhas)
+            treeFolhas6.position.set(0,0.5,-0.2)
+            treeFolhas6.rotation.z = -2
+            treeGalho.add(treeFolhas6)
+            geometryFolhas.push(geometryTreeFolhas6)
+            
+            let geometryTreeFolhas7 = new THREE.IcosahedronGeometry(0.65, 0);
+            treeFolhas7 = new THREE.Mesh(geometryTreeFolhas7, materialFolhas)
+            treeFolhas7.position.set(0,0.5,0)
+            treeFolhas7.rotation.z = -2
+            treeGalho3.add(treeFolhas7)
+            geometryFolhas.push(geometryTreeFolhas7)
+            
+            let geometryTreeFolhas8 = new THREE.IcosahedronGeometry(0.5, 0);
+            treeFolhas8 = new THREE.Mesh(geometryTreeFolhas8, materialFolhas)
+            treeFolhas8.position.set(0.2,0,-0.7)
+            treeFolhas8.rotation.z = -1.4
+            treeFolhas7.add(treeFolhas8)
+            geometryFolhas.push(geometryTreeFolhas8)
+            
+            /* const axes = new THREE.AxesHelper();
+            treeFolhas8.add(axes) */
+            
+            const folhasGeometry = BufferGeometryUtils.mergeBufferGeometries(geometryFolhas);
+
+            /* for (let i = 0; i < geometryFolhas)
+ */
+            scene.add(treeTronk)
+
+            renderer.setAnimationLoop(render);
+        }
+
+        function render() {
+            renderer.render(scene, camera)
+            controls.update()
+
+            // animation loop galhos
+
+        }
+
+    </script>
+</body>
+
+</html>
