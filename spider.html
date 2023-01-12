@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Basic ThreeJS APP</title>
+    <style>
+        body {
+            /* set margin to 0 and overflow to hidden, to use the complete page */
+            margin: 0;
+            overflow: hidden;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- HTML body will hold the Output -->
+
+    <script type="module">
+        import * as THREE from './libs/three.module.js';
+        import * as CONTROLS from './libs/OrbitControls.js';
+        import * as BufferGeometryUtils from './libs/BufferGeometryUtils.js';
+
+        let camera, scene, renderer;
+
+        let canStatic, materialCAN
+
+        let controls
+
+        let legMovement = 0;
+        let legMovement2, legMovement3;
+
+        let SuperiorLeg1, SuperiorLeg2, SuperiorLeg3, SuperiorLeg4, SuperiorLeg5, SuperiorLeg6, SuperiorLeg7, SuperiorLeg8
+        let InferiorLeg1, InferiorLeg2, InferiorLeg3, InferiorLeg4, InferiorLeg5, InferiorLeg6, InferiorLeg7, InferiorLeg8
+        
+
+        window.onload = function init() {
+            
+            scene = new THREE.Scene();
+            
+            const aspect = window.innerWidth / window.innerHeight;
+            camera = new THREE.PerspectiveCamera(75, aspect, 0.1, 10);
+            camera.position.y = 2;
+            camera.position.z = 8;
+            camera.lookAt(scene.position);
+            
+            
+            renderer = new THREE.WebGLRenderer({ antialias: false }); 
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            
+            controls = new CONTROLS.OrbitControls(camera, renderer.domElement)
+            
+            renderer.setClearColor("#000000");
+            document.body.appendChild(renderer.domElement);
+            
+            const axesHelper = new THREE.AxesHelper( 5 );
+            
+            //TEXTURES
+            const backgroundTexture = new THREE.TextureLoader().load('./maxresdefault.jpg')
+            
+            scene.background = backgroundTexture
+            
+            
+            
+            // LATA
+            materialCAN = new THREE.MeshNormalMaterial({ wireframe: false });
+            let materialSpiderLeg = new THREE.MeshNormalMaterial({ wireframe: false });
+            
+            let CAN = new THREE.CylinderGeometry(1,1,4,32)
+            canStatic = new THREE.Mesh(CAN, materialCAN);
+            canStatic.position.set(0,1,0.021)
+            canStatic.rotation.z = 0 * Math.PI / 180
+            canStatic.rotation.x = -90 * Math.PI / 180
+            
+            //SUPERIOR LEGS
+
+            let spiderSuperiorLeg1 = new THREE.CylinderGeometry(0.15,0.25,1,32)
+            SuperiorLeg1 = new THREE.Mesh(spiderSuperiorLeg1, materialSpiderLeg)
+            SuperiorLeg1.position.set(-1,1.011,0)
+            canStatic.add(SuperiorLeg1)
+            SuperiorLeg1.rotation.x = 220 * Math.PI / 180
+            SuperiorLeg1.rotation.y = 160 * Math.PI / 180
+            SuperiorLeg1.rotation.z = 223.40 * Math.PI / 180
+
+            let spiderSuperiorLeg2 = new THREE.CylinderGeometry(0.15,0.25,1,32)
+            SuperiorLeg2 = new THREE.Mesh(spiderSuperiorLeg2, materialSpiderLeg) 
+            SuperiorLeg2.position.set(-1.154,0.4,0.05)
+            canStatic.add(SuperiorLeg2)
+            SuperiorLeg2.rotation.x = 220 * Math.PI / 180
+            SuperiorLeg2.rotation.y = 158 * Math.PI / 180
+            SuperiorLeg2.rotation.z = 250 * Math.PI / 180
+
+            let spiderSuperiorLeg3 = new THREE.CylinderGeometry(0.15,0.25,1,32)
+            SuperiorLeg3 = new THREE.Mesh(spiderSuperiorLeg2, materialSpiderLeg) 
+            SuperiorLeg3.position.set(-1.154,-0.2,0.05)
+            canStatic.add(SuperiorLeg3)
+            SuperiorLeg3.rotation.x = 165 * Math.PI / 180
+            SuperiorLeg3.rotation.y = 156 * Math.PI / 180
+            SuperiorLeg3.rotation.z = 280 * Math.PI / 180
+            let axesHelper3 = new THREE.AxesHelper( 2 );
+            SuperiorLeg3.add(axesHelper3)
+
+            let spiderSuperiorLeg4 = new THREE.CylinderGeometry(0.15,0.25,1,32)
+            SuperiorLeg4 = new THREE.Mesh(spiderSuperiorLeg2, materialSpiderLeg) 
+            SuperiorLeg4.position.set(-1.154,-0.9,0.05)
+            canStatic.add(SuperiorLeg4)
+            SuperiorLeg4.rotation.x = 165 * Math.PI / 180
+            SuperiorLeg4.rotation.y = 156 * Math.PI / 180
+            SuperiorLeg4.rotation.z = 300 * Math.PI / 180
+            
+            // OTHER SIDE
+            // X = 220 - 180, Y = 160 - 180, Z = 223.40 + 90
+            let spiderSuperiorLeg5 = new THREE.CylinderGeometry(0.15,0.25,1,32)
+            SuperiorLeg5 = new THREE.Mesh(spiderSuperiorLeg1, materialSpiderLeg)
+            SuperiorLeg5.position.set(1,1.011,0)
+            canStatic.add(SuperiorLeg5)
+            SuperiorLeg5.rotation.x = 40 * Math.PI / 180
+            SuperiorLeg5.rotation.y = -20 * Math.PI / 180
+            SuperiorLeg5.rotation.z = 313 * Math.PI / 180
+
+            let spiderSuperiorLeg6 = new THREE.CylinderGeometry(0.15,0.25,1,32)
+            SuperiorLeg6 = new THREE.Mesh(spiderSuperiorLeg1, materialSpiderLeg)
+            SuperiorLeg6.position.set(1.154,0.4,0.05)
+            canStatic.add(SuperiorLeg6)
+            SuperiorLeg6.rotation.x = 40 * Math.PI / 180
+            SuperiorLeg6.rotation.y = -22 * Math.PI / 180
+            SuperiorLeg6.rotation.z = 290 * Math.PI / 180
+
+            let spiderSuperiorLeg7 = new THREE.CylinderGeometry(0.15,0.25,1,32)
+            SuperiorLeg7 = new THREE.Mesh(spiderSuperiorLeg2, materialSpiderLeg) 
+            SuperiorLeg7.position.set(1.154,-0.2,0.05)
+            canStatic.add(SuperiorLeg7)
+            SuperiorLeg7.rotation.x = -15 * Math.PI / 180
+            SuperiorLeg7.rotation.y = -24 * Math.PI / 180
+            SuperiorLeg7.rotation.z = 260 * Math.PI / 180
+
+            let spiderSuperiorLeg8 = new THREE.CylinderGeometry(0.15,0.25,1,32)
+            SuperiorLeg8 = new THREE.Mesh(spiderSuperiorLeg2, materialSpiderLeg) 
+            SuperiorLeg8.position.set(1.154,-0.9,0.05)
+            canStatic.add(SuperiorLeg8)
+            SuperiorLeg8.rotation.x = -15 * Math.PI / 180
+            SuperiorLeg8.rotation.y = -24 * Math.PI / 180
+            SuperiorLeg8.rotation.z = 240 * Math.PI / 180
+
+            //INFERIOR LEGS
+            
+            let spiderInferiorLeg1 = new THREE.CylinderGeometry(0.12, 0.03, 1.8, 32)
+            InferiorLeg1 = new THREE.Mesh(spiderInferiorLeg1, materialSpiderLeg)
+            InferiorLeg1.position.set(-0.25,0.35,-0.8)
+            SuperiorLeg1.add(InferiorLeg1)
+            InferiorLeg1.rotation.x = 50 * Math.PI / 180
+            InferiorLeg1.rotation.y = -60 * Math.PI / 180
+            InferiorLeg1.rotation.z = -31.40 * Math.PI / 180 
+
+            let spiderInferiorLeg2 = new THREE.CylinderGeometry(0.12, 0.03, 1.8, 32)
+            InferiorLeg2 = new THREE.Mesh(spiderInferiorLeg2, materialSpiderLeg)
+            InferiorLeg2.position.set(-0.4,0.65,-0.7)
+            SuperiorLeg2.add(InferiorLeg2)
+            InferiorLeg2.rotation.x = 60 * Math.PI / 180
+            InferiorLeg2.rotation.y = -50 * Math.PI / 180
+            InferiorLeg2.rotation.z = -50.40 * Math.PI / 180
+            
+            let spiderInferiorLeg3 = new THREE.CylinderGeometry(0.12, 0.03, 1.8, 32)
+            InferiorLeg3 = new THREE.Mesh(spiderInferiorLeg2, materialSpiderLeg)
+            InferiorLeg3.position.set(0.05,0.70,-0.8)
+            SuperiorLeg3.add(InferiorLeg3)
+            InferiorLeg3.rotation.x = 60 * Math.PI / 180
+            InferiorLeg3.rotation.y = -96 * Math.PI / 180
+            InferiorLeg3.rotation.z = -45 * Math.PI / 180 
+
+            let spiderInferiorLeg4 = new THREE.CylinderGeometry(0.12, 0.03, 1.8, 32)
+            InferiorLeg4 = new THREE.Mesh(spiderInferiorLeg2, materialSpiderLeg)
+            InferiorLeg4.position.set(-0.155,0.8,-0.8)
+            SuperiorLeg4.add(InferiorLeg4)
+            InferiorLeg4.rotation.x = 60 * Math.PI / 180
+            InferiorLeg4.rotation.y = -75 * Math.PI / 180
+            InferiorLeg4.rotation.z = -50.40 * Math.PI / 180 
+
+            //OTHER SIDE
+
+            let spiderInferiorLeg5 = new THREE.CylinderGeometry(0.12, 0.03, 1.8, 32)
+            InferiorLeg5 = new THREE.Mesh(spiderInferiorLeg1, materialSpiderLeg)
+            InferiorLeg5.position.set(0.25,0.35,-0.8)
+            SuperiorLeg5.add(InferiorLeg5)
+            InferiorLeg5.rotation.x = 50 * Math.PI / 180
+            InferiorLeg5.rotation.y = -120 * Math.PI / 180
+            InferiorLeg5.rotation.z = -31.40 * Math.PI / 180 
+
+            let spiderInferiorLeg6 = new THREE.CylinderGeometry(0.12, 0.03, 1.8, 32)
+            InferiorLeg6 = new THREE.Mesh(spiderInferiorLeg1, materialSpiderLeg)
+            InferiorLeg6.position.set(0.4,0.65,-0.7)
+            SuperiorLeg6.add(InferiorLeg6)
+            InferiorLeg6.rotation.x = 60 * Math.PI / 180
+            InferiorLeg6.rotation.y = -130 * Math.PI / 180
+            InferiorLeg6.rotation.z = -50.40 * Math.PI / 180 
+
+            let spiderInferiorLeg7 = new THREE.CylinderGeometry(0.12, 0.03, 1.8, 32)
+            InferiorLeg7 = new THREE.Mesh(spiderInferiorLeg2, materialSpiderLeg)
+            InferiorLeg7.position.set(-0.03,0.70,-0.8)
+            SuperiorLeg7.add(InferiorLeg7)
+            InferiorLeg7.rotation.x = 60 * Math.PI / 180
+            InferiorLeg7.rotation.y = -85 * Math.PI / 180
+            InferiorLeg7.rotation.z = -45 * Math.PI / 180 
+
+            let spiderInferiorLeg8 = new THREE.CylinderGeometry(0.12, 0.03, 1.8, 32)
+            InferiorLeg8 = new THREE.Mesh(spiderInferiorLeg2, materialSpiderLeg)
+            InferiorLeg8.position.set(0.155,0.8,-0.8)
+            SuperiorLeg8.add(InferiorLeg8)
+            InferiorLeg8.rotation.x = 60 * Math.PI / 180
+            InferiorLeg8.rotation.y = -105 * Math.PI / 180
+            InferiorLeg8.rotation.z = -50.40 * Math.PI / 180 
+
+            scene.add(canStatic)
+
+            scene.add( axesHelper )
+
+            renderer.setAnimationLoop(render);
+        }
+
+        function render() {
+            renderer.render(scene, camera)
+            controls.update()
+
+            // animation loop galhos
+
+        }
+
+        document.addEventListener('keypress', (e) => {
+            if('f' == e.key) {
+                //FORWARD SPIDER LEG 1
+                if(legMovement == 0) { 
+                SuperiorLeg1.rotation.x -= 5 * Math.PI / 180
+                SuperiorLeg1.rotation.y -= 5 * Math.PI / 180
+                SuperiorLeg8.rotation.x -= 5 * Math.PI / 180
+                SuperiorLeg8.rotation.z -= 5 * Math.PI / 180
+                SuperiorLeg4.rotation.x += 5 * Math.PI / 180
+                SuperiorLeg4.rotation.z += 5 * Math.PI / 180
+                SuperiorLeg5.rotation.x += 5 * Math.PI / 180
+                SuperiorLeg5.rotation.y += 5 * Math.PI / 180
+
+                if(legMovement2 == undefined && (SuperiorLeg1.rotation.x == 3.7524578917878086) && (SuperiorLeg1.rotation.y == 2.705260340591211)){
+                    legMovement2 = 0
+                }
+
+                if((SuperiorLeg1.rotation.x == 3.4906585039886595) && (SuperiorLeg1.rotation.y == 2.4434609527920617)){
+                    legMovement = 1
+                }
+                
+                if((SuperiorLeg1.rotation.x == 3.577924966588376) && (SuperiorLeg1.rotation.y == 2.530727415391778)){
+                    legMovement3 = 1
+                }
+
+                
+             }   
+             if(legMovement == 1){
+                SuperiorLeg1.rotation.x += 5 * Math.PI / 180
+                SuperiorLeg1.rotation.y += 5 * Math.PI / 180
+                SuperiorLeg8.rotation.x += 5 * Math.PI / 180
+                SuperiorLeg8.rotation.z += 5 * Math.PI / 180
+                SuperiorLeg4.rotation.x -= 5 * Math.PI / 180
+                SuperiorLeg4.rotation.z -= 5 * Math.PI / 180
+                SuperiorLeg5.rotation.x -= 5 * Math.PI / 180
+                SuperiorLeg5.rotation.y -= 5 * Math.PI / 180
+
+                if((SuperiorLeg1.rotation.x == 4.1887902047863905) && (SuperiorLeg1.rotation.y == 3.1415926535897927)){
+                    legMovement = 0
+                }
+            }
+
+                //FORWARD SPIDER LEG 2
+                if(legMovement2 == 0) { 
+                SuperiorLeg2.rotation.x -= 5 * Math.PI / 180
+                SuperiorLeg2.rotation.y -= 5 * Math.PI / 180
+                SuperiorLeg7.rotation.x -= 5 * Math.PI / 180
+                SuperiorLeg7.rotation.z -= 5 * Math.PI / 180
+                SuperiorLeg3.rotation.x += 5 * Math.PI / 180
+                SuperiorLeg3.rotation.z += 5 * Math.PI / 180
+                SuperiorLeg6.rotation.x += 5 * Math.PI / 180
+                SuperiorLeg6.rotation.z += 5 * Math.PI / 180 
+
+                if((SuperiorLeg2.rotation.x == 3.577924966588376) && (SuperiorLeg2.rotation.y == 2.4958208303518914)){
+                    legMovement2 = 1
+                }
+                
+                }   
+                
+                if(legMovement2 == 1){
+                SuperiorLeg2.rotation.x += 5 * Math.PI / 180
+                SuperiorLeg2.rotation.y += 5 * Math.PI / 180
+                SuperiorLeg7.rotation.x += 5 * Math.PI / 180
+                SuperiorLeg7.rotation.z += 5 * Math.PI / 180
+                SuperiorLeg3.rotation.x -= 5 * Math.PI / 180
+                SuperiorLeg3.rotation.z -= 5 * Math.PI / 180
+                SuperiorLeg6.rotation.x -= 5 * Math.PI / 180
+                SuperiorLeg6.rotation.z -= 5 * Math.PI / 180
+
+                if((SuperiorLeg2.rotation.x == 4.101523742186674) && (SuperiorLeg2.rotation.y == 3.0194196059501897)){
+                    legMovement2 = 0
+                }
+
+                }
+                 
+   
+        }
+    })
+
+    </script>
+</body>
+
+</html>
