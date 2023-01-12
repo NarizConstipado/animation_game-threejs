@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script type="module">
+        import * as THREE from './libs/three.module.js';
+        import * as CONTROLS from './libs/OrbitControls.js';
+        import * as BufferGeometryUtils from './libs/BufferGeometryUtils.js';
+
+        let camera, scene, renderer;
+        let character,
+            body, eye_left, eye_right, inside_body,
+            arm_left, arm_right, leg_left, leg_right,
+            arm_point_left, arm_point_right, leg_point_left, leg_point_right;
+
+        let material_body, material_inside_body, material_eye, material_leg;
+
+        let controls
+
+        window.onload = () => {
+            scene = new THREE.Scene();
+
+            const aspect = window.innerWidth / window.innerHeight;
+            camera = new THREE.PerspectiveCamera(75, aspect, 0.1, 10);
+            camera.position.y = 2;
+            camera.position.z = 8;
+            camera.lookAt(scene.position);
+
+            renderer = new THREE.WebGLRenderer({ antilias: false });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+
+            controls = new CONTROLS.OrbitControls(camera, renderer.domElement)
+
+            renderer.setClearColor("#000000");
+            document.body.appendChild(renderer.domElement);
+
+            //KARBY REGION
+            material_body = new THREE.MeshBasicMaterial({ wireframe: false });
+            material_inside_body = new THREE.MeshBasicMaterial({ wireframe: false });
+            material_eye = new THREE.MeshBasicMaterial({ wireframe: false });
+            material_leg = new THREE.MeshBasicMaterial({ wireframe: false });
+            material_body.color = new THREE.Color("rgb(252,39,209)")
+            material_inside_body.color = new THREE.Color("rgb(175,3,64)")
+            material_inside_body.side = THREE.BackSide
+            material_eye.color = new THREE.Color("rgb(0,0,0)")
+            material_leg.color = new THREE.Color("rgb(175,3,64)")
+            character = new THREE.Mesh();
+
+            body = new THREE.Mesh(new THREE.SphereGeometry(1, 32, 16, 0, Math.PI * 2, 0, Math.PI / 180 * 175), material_body);
+            // body = new THREE.Mesh(new THREE.SphereGeometry(1, 32, 16, 0, Math.PI * 2, 0, Math.PI / 180 * 130.4), material_body);
+            body.rotation.x = -80 * Math.PI / 180;
+            character.add(body)
+
+            // inside_body = new THREE.Mesh(new THREE.SphereGeometry(1, 32, 16, 0, Math.PI * 2, 0, Math.PI), material_inside_body);
+            // inside_body.scale.set(0.98, 0.98, 0.98)
+            inside_body = new THREE.Mesh(new THREE.CircleGeometry(0.78, 32), material_leg)
+            inside_body.position.set(0, -0.1, 0.6)
+            inside_body.rotation.x = 10 * Math.PI / 180;
+            character.add(inside_body)
+
+            eye_right = new THREE.Mesh(new THREE.SphereGeometry(1, 32, 16, 0, Math.PI * 2, 0, Math.PI), material_eye);
+            eye_right.position.set(-0.2, 0.3, 0.85)
+            eye_right.rotation.x = -18.4 * Math.PI / 180
+            // eye_right.position.set(-0.2, 0.8, 0.5)
+            // eye_right.rotation.x = -58.4* Math.PI /180
+            eye_right.scale.set(0.1, 0.3, 0.12)
+            character.add(eye_right)
+
+            eye_left = new THREE.Mesh(new THREE.SphereGeometry(1, 32, 16, 0, Math.PI * 2, 0, Math.PI), material_eye);
+            eye_left.position.set(0.2, 0.3, 0.85)
+            eye_left.rotation.x = -18.4 * Math.PI / 180
+            // eye_left.position.set(0.2, 0.8, 0.5)
+            // eye_left.rotation.x = -58.4* Math.PI /180
+            eye_left.scale.set(0.1, 0.3, 0.12)
+            character.add(eye_left)
+
+            arm_right = new THREE.Mesh(new THREE.SphereGeometry(1, 32, 16, 0, Math.PI * 2, 0, Math.PI), material_body);
+            arm_right.position.set(-0.6, 0.122, 0)
+            arm_right.scale.set(0.88, 0.5, 0.35)
+            character.add(arm_right)
+
+            arm_left = new THREE.Mesh(new THREE.SphereGeometry(1, 32, 16, 0, Math.PI * 2, 0, Math.PI), material_body);
+            arm_left.position.set(0.6, 0.122, 0)
+            arm_left.scale.set(0.88, 0.5, 0.35)
+            character.add(arm_left)
+
+            leg_right = new THREE.Mesh(new THREE.SphereGeometry(1, 32, 16, 0, Math.PI * 2, 0, Math.PI), material_leg);
+            leg_right.position.set(-0.6, -0.8, 0.5)
+            leg_right.scale.set(0.4, 0.3, 0.7)
+            character.add(leg_right)
+
+            leg_left = new THREE.Mesh(new THREE.SphereGeometry(1, 32, 16, 0, Math.PI * 2, 0, Math.PI), material_leg);
+            leg_left.position.set(0.6, -0.8, 0.5)
+            leg_left.scale.set(0.4, 0.3, 0.7)
+            character.add(leg_left)
+            //END KARBY REGION
+
+            scene.add(character)
+
+            renderer.setAnimationLoop(render);
+            console.log(renderer);
+        }
+
+        function render() {
+            renderer.render(scene, camera);
+            controls.update()
+
+        }
+
+        // OPEN MOUTH
+        document.addEventListener('keypress', (e) => {
+            if ("f" == e.key) {
+                let eye_position = [character.children[2].position.y, character.children[2].position.z, character.children[2].rotation.x]
+                console.log(character.children[2].position.y, character.children[2].position.z)
+                console.log(character.children[3].position.y, character.children[3].position.z)
+                eye_right.position.set(-0.2, (0.033 + eye_position[0]), (eye_position[1] - 0.02))
+                eye_right.rotation.x = eye_position[2] - (3 * Math.PI / 180)
+                eye_left.position.set(0.2, (0.033 + eye_position[0]), (eye_position[1] - 0.02))
+                eye_left.rotation.x = eye_position[2] - (3 * Math.PI / 180)
+                let mouth = character.children[0].geometry.parameters.thetaLength += Math.PI / 180 * -3;
+                if (mouth <= Math.PI / 180 * 130) {
+                    eye_right.position.set(-0.2, 0.8, 0.5)
+                    eye_right.rotation.x = -58.4 * Math.PI / 180
+                    eye_left.position.set(0.2, 0.8, 0.5)
+                    eye_left.rotation.x = -58.4 * Math.PI / 180
+                    mouth = Math.PI / 180 * 130
+                }
+                character.children[0].geometry = new THREE.SphereGeometry(1, 32, 16, 0, Math.PI * 2, 0, mouth)
+            }
+        })
+
+        // CLOSE MOUTH
+        document.addEventListener('keyup', (e) => {
+            eye_right.position.set(-0.2, 0.3, 0.85)
+            eye_right.rotation.x = -18.4 * Math.PI / 180
+            eye_left.position.set(0.2, 0.3, 0.85)
+            eye_left.rotation.x = -18.4 * Math.PI / 180
+            character.children[0].geometry = new THREE.SphereGeometry(1, 32, 16, 0, Math.PI * 2, 0, Math.PI / 180 * 175)
+        })
+    </script>
+</body>
+
+</html>
