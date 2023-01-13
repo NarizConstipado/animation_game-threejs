@@ -13,6 +13,9 @@
         import * as THREE from './libs/three.module.js';
         import * as CONTROLS from './libs/OrbitControls.js';
         import * as BufferGeometryUtils from './libs/BufferGeometryUtils.js';
+        import { LineSegments2 } from './libs/lines/LineSegments2.js';
+        import { LineSegmentsGeometry } from './libs/lines/LineSegmentsGeometry.js';
+        import { LineMaterial } from './libs/lines/LineMaterial.js';
 
         let camera, scene, renderer;
         let character,
@@ -22,128 +25,239 @@
 
         let material_body, material_inside_body, material_eye, material_leg;
 
+        let tornado, points_tornado = []
+
+
         let controls
 
         window.onload = () => {
             scene = new THREE.Scene();
 
             const aspect = window.innerWidth / window.innerHeight;
-            camera = new THREE.PerspectiveCamera(75, aspect, 0.1, 10);
-            camera.position.y = 2;
+            camera = new THREE.PerspectiveCamera(75, aspect, 0.1, 50);
+            camera.position.y = 5;
             camera.position.z = 8;
-            camera.lookAt(scene.position);
 
             renderer = new THREE.WebGLRenderer({ antilias: false });
             renderer.setSize(window.innerWidth, window.innerHeight);
 
-            controls = new CONTROLS.OrbitControls(camera, renderer.domElement)
 
             renderer.setClearColor("#000000");
             document.body.appendChild(renderer.domElement);
 
-            //KARBY REGION
+            //KIRBY REGION
             material_body = new THREE.MeshBasicMaterial({ wireframe: false });
             material_inside_body = new THREE.MeshBasicMaterial({ wireframe: false });
             material_eye = new THREE.MeshBasicMaterial({ wireframe: false });
             material_leg = new THREE.MeshBasicMaterial({ wireframe: false });
-            material_body.color = new THREE.Color("rgb(252,39,209)")
-            material_inside_body.color = new THREE.Color("rgb(175,3,64)")
-            material_inside_body.side = THREE.BackSide
+            material_body.color = new THREE.Color("rgb(254,133,230)")
+            material_body.side = THREE.DoubleSide
+            material_inside_body.color = new THREE.Color("rgb(200,3,64)")
+            material_inside_body.side = THREE.FrontSide
             material_eye.color = new THREE.Color("rgb(0,0,0)")
             material_leg.color = new THREE.Color("rgb(175,3,64)")
             character = new THREE.Mesh();
 
             body = new THREE.Mesh(new THREE.SphereGeometry(1, 32, 16, 0, Math.PI * 2, 0, Math.PI / 180 * 175), material_body);
-            // body = new THREE.Mesh(new THREE.SphereGeometry(1, 32, 16, 0, Math.PI * 2, 0, Math.PI / 180 * 130.4), material_body);
-            body.rotation.x = -80 * Math.PI / 180;
             character.add(body)
 
-            // inside_body = new THREE.Mesh(new THREE.SphereGeometry(1, 32, 16, 0, Math.PI * 2, 0, Math.PI), material_inside_body);
-            // inside_body.scale.set(0.98, 0.98, 0.98)
-            inside_body = new THREE.Mesh(new THREE.CircleGeometry(0.78, 32), material_leg)
-            inside_body.position.set(0, -0.1, 0.6)
-            inside_body.rotation.x = 10 * Math.PI / 180;
+            inside_body = new THREE.Mesh(new THREE.CircleGeometry(0.78, 32), material_inside_body)
             character.add(inside_body)
 
             eye_right = new THREE.Mesh(new THREE.SphereGeometry(1, 32, 16, 0, Math.PI * 2, 0, Math.PI), material_eye);
-            eye_right.position.set(-0.2, 0.3, 0.85)
-            eye_right.rotation.x = -18.4 * Math.PI / 180
-            // eye_right.position.set(-0.2, 0.8, 0.5)
-            // eye_right.rotation.x = -58.4* Math.PI /180
-            eye_right.scale.set(0.1, 0.3, 0.12)
             character.add(eye_right)
 
             eye_left = new THREE.Mesh(new THREE.SphereGeometry(1, 32, 16, 0, Math.PI * 2, 0, Math.PI), material_eye);
-            eye_left.position.set(0.2, 0.3, 0.85)
-            eye_left.rotation.x = -18.4 * Math.PI / 180
-            // eye_left.position.set(0.2, 0.8, 0.5)
-            // eye_left.rotation.x = -58.4* Math.PI /180
-            eye_left.scale.set(0.1, 0.3, 0.12)
             character.add(eye_left)
 
             arm_right = new THREE.Mesh(new THREE.SphereGeometry(1, 32, 16, 0, Math.PI * 2, 0, Math.PI), material_body);
-            arm_right.position.set(-0.6, 0.122, 0)
-            arm_right.scale.set(0.88, 0.5, 0.35)
             character.add(arm_right)
 
             arm_left = new THREE.Mesh(new THREE.SphereGeometry(1, 32, 16, 0, Math.PI * 2, 0, Math.PI), material_body);
-            arm_left.position.set(0.6, 0.122, 0)
-            arm_left.scale.set(0.88, 0.5, 0.35)
             character.add(arm_left)
 
             leg_right = new THREE.Mesh(new THREE.SphereGeometry(1, 32, 16, 0, Math.PI * 2, 0, Math.PI), material_leg);
-            leg_right.position.set(-0.6, -0.8, 0.5)
-            leg_right.scale.set(0.4, 0.3, 0.7)
             character.add(leg_right)
 
             leg_left = new THREE.Mesh(new THREE.SphereGeometry(1, 32, 16, 0, Math.PI * 2, 0, Math.PI), material_leg);
-            leg_left.position.set(0.6, -0.8, 0.5)
-            leg_left.scale.set(0.4, 0.3, 0.7)
             character.add(leg_left)
-            //END KARBY REGION
 
-            scene.add(character)
+            character.position.set(0, 0, 0)
+            camera.lookAt(character.position)
+            //END KIRBY REGION
+
+            for (let i = 50; i < 200; i++) {
+                points_tornado.push(i / 10 * Math.sin(Math.PI / 16 * i), i / 10 * Math.cos(Math.PI / 16 * i), i / 5)
+            }
+
+            tornado = new LineSegments2(
+                new LineSegmentsGeometry().setPositions(points_tornado),
+                new LineMaterial({ color: 0xffffff, linewidth: 0.005 }));
+            tornado.scale.set(0.1,0.1,0.1)
+            tornado.position.z = 0
+            tornado.visible = false
+            character.add(tornado)
+
+
+
+            const floor = new THREE.Mesh(new THREE.PlaneGeometry(25, 25), new THREE.MeshBasicMaterial({ color: 0x60ee60 }, { side: THREE.DoubleSide }))
+            floor.rotation.x = -Math.PI / 2
+            floor.position.y = -1.1
+
+            const light = new THREE.HemisphereLight(0xffffbb, 0x080820, 1)
+            light.position.set(0, 3, 3)
+
+
+
+
+            position_default()
+            scene.add(character, floor, light)
 
             renderer.setAnimationLoop(render);
-            console.log(renderer);
         }
 
         function render() {
             renderer.render(scene, camera);
-            controls.update()
-
+            walk()
+            tornado.rotation.z -= Math.PI / 100
         }
 
         // OPEN MOUTH
-        document.addEventListener('keypress', (e) => {
-            if ("f" == e.key) {
-                let eye_position = [character.children[2].position.y, character.children[2].position.z, character.children[2].rotation.x]
-                console.log(character.children[2].position.y, character.children[2].position.z)
-                console.log(character.children[3].position.y, character.children[3].position.z)
-                eye_right.position.set(-0.2, (0.033 + eye_position[0]), (eye_position[1] - 0.02))
-                eye_right.rotation.x = eye_position[2] - (3 * Math.PI / 180)
-                eye_left.position.set(0.2, (0.033 + eye_position[0]), (eye_position[1] - 0.02))
-                eye_left.rotation.x = eye_position[2] - (3 * Math.PI / 180)
-                let mouth = character.children[0].geometry.parameters.thetaLength += Math.PI / 180 * -3;
-                if (mouth <= Math.PI / 180 * 130) {
-                    eye_right.position.set(-0.2, 0.8, 0.5)
-                    eye_right.rotation.x = -58.4 * Math.PI / 180
-                    eye_left.position.set(0.2, 0.8, 0.5)
-                    eye_left.rotation.x = -58.4 * Math.PI / 180
-                    mouth = Math.PI / 180 * 130
-                }
-                character.children[0].geometry = new THREE.SphereGeometry(1, 32, 16, 0, Math.PI * 2, 0, mouth)
+
+        let clicked_keys = []
+        function walk() {
+            let aready_walk = false
+            if (clicked_keys.includes("w")) {
+                character.position.z -= -Math.cos(character.rotation.y) * 0.1 * move.velocity
+                character.position.x -= -Math.sin(character.rotation.y) * 0.1 * move.velocity
+                position_walk()
+                camera.lookAt(character.position)
+                aready_walk = true
             }
+            if (clicked_keys.includes("s")) {
+                character.position.z += -Math.cos(character.rotation.y) * 0.1 * move.velocity
+                character.position.x += -Math.sin(character.rotation.y) * 0.1 * move.velocity
+                if (!aready_walk) {
+                    aready_walk = true
+                    position_walk()
+                }
+                else aready_walk = false
+                camera.lookAt(character.position)
+            }
+            if (clicked_keys.includes("a")) {
+                character.rotation.y += Math.PI / 36
+                camera.lookAt(character.position)
+                if (!aready_walk) {
+                    aready_walk = true
+                    position_walk()
+                }
+                else aready_walk = false
+            }
+            if (clicked_keys.includes("d")) {
+                character.rotation.y -= Math.PI / 36
+                camera.lookAt(character.position)
+                if (!aready_walk) {
+                    aready_walk = true
+                    position_walk()
+                }
+                else aready_walk = false
+            }
+            if (clicked_keys.includes("f")) position_eat()
+            if (clicked_keys.includes(" ")) move.velocity = 3
+            else move.velocity = 1
+        }
+
+        document.addEventListener('keypress', (e) => {
+            if (!clicked_keys.includes(e.key.toLowerCase())) clicked_keys.push(e.key.toLowerCase())
         })
 
         // CLOSE MOUTH
         document.addEventListener('keyup', (e) => {
+            clicked_keys.splice(clicked_keys.indexOf(e.key), 1)
+            if(!clicked_keys.includes("f")) position_default()
+        })
+
+        // KIRBY POSITION
+        function position_default() {
+            character.children[0].geometry = new THREE.SphereGeometry(1, 32, 16, 0, Math.PI * 2, 0, Math.PI / 180 * 175)
+            body.rotation.x = -80 * Math.PI / 180;
+
+            inside_body.position.set(0, -0.1, 0.6)
+            inside_body.rotation.x = 10 * Math.PI / 180;
+
             eye_right.position.set(-0.2, 0.3, 0.85)
             eye_right.rotation.x = -18.4 * Math.PI / 180
+            eye_right.scale.set(0.1, 0.3, 0.12)
+
             eye_left.position.set(0.2, 0.3, 0.85)
             eye_left.rotation.x = -18.4 * Math.PI / 180
-            character.children[0].geometry = new THREE.SphereGeometry(1, 32, 16, 0, Math.PI * 2, 0, Math.PI / 180 * 175)
-        })
+            eye_left.scale.set(0.1, 0.3, 0.12)
+
+            arm_right.position.set(-0.6, 0.122, 0)
+            arm_right.rotation.set(0, 0, 0)
+            arm_right.scale.set(0.88, 0.5, 0.35)
+
+            arm_left.position.set(0.6, 0.122, 0)
+            arm_left.rotation.set(0, 0, 0)
+            arm_left.scale.set(0.88, 0.5, 0.35)
+
+            leg_right.position.set(-0.5, -0.9, 0.1)
+            leg_right.rotation.set(0, 0, 0)
+            leg_right.scale.set(0.4, 0.3, 0.7)
+
+            leg_left.position.set(0.5, -0.9, 0.1)
+            leg_left.rotation.set(0, 0, 0)
+            leg_left.scale.set(0.4, 0.3, 0.7)
+
+            tornado.visible = false;
+        }
+
+        function position_eat() {
+            let eye_position = [character.children[2].position.y, character.children[2].position.z, character.children[2].rotation.x]
+            eye_right.position.set(-0.2, (0.033 + eye_position[0]), (eye_position[1] - 0.02))
+            eye_right.rotation.x = eye_position[2] - (3 * Math.PI / 180)
+            eye_left.position.set(0.2, (0.033 + eye_position[0]), (eye_position[1] - 0.02))
+            eye_left.rotation.x = eye_position[2] - (3 * Math.PI / 180)
+            let mouth = character.children[0].geometry.parameters.thetaLength += Math.PI / 180 * -3;
+            if (mouth <= Math.PI / 180 * 130) {
+                tornado.visible = true;
+                eye_right.position.set(-0.2, 0.8, 0.5)
+                eye_right.rotation.x = -58.4 * Math.PI / 180
+                eye_left.position.set(0.2, 0.8, 0.5)
+                eye_left.rotation.x = -58.4 * Math.PI / 180
+                mouth = Math.PI / 180 * 130
+            }
+            character.children[0].geometry = new THREE.SphereGeometry(1, 32, 16, 0, Math.PI * 2, 0, mouth)
+        }
+
+        let move = { "max": 0.7, "min": -0.1, "in_out": true, "velocity": 1 }
+        function position_walk() {
+            if (move.in_out) {
+                
+                if (leg_left.position.z < move.min) move.in_out = false
+
+                arm_left.rotation.y += 0.04 * move.velocity
+                arm_right.rotation.y += 0.04 * move.velocity
+
+                leg_left.position.set(0.5, -0.9, leg_left.position.z - 0.06 * move.velocity)
+                leg_left.rotation.x += 0.1 * move.velocity
+
+                leg_right.position.set(-0.5, -0.9, leg_right.position.z + 0.06 * move.velocity)
+                leg_right.rotation.x -= 0.1 * move.velocity
+
+            } else {
+                if (leg_left.position.z > move.max) move.in_out = true
+
+                arm_left.rotation.y -= 0.04 * move.velocity
+                arm_right.rotation.y -= 0.04 * move.velocity
+
+                leg_left.position.set(0.5, -0.9, leg_left.position.z + 0.06 * move.velocity)
+                leg_left.rotation.x -= 0.1 * move.velocity
+
+                leg_right.position.set(-0.5, -0.9, leg_right.position.z - 0.06 * move.velocity)
+                leg_right.rotation.x += 0.1 * move.velocity
+            }
+        }
     </script>
 </body>
 
