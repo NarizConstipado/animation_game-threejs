@@ -27,11 +27,13 @@
         let treeFolhas, treeFolhas2, treeFolhas3, treeFolhas4, treeFolhas5, treeFolhas6, treeFolhas7, treeFolhas8;
 
         let animationTree = true, animationGalho1 = true, animationGalho2 = true, animationGalho3 = true;
+        let animationLeafs = true;
         let materialTronk, materialFolhas;
 
         let verts = [];
         let controls;
-        const geometryFolhas = []
+        const geometryFolhas = [], geometryBushes = [];
+        const  geometryTronk = [],  geometryGalho = [],  geometryGalho2 = [],  geometryGalho3 = []
 
         window.onload = function init() {
             
@@ -63,6 +65,8 @@
             treeTronk.position.set(0,0.7,0)
             pivot.add(treeTronk);
             treeTronk.rotation.z = 0.1
+            //
+            geometryTronk.push(pivot)
             
             let geometryTronk2 = new THREE.CylinderGeometry(0.09,0.1,1,5)
             treeTronk2 = new THREE.Mesh(geometryTronk2, materialTronk);
@@ -85,6 +89,8 @@
             pivotTreeGalho1.rotation.y = -0.8
             pivotTreeGalho1.add(treeGalho)
             treeTronk2.add(pivotTreeGalho1)
+            //
+            geometryGalho.push(pivotTreeGalho1)
 
             let geometryTreeGalho2 = new THREE.CylinderGeometry(0.04,0.07,0.9,7)
             treeGalho2 = new THREE.Mesh(geometryTreeGalho2, materialTronk)
@@ -95,6 +101,8 @@
             pivotTreeGalho2.rotation.y = 2.2
             pivotTreeGalho2.add(treeGalho2)
             treeTronk.add(pivotTreeGalho2)
+            //
+            geometryGalho2.push(pivotTreeGalho2)
 
             let geometryTreeGalho3 = new THREE.CylinderGeometry(0.03,0.04,0.55,7)
             treeGalho3 = new THREE.Mesh(geometryTreeGalho3, materialTronk)
@@ -104,6 +112,8 @@
             pivotTreeGalho3.rotation.z = -0.5
             pivotTreeGalho3.add(treeGalho3)
             treeGalho2.add(pivotTreeGalho3)
+            //
+            geometryGalho3.push(pivotTreeGalho3)
 
             // folhas
             materialFolhas = new THREE.MeshNormalMaterial({ wireframe: false });
@@ -111,117 +121,141 @@
 
             let geometryTreeFolhas = new THREE.IcosahedronBufferGeometry(1, 0);
             treeFolhas = new THREE.Mesh(geometryTreeFolhas, materialFolhas)
-            treeFolhas.position.set(1.75,0.25,0)
-            treeGalho.add(treeFolhas)
-            geometryFolhas.push(geometryTreeFolhas)
+            treeFolhas.position.set(0,1,0)
+            treeFolhas.rotation.z = 1
+            treeFolhas.rotation.y = -0.6
+            treeTronk3.add(treeFolhas)
+            geometryFolhas.push(treeFolhas)
             
             let geometryTreeFolhas2 = new THREE.IcosahedronBufferGeometry(0.7, 0);
             treeFolhas2 = new THREE.Mesh(geometryTreeFolhas2, materialFolhas)
             treeFolhas2.position.set(-0.7,0.4,0)
             treeFolhas2.rotation.z = 2.4
             treeFolhas.add(treeFolhas2)
-            geometryFolhas.push(geometryTreeFolhas2)
+            geometryFolhas.push(treeFolhas2)
             
             let geometryTreeFolhas3 = new THREE.IcosahedronBufferGeometry(0.75, 0);
             treeFolhas3 = new THREE.Mesh(geometryTreeFolhas3, materialFolhas)
             treeFolhas3.position.set(-0.2,-0.6,-0.6)
             treeFolhas3.rotation.z = 0.4
             treeFolhas.add(treeFolhas3)
-            geometryFolhas.push(geometryTreeFolhas3)
+            geometryFolhas.push(treeFolhas3)
             
             let geometryTreeFolhas4 = new THREE.IcosahedronBufferGeometry(0.85, 0);
             treeFolhas4 = new THREE.Mesh(geometryTreeFolhas4, materialFolhas)
             treeFolhas4.position.set(-0.7,0.4,0.7)
             treeFolhas4.rotation.z = -1.4
             treeFolhas.add(treeFolhas4)
-            geometryFolhas.push(geometryTreeFolhas4)
+            geometryFolhas.push(treeFolhas4)
             
             let geometryTreeFolhas5 = new THREE.IcosahedronBufferGeometry(0.65, 0);
             treeFolhas5 = new THREE.Mesh(geometryTreeFolhas5, materialFolhas)
             treeFolhas5.position.set(-1.3,0.2,1.2)
             treeFolhas5.rotation.z = -2
             treeFolhas.add(treeFolhas5)
-            geometryFolhas.push(geometryTreeFolhas5)
+            geometryFolhas.push(treeFolhas5)
             
             let geometryTreeFolhas6 = new THREE.IcosahedronBufferGeometry(0.5, 0);
             treeFolhas6 = new THREE.Mesh(geometryTreeFolhas6, materialFolhas)
             treeFolhas6.position.set(0,0.5,-0.2)
             treeFolhas6.rotation.z = -2
             treeGalho.add(treeFolhas6)
-            geometryFolhas.push(geometryTreeFolhas6)
+            geometryFolhas.push(treeFolhas6)
             
             let geometryTreeFolhas7 = new THREE.IcosahedronBufferGeometry(0.65, 0);
             treeFolhas7 = new THREE.Mesh(geometryTreeFolhas7, materialFolhas)
             treeFolhas7.position.set(0,0.5,0)
             treeFolhas7.rotation.z = -2
             treeGalho3.add(treeFolhas7)
-            geometryFolhas.push(geometryTreeFolhas7)
+            geometryFolhas.push(treeFolhas7)
             
             let geometryTreeFolhas8 = new THREE.IcosahedronBufferGeometry(0.5, 0);
             treeFolhas8 = new THREE.Mesh(geometryTreeFolhas8, materialFolhas)
             treeFolhas8.position.set(0.2,0,-0.7)
             treeFolhas8.rotation.z = -1.4
             treeFolhas7.add(treeFolhas8)
-            geometryFolhas.push(geometryTreeFolhas8)
+            geometryFolhas.push(treeFolhas8)
             
             scene.add(pivot)
 
+            // bush
 
-            const axes = new THREE.AxesHelper();
-            pivotTreeGalho1.add(axes)
+
+            /* const axes = new THREE.AxesHelper();
+            treeTronk3.add(axes)*/
             
             // const folhasGeometry = BufferGeometryUtils.mergeBufferGeometries(geometryFolhas);
 
-            /* for (let i = 0; i < geometryFolhas)
- */
             renderer.setAnimationLoop(render);
         }
 
         function render() {
             renderer.render(scene, camera)
             controls.update()
+            animationsTree()    
+        }
 
-            // animation loop galhos
-            /* treeGalho.rotation.z += 0.001;
-            treeGalho2.rotation.z += 0.002;
-            treeGalho3.rotation.z += 0.003; */
-            
+        function animationsTree(){
             if(animationTree){
-                pivot.rotation.z += 0.00001
+                geometryTronk.forEach(tronk => {
+                    tronk.rotation.z += 0.00008
+                })
                 if(pivot.rotation.z >= 0.01) animationTree = false;
             } 
             else {
-                pivot.rotation.z -= 0.00001;
+                geometryTronk.forEach(tronk => {
+                    tronk.rotation.z -= 0.00008
+                })
                 if(pivot.rotation.z <= -0.01) animationTree = true
             }
 
             if(animationGalho3){
-                pivotTreeGalho3.rotation.x += 0.0002
-                if(pivotTreeGalho3.rotation.x >= 0.02) animationGalho3 = false;
+                pivotTreeGalho3.rotation.x += 0.00001
+                if(pivotTreeGalho3.rotation.x >= 0.03) animationGalho3 = false;
             } 
             else { 
-                pivotTreeGalho3.rotation.x -= 0.0002;
-                if(pivotTreeGalho3.rotation.x <= -0.04) animationGalho3 = true
+                pivotTreeGalho3.rotation.x -= 0.00001;
+                if(pivotTreeGalho3.rotation.x <= -0.05) animationGalho3 = true
             }
  
             if(animationGalho2){
-                pivotTreeGalho2.rotation.y += 0.00001
-                if(pivotTreeGalho2.rotation.y >= 0.02) animationGalho2 = false;
+                geometryGalho2.forEach(galho => {
+                    galho.rotation.y += 0.0005
+                })
+                if(pivotTreeGalho2.rotation.y >= 2.22) animationGalho2 = false;
             } 
             else {
-                pivotTreeGalho2.rotation.y -= 0.00001;
-                if(pivotTreeGalho2.rotation.y <= -0.04) animationGalho2 = true
+                geometryGalho2.forEach(galho => {
+                    galho.rotation.y -= 0.0005
+                })
+                if(pivotTreeGalho2.rotation.y <= 2.18) animationGalho2 = true
             }
-                
+
             if(animationGalho1){
-                pivotTreeGalho1.rotation.y += 0.00001
-                if(pivotTreeGalho1.rotation.y >= 0.02) animationGalho1 = false;
+                geometryGalho.forEach(galho => {
+                    galho.rotation.x += 0.0005
+                })
+                if(pivotTreeGalho1.rotation.x >= 0.1) animationGalho1 = false;
             } 
             else {
-                pivotTreeGalho1.rotation.y -= 0.00001;
-                if(pivotTreeGalho1.rotation.y <= -0.04) animationGalho1 = true
+                geometryGalho.forEach(galho => {
+                    galho.rotation.x -= 0.0005
+                })
+                if(pivotTreeGalho1.rotation.x <= -0.1) animationGalho1 = true
             }
-                
+ 
+            if(animationLeafs){
+                geometryFolhas.forEach(treeFolha => {
+                    treeFolha.scale.x += 0.0002
+                });
+                if(treeFolhas.scale.x >= 1.05) animationLeafs = false
+            }
+            else {
+                geometryFolhas.forEach(treeFolha =>{
+                    treeFolha.scale.x -= 0.0002
+                })
+                if(treeFolhas7.scale.x <= 0.95) animationLeafs = true
+            }
         }
 
     </script>
