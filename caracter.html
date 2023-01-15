@@ -18,17 +18,20 @@
         import { LineMaterial } from './libs/lines/LineMaterial.js';
 
         let camera, scene, renderer;
-        let character,
+        let character, character_up,
             body, eye_left, eye_right, inside_body,
-            arm_left, arm_right, leg_left, leg_right,
+            arm_left, arm_right_pivot, arm_right, leg_left, leg_right,
             arm_point_left, arm_point_right, leg_point_left, leg_point_right;
 
         let material_body, material_inside_body, material_eye, material_leg;
 
         let tornado, points_tornado = []
 
+        let sword, grip, cross_guard, lower_end, lower_up, material_sword;
 
         let controls
+
+        let move = { "max": 0.7, "min": -0.1, "in_out": true, "velocity": 1, "hit": false, "hit_out": false }
 
         window.onload = () => {
             scene = new THREE.Scene();
@@ -56,25 +59,30 @@
             material_inside_body.side = THREE.FrontSide
             material_eye.color = new THREE.Color("rgb(0,0,0)")
             material_leg.color = new THREE.Color("rgb(175,3,64)")
-            character = new THREE.Mesh();
+
+            character = new THREE.Group();
+            character_up = new THREE.Group();
+            character.add(character_up)
 
             body = new THREE.Mesh(new THREE.SphereGeometry(1, 32, 16, 0, Math.PI * 2, 0, Math.PI / 180 * 175), material_body);
-            character.add(body)
+            character_up.add(body)
 
             inside_body = new THREE.Mesh(new THREE.CircleGeometry(0.78, 32), material_inside_body)
-            character.add(inside_body)
+            character_up.add(inside_body)
 
             eye_right = new THREE.Mesh(new THREE.SphereGeometry(1, 32, 16, 0, Math.PI * 2, 0, Math.PI), material_eye);
-            character.add(eye_right)
+            character_up.add(eye_right)
 
             eye_left = new THREE.Mesh(new THREE.SphereGeometry(1, 32, 16, 0, Math.PI * 2, 0, Math.PI), material_eye);
-            character.add(eye_left)
+            character_up.add(eye_left)
 
+            arm_right_pivot = new THREE.Mesh();
             arm_right = new THREE.Mesh(new THREE.SphereGeometry(1, 32, 16, 0, Math.PI * 2, 0, Math.PI), material_body);
-            character.add(arm_right)
+            arm_right_pivot.add(arm_right)
+            character_up.add(arm_right_pivot)
 
             arm_left = new THREE.Mesh(new THREE.SphereGeometry(1, 32, 16, 0, Math.PI * 2, 0, Math.PI), material_body);
-            character.add(arm_left)
+            character_up.add(arm_left)
 
             leg_right = new THREE.Mesh(new THREE.SphereGeometry(1, 32, 16, 0, Math.PI * 2, 0, Math.PI), material_leg);
             character.add(leg_right)
@@ -93,22 +101,47 @@
             tornado = new LineSegments2(
                 new LineSegmentsGeometry().setPositions(points_tornado),
                 new LineMaterial({ color: 0xffffff, linewidth: 0.005 }));
-            tornado.scale.set(0.1,0.1,0.1)
+            tornado.scale.set(0.1, 0.1, 0.1)
             tornado.position.z = 0
             tornado.visible = false
-            character.add(tornado)
+            character_up.add(tornado)
 
+            //SWORD
+            sword = new THREE.Mesh();
+            material_sword = new THREE.MeshBasicMaterial({ color: 0xdd7744, wireframe: false })
 
+            grip = new THREE.Mesh(new THREE.CylinderGeometry(), material_sword);
+            grip.scale.set(0.15, 1, 0.15)
+
+            cross_guard = new THREE.Mesh(new THREE.BoxGeometry(), material_sword);
+            cross_guard.scale.set(1, 0.2, 0.6)
+            cross_guard.position.y = 0.6
+
+            lower_end = new THREE.Mesh(new THREE.CylinderGeometry(1, 0.6, 1, 4), material_sword)
+            lower_end.scale.set(0.5, 2, 0.2)
+            lower_end.position.y = 1.7
+
+            lower_up = new THREE.Mesh(new THREE.CylinderGeometry(0, 1, 1, 4), material_sword)
+            lower_up.scale.set(0.5, 1, 0.2)
+            lower_up.position.y = 3.2
+
+            sword.add(grip)
+            sword.add(cross_guard)
+            sword.add(lower_end)
+            sword.add(lower_up)
+            sword.position.x = -0.6
+
+            sword.rotation.set(Math.PI / 180 * -30, Math.PI / 180 * 70, Math.PI / 180 * 30)
+            sword.scale.set(1, 0.7, 1)
+
+            arm_right_pivot.add(sword)
+            //END SWORD
 
             const floor = new THREE.Mesh(new THREE.PlaneGeometry(25, 25), new THREE.MeshBasicMaterial({ color: 0x60ee60 }, { side: THREE.DoubleSide }))
             floor.rotation.x = -Math.PI / 2
             floor.position.y = -1.1
-
             const light = new THREE.HemisphereLight(0xffffbb, 0x080820, 1)
             light.position.set(0, 3, 3)
-
-
-
 
             position_default()
             scene.add(character, floor, light)
@@ -122,8 +155,7 @@
             tornado.rotation.z -= Math.PI / 100
         }
 
-        // OPEN MOUTH
-
+        // ANIMATION ACTIVATE
         let clicked_keys = []
         function walk() {
             let aready_walk = false
@@ -162,24 +194,28 @@
                 }
                 else aready_walk = false
             }
-            if (clicked_keys.includes("f")) position_eat()
-            if (clicked_keys.includes(" ")) move.velocity = 3
-            else move.velocity = 1
+            if (clicked_keys.includes("e")) position_eat();
+            if (clicked_keys.includes(" ")) move.velocity = 3;
+            else move.velocity = 1;
+            if (clicked_keys.includes("f")) position_hit();
+            animation_hit();
         }
 
         document.addEventListener('keypress', (e) => {
             if (!clicked_keys.includes(e.key.toLowerCase())) clicked_keys.push(e.key.toLowerCase())
         })
 
-        // CLOSE MOUTH
         document.addEventListener('keyup', (e) => {
             clicked_keys.splice(clicked_keys.indexOf(e.key), 1)
-            if(!clicked_keys.includes("f")) position_default()
+            if (!clicked_keys.includes("e")) position_default()
         })
 
         // KIRBY POSITION
         function position_default() {
-            character.children[0].geometry = new THREE.SphereGeometry(1, 32, 16, 0, Math.PI * 2, 0, Math.PI / 180 * 175)
+            character_up.rotation.set(0, 0, 0)
+
+
+            body.geometry = new THREE.SphereGeometry(1, 32, 16, 0, Math.PI * 2, 0, Math.PI / 180 * 175)
             body.rotation.x = -80 * Math.PI / 180;
 
             inside_body.position.set(0, -0.1, 0.6)
@@ -193,8 +229,8 @@
             eye_left.rotation.x = -18.4 * Math.PI / 180
             eye_left.scale.set(0.1, 0.3, 0.12)
 
-            arm_right.position.set(-0.6, 0.122, 0)
-            arm_right.rotation.set(0, 0, 0)
+            arm_right_pivot.position.set(-0.6, 0.122, 0)
+            arm_right_pivot.rotation.set(0, 0, 0)
             arm_right.scale.set(0.88, 0.5, 0.35)
 
             arm_left.position.set(0.6, 0.122, 0)
@@ -213,12 +249,12 @@
         }
 
         function position_eat() {
-            let eye_position = [character.children[2].position.y, character.children[2].position.z, character.children[2].rotation.x]
+            let eye_position = [eye_left.position.y, eye_left.position.z, eye_left.rotation.x]
             eye_right.position.set(-0.2, (0.033 + eye_position[0]), (eye_position[1] - 0.02))
             eye_right.rotation.x = eye_position[2] - (3 * Math.PI / 180)
             eye_left.position.set(0.2, (0.033 + eye_position[0]), (eye_position[1] - 0.02))
             eye_left.rotation.x = eye_position[2] - (3 * Math.PI / 180)
-            let mouth = character.children[0].geometry.parameters.thetaLength += Math.PI / 180 * -3;
+            let mouth = body.geometry.parameters.thetaLength += Math.PI / 180 * -3;
             if (mouth <= Math.PI / 180 * 130) {
                 tornado.visible = true;
                 eye_right.position.set(-0.2, 0.8, 0.5)
@@ -227,17 +263,16 @@
                 eye_left.rotation.x = -58.4 * Math.PI / 180
                 mouth = Math.PI / 180 * 130
             }
-            character.children[0].geometry = new THREE.SphereGeometry(1, 32, 16, 0, Math.PI * 2, 0, mouth)
+            body.geometry = new THREE.SphereGeometry(1, 32, 16, 0, Math.PI * 2, 0, mouth)
         }
 
-        let move = { "max": 0.7, "min": -0.1, "in_out": true, "velocity": 1 }
         function position_walk() {
             if (move.in_out) {
-                
+
                 if (leg_left.position.z < move.min) move.in_out = false
 
                 arm_left.rotation.y += 0.04 * move.velocity
-                arm_right.rotation.y += 0.04 * move.velocity
+                arm_right_pivot.rotation.y += 0.04 * move.velocity
 
                 leg_left.position.set(0.5, -0.9, leg_left.position.z - 0.06 * move.velocity)
                 leg_left.rotation.x += 0.1 * move.velocity
@@ -249,13 +284,37 @@
                 if (leg_left.position.z > move.max) move.in_out = true
 
                 arm_left.rotation.y -= 0.04 * move.velocity
-                arm_right.rotation.y -= 0.04 * move.velocity
+                arm_right_pivot.rotation.y -= 0.04 * move.velocity
 
                 leg_left.position.set(0.5, -0.9, leg_left.position.z + 0.06 * move.velocity)
                 leg_left.rotation.x -= 0.1 * move.velocity
 
                 leg_right.position.set(-0.5, -0.9, leg_right.position.z - 0.06 * move.velocity)
                 leg_right.rotation.x += 0.1 * move.velocity
+            }
+        }
+
+        function position_hit() {
+            character_up.rotation.y = Math.PI / 180 * -45;
+            sword.rotation.set(Math.PI / 180 * 30, Math.PI / 180 * 10, Math.PI / 180 * 50)
+            move.hit = true;
+        }
+
+        function animation_hit() {
+            if (move.hit) {
+                character_up.rotation.y += Math.PI / 24
+                if (character_up.rotation.y > 2 * Math.PI / 3) {
+                    move.hit = false
+                    move.hit_out = true
+                }
+            }
+            if (move.hit_out) {
+                character_up.rotation.y -= Math.PI / 12
+                if (character_up.rotation.y < 0) {
+                    move.hit_out = false
+                    sword.rotation.set(Math.PI / 180 * -30, Math.PI / 180 * 70, Math.PI / 180 * 30)
+                    position_default()
+                }
             }
         }
     </script>
