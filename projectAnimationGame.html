@@ -28,7 +28,8 @@
 
         //map
         let clicked_keys = []
-        let colisonsWalls = [];
+        let collisionsWalls = [];
+        let treesColection = []
         let oldPosition, oldRotation
         let kirby
         
@@ -40,8 +41,7 @@
 
         //other
         let camera, scene, renderer;
-        let collisionF, collisionB, collisionR, collisionL
-        let bbHelper, bbHelper1, bbHelper2, bbHelper3, bbHelper4
+        let bbHelper, bbHelper1, bbHelper2, bbHelper3, bbHelper4, bbtreeTronk
         let controls
 
         window.onload = () => {
@@ -65,8 +65,15 @@
             kirby = new Kirby()
 
         //TREE
-            tree = new Tree(10,0,-5,2.5, 0.5)
-
+            let scale = {x: 2.5, y: 2.5, z: 2.5}
+            tree = new Tree(0,0,scale, 0.5, 1)
+            collisionsWalls.push(tree.treeTronk)
+            treesColection.push(tree)
+            treesColection.forEach(tree => {
+                scene.add(tree.pivot)
+            })
+            const axes = new THREE.AxesHelper();
+            tree.treeTronk.add(axes)
         //map
             const floor = new THREE.Mesh(new THREE.PlaneGeometry(50, 50), new THREE.MeshBasicMaterial({ color: 0x60ee60 }))
             floor.rotation.x = -Math.PI / 2
@@ -75,22 +82,22 @@
             let wallSideRight = new THREE.Mesh(new THREE.PlaneGeometry(50, 40), new THREE.MeshBasicMaterial({color: 0x20ee00}))
             wallSideRight.position.set(25,18,0)
             wallSideRight.rotation.y = -Math.PI / 2
-            colisonsWalls.push(wallSideRight)
+            collisionsWalls.push(wallSideRight)
             
             let wallSideLeft = new THREE.Mesh(new THREE.PlaneGeometry(50, 40), new THREE.MeshBasicMaterial({color: 0x20ee00}))
             wallSideLeft.position.set(-25,18,0)
             wallSideLeft.rotation.y = Math.PI / 2
-            colisonsWalls.push(wallSideLeft)
+            collisionsWalls.push(wallSideLeft)
             
             let wallFront = new THREE.Mesh(new THREE.PlaneGeometry(50, 40), new THREE.MeshBasicMaterial({color: 0x20ee00}))
             wallFront.position.set(0,18,-25)
-            colisonsWalls.push(wallFront)
+            collisionsWalls.push(wallFront)
             
             
             let wallBack = new THREE.Mesh(new THREE.PlaneGeometry(50, 20), new THREE.MeshBasicMaterial({color: 0x20ee00}))
             wallBack.position.set(0,8,25)
             wallBack.rotation.y = -Math.PI
-            colisonsWalls.push(wallBack)
+            collisionsWalls.push(wallBack)
 
             /* const axes = new THREE.AxesHelper(10);
             wallSideLeft.add(axes) */
@@ -105,7 +112,7 @@
             scene.add(kirby2.character)
             //************************ FINAL KIRBY 2 ************************
 
-            scene.add(wallFront, wallBack, wallSideRight, wallSideLeft, floor, light, kirby.character, tree.pivot)
+            scene.add(wallFront, wallBack, wallSideRight, wallSideLeft, floor, light, kirby.character)
             
             kirby.position_default()
             kirby.body.geometry.computeBoundingBox();
@@ -113,13 +120,18 @@
             wallBack.geometry.computeBoundingBox();
             wallSideLeft.geometry.computeBoundingBox();
             wallSideRight.geometry.computeBoundingBox();
+            treesColection.forEach(tree => {
+                tree.treeTronk.geometry.computeBoundingBox();
+            })
 
             bbHelper = new THREE.BoxHelper(kirby.body, 0x00FFFF);
             bbHelper1 = new THREE.BoxHelper(wallFront, 0x00FFFF);
             bbHelper2 = new THREE.BoxHelper(wallBack, 0x00FFFF);
             bbHelper3 = new THREE.BoxHelper(wallSideLeft, 0x00FFFF);
             bbHelper4 = new THREE.BoxHelper(wallSideRight, 0x00FFFF);
-            scene.add(bbHelper, bbHelper1, bbHelper2, bbHelper3, bbHelper4);
+            bbtreeTronk = new THREE.BoxHelper(tree.treeTronk, 0x00FFFF);
+            bbtreeTronk.position.set(tree.pivot.position)
+            scene.add(bbHelper, bbHelper1, bbHelper2, bbHelper3, bbHelper4, bbtreeTronk);
 
         //renderer
             renderer.setAnimationLoop(render);
@@ -128,7 +140,10 @@
         function render() {
             renderer.render(scene, camera)
             bbHelper.update()
-            tree.animationsTree()
+            treesColection.forEach(tree => {
+                tree.animationsTree()
+            })
+            
             camera.lookAt(kirby.character.position)
 
             kirby.tornado.rotation.z -= Math.PI / 100 
@@ -138,21 +153,20 @@
             
             kirby.walk(clicked_keys)
             
-            if(checkCollisions()){
+            /* if(checkCollisions()){
                 kirby.character.rotation.y = oldRotation
                 if(kirby.character.position.x < 0) kirby.character.position.x = oldPosition.x + 0.5
                 else kirby.character.position.x = oldPosition.x -0.1
                 if(kirby.character.position.z < 0) kirby.character.position.z = oldPosition.z + 0.5
                 else kirby.character.position.z = oldPosition.z -0.1
-            }            
+            }    */         
         }
 
     //collisions detector
         function checkCollisions(){
-            console.log(colisonsWalls)
             let Bkirby = new THREE.Box3().setFromObject(kirby.body);
-			for (let i = 0; i < colisonsWalls.length; i++) {
-				let obstBox = new THREE.Box3().setFromObject(colisonsWalls[i]);
+			for (let i = 0; i < collisionsWalls.length; i++) {
+				let obstBox = new THREE.Box3().setFromObject(collisionsWalls[i]);
 				let collision = Bkirby.intersectsBox(obstBox);
 				if (collision) {
 					console.log("HIT")

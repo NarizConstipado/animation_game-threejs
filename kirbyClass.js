@@ -30,7 +30,6 @@ export default class Kirby {
 
     constructor(color = "rgb(254,133,230)", npc = false, equipe_sword = true,) {
         //KIRBY
-        console.log(color);
         this.material_body.color.set(color)
 
         this.character.add(this.character_up)

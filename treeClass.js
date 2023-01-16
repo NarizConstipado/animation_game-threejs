@@ -49,13 +49,13 @@ export default class Tree {
                 this.treeFolhas5, this.treeFolhas6, this.treeFolhas7, this.geometryTreeFolhas8
             ]
             
-            constructor(velocity, positionX, positionZ, scale, rotation) {
-                
+            constructor(positionX, positionZ, scale, rotation, velocity) {
+
                 this.velocity = velocity
                 this.materialFolhas.color.set('rgb(0,154,23)')
                 this.materialTronk.color.set('rgb(78,53,36)')
                 this.pivot.position.set(positionX, -1.1, positionZ)
-                this.pivot.scale.set(scale,scale,scale)
+                this.pivot.scale.set(scale.x,scale.z,scale.y)
                 this.pivot.rotation.y = rotation
 
                 this.pivot.add(this.treeTronk);
@@ -164,7 +164,7 @@ export default class Tree {
                 }
                 else {
                     this.geometryFolhas.forEach(treeFolha =>{
-                        treeFolha.scale.x -= 0.0002
+                        treeFolha.scale.x -= 0.0002 
                     })
                     if(this.treeFolhas.scale.x <= 0.95) this.animationLeafs = true
                 }
