@@ -66,7 +66,7 @@
 
         //TREE
             let scale = {x: 2.5, y: 2.5, z: 2.5}
-            tree = new Tree(0,0,scale, 0.5, 1)
+            tree = new Tree(0,10,scale, 0.5, 1)
             collisionsWalls.push(tree.treeTronk)
             treesColection.push(tree)
             treesColection.forEach(tree => {
@@ -150,16 +150,19 @@
         
             oldPosition = {x: kirby.character.position.x, z: kirby.character.position.z} 
             oldRotation = kirby.character.rotation.y
-            
+            console.log(oldRotation, oldPosition)
             kirby.walk(clicked_keys)
+            console.log(kirby.character.rotation.y, kirby.character.position)
             
-            /* if(checkCollisions()){
+            if(checkCollisions()){
                 kirby.character.rotation.y = oldRotation
-                if(kirby.character.position.x < 0) kirby.character.position.x = oldPosition.x + 0.5
-                else kirby.character.position.x = oldPosition.x -0.1
-                if(kirby.character.position.z < 0) kirby.character.position.z = oldPosition.z + 0.5
-                else kirby.character.position.z = oldPosition.z -0.1
-            }    */         
+                kirby.character.position.x = oldPosition.x
+                kirby.character.position.z = oldPosition.z
+                /* if(Math.sign(kirby.character.position.x) == -1) kirby.character.position.x = oldPosition.x + 0.5
+                else kirby.character.position.x = oldPosition.x -0.5
+                if(Math.sign(kirby.character.position.z) == -1) kirby.character.position.z = oldPosition.z + 0.5
+                else kirby.character.position.z = oldPosition.z -0.5 */
+            }            
         }
 
     //collisions detector
