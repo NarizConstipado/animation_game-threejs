@@ -17,6 +17,7 @@
 
 <body>
     <script type="module">
+        import Tree from './treeClass.js';
         import Kirby from './kirbyClass.js'; 
         import * as THREE from './libs/three.module.js';
         import * as CONTROLS from './libs/OrbitControls.js';
@@ -32,7 +33,7 @@
         let kirby
         
         //trees
-        
+        let tree
         
         //junk
         
@@ -62,6 +63,9 @@
             
         //KIRBY
             kirby = new Kirby()
+
+        //TREE
+            tree = new Tree(10,0,-5,2.5, 0.5)
 
         //map
             const floor = new THREE.Mesh(new THREE.PlaneGeometry(50, 50), new THREE.MeshBasicMaterial({ color: 0x60ee60 }))
@@ -101,7 +105,7 @@
             scene.add(kirby2.character)
             //************************ FINAL KIRBY 2 ************************
 
-            scene.add(wallFront, wallBack, wallSideRight, wallSideLeft, floor, light, kirby.character)
+            scene.add(wallFront, wallBack, wallSideRight, wallSideLeft, floor, light, kirby.character, tree.pivot)
             
             kirby.position_default()
             kirby.body.geometry.computeBoundingBox();
@@ -124,6 +128,7 @@
         function render() {
             renderer.render(scene, camera)
             bbHelper.update()
+            tree.animationsTree()
             camera.lookAt(kirby.character.position)
 
             kirby.tornado.rotation.z -= Math.PI / 100 
