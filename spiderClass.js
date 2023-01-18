@@ -5,8 +5,10 @@ export default class Spider {
     materialCAN = new THREE.MeshNormalMaterial({ wireframe: false });
     materialSpiderLeg = new THREE.MeshNormalMaterial({ wireframe: false });
     
+    body = new THREE.Object3D();
+
     CAN = new THREE.CylinderGeometry(1,1,4,32)
-    canStatic = new THREE.Mesh(CAN, materialCAN);
+    canStatic = new THREE.Mesh(this.CAN, this.materialCAN);
     
     spiderSuperiorLeg1 = new THREE.CylinderGeometry(0.15,0.25,1,32)
     SuperiorLeg1 = new THREE.Mesh(this.spiderSuperiorLeg1, this.materialSpiderLeg)
@@ -41,13 +43,16 @@ export default class Spider {
     spiderInferiorLeg8 = new THREE.CylinderGeometry(0.12, 0.03, 1.8, 32)
     InferiorLeg8 = new THREE.Mesh(this.spiderInferiorLeg2, this.materialSpiderLeg)
     
-    constructor(position, scale, rotation, velocity){
+    constructor(position, scale, rotation, velocity){      
         this.legMovement = 0
         this.velocity = velocity
-        this.canStatic.position.set(position.x, position.z, position.y)
-        this.canStatic.scale.set(scale.x, scale.z, scale.y)
-        this.canStatic.rotation.set(rotation.x, rotation.z, rotation.y)
-        
+        this.body.position.set(position.x, position.y, position.z)
+        this.body.scale.set(scale.x, scale.y, scale.z)
+        this.body.rotation.set(rotation.x, rotation.y, rotation.z)
+        this.animationStart = false
+        this.animationFall = false
+
+        this.body.add(this.canStatic)
         this.canStatic.add(this.SuperiorLeg1)
         this.canStatic.add(this.SuperiorLeg2)
         this.canStatic.add(this.SuperiorLeg3)
@@ -64,8 +69,8 @@ export default class Spider {
         this.SuperiorLeg6.add(this.InferiorLeg6)
         this.SuperiorLeg7.add(this.InferiorLeg7)
         this.SuperiorLeg8.add(this.InferiorLeg8)
-        // LATA
-        this.canStatic.rotation.z = 0 * Math.PI / 180
+        //CANsTATIC
+        this.canStatic.rotation.z = 180 * Math.PI / 180
         this.canStatic.rotation.x = -90 * Math.PI / 180
         //SUPERIOR LEGS
         this.SuperiorLeg1.position.set(-1,1.011,0)
@@ -79,8 +84,8 @@ export default class Spider {
         this.SuperiorLeg3.position.set(-1.154,-0.2,0.05)
         this.SuperiorLeg3.rotation.x = 165 * Math.PI / 180
         this.SuperiorLeg3.rotation.y = 156 * Math.PI / 180
+        this.SuperiorLeg4.position.set(-1.154,-0.9,0.05)
         this.SuperiorLeg3.rotation.z = 280 * Math.PI / 180
-        this.SuperiorLeg3.add(axesHelper3)
         this.SuperiorLeg4.rotation.x = 165 * Math.PI / 180
         this.SuperiorLeg4.rotation.y = 156 * Math.PI / 180
         this.SuperiorLeg4.rotation.z = 300 * Math.PI / 180
@@ -101,7 +106,7 @@ export default class Spider {
         this.SuperiorLeg8.rotation.x = -15 * Math.PI / 180
         this.SuperiorLeg8.rotation.y = -24 * Math.PI / 180
         this.SuperiorLeg8.rotation.z = 240 * Math.PI / 180
-        this.//INFERIOR LEGS
+        //INFERIOR LEGS
         this.InferiorLeg1.position.set(-0.25,0.35,-0.8)
         this.InferiorLeg1.rotation.x = 50 * Math.PI / 180
         this.InferiorLeg1.rotation.y = -60 * Math.PI / 180
@@ -137,9 +142,9 @@ export default class Spider {
         this.InferiorLeg8.rotation.z = -50.40 * Math.PI / 180 
     }    
     
-    animationLegs() {
+    animation() {
         //FORWARD SPIDER LEG 1
-        if(legMovement == 0) { 
+        if(this.legMovement == 0) { 
             this.SuperiorLeg1.rotation.x -= 5 * Math.PI / 180 * this.velocity
             this.SuperiorLeg1.rotation.y -= 5 * Math.PI / 180 * this.velocity
             this.SuperiorLeg8.rotation.x -= 5 * Math.PI / 180 * this.velocity

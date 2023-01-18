@@ -17,6 +17,8 @@
 
 <body>
     <script type="module">
+        import Spider from './spiderClass.js';
+        import PaperBall from './paper_ballClass.js';
         import DragonFly from './dragonFlyClass.js';
         import Tree from './treeClass.js';
         import Kirby from './kirbyClass.js'; 
@@ -30,7 +32,7 @@
         //map
         let clicked_keys = []
         let collisionsWalls = [];
-        let treesColection = [], dragonTrashColection = []
+        let treesColection = [], trashColection = []
         let oldPosition, oldRotation
         let kirby
         
@@ -38,7 +40,8 @@
         let tree
         
         //junk
-        let dragonFly
+        let dragonFly, paperBall, spider
+        let rotationBody, allowRotation = false
 
         //other
         let camera, scene, renderer;
@@ -67,17 +70,34 @@
 
         //trashItems
         //dragonFly
-            let scaleDragon = {x: 1,y: 1,z: 1}
-            let positionDragon = {x: 0,y: 0,z: 0}
-            let rotationDragon = {x: 0,y: 0,z: 0}
-            let velocityDragon = 1
-            dragonFly = new DragonFly(positionDragon, scaleDragon, rotationDragon, velocityDragon)
-            dragonTrashColection.push(dragonFly)
-            scene.add(dragonFly.staticBottle)
+        let scaleDragon = {x: 0.4,y: 0.4,z: 0.4}
+        let positionDragon = {x: 10,y: 10,z: 0}
+        let rotationDragon = {x: 0,y: 0,z: 0}
+        let velocityDragon = 1
+        dragonFly = new DragonFly(positionDragon, scaleDragon, rotationDragon, velocityDragon)
+        trashColection.push(dragonFly)
+        //paperBall
+        let scaleBall = {x: 0.4,y: 0.4,z: 0.4}
+        let positionBall = {x: -5,y: 10,z: 0}
+        let rotationBall = {x: 0,y: 0,z: 0}
+        let velocityBall = 1
+        paperBall = new PaperBall(positionBall, scaleBall, rotationBall, velocityBall)
+        trashColection.push(paperBall)
+        //spider
+        let scaleSpider = {x: 0.4,y: 0.4,z: 0.4}
+        let positionSpider = {x: -5,y: 10,z: 5}
+        let rotationSpider = {x: 0,y: 0,z: 0}
+        let velocitySpider = 1
+        spider = new Spider(positionSpider, scaleSpider, rotationSpider, velocityBall)
+        trashColection.push(spider)
+
+        trashColection.forEach(trash => scene.add(trash.body))
+        
             
         //TREE
-            let scale = {x: 2.5, y: 2.5, z: 2.5}
-            tree = new Tree(0,-10,scale, 0.5, 1)
+            let scaleTree = {x: 2.5, y: 2.5, z: 2.5}
+            let positionTree = {x: 0, y: -1.1, z: -10}
+            tree = new Tree(positionTree,scaleTree, 0.5, 1, dragonFly)
             /* collisionsWalls.push(tree.treeTronk) */
             treesColection.push(tree)
             treesColection.forEach(tree => {
@@ -88,7 +108,7 @@
             floor.rotation.x = -Math.PI / 2
             floor.position.y = -1.1
             
-            let wallSideRight = new THREE.Mesh(new THREE.PlaneGeometry(50, 40), new THREE.MeshBasicMaterial({color: 0x20ee00}))
+            /* let wallSideRight = new THREE.Mesh(new THREE.PlaneGeometry(50, 40), new THREE.MeshBasicMaterial({color: 0x20ee00}))
             wallSideRight.position.set(25,18,0)
             wallSideRight.rotation.y = -Math.PI / 2
             collisionsWalls.push(wallSideRight)
@@ -106,7 +126,7 @@
             let wallBack = new THREE.Mesh(new THREE.PlaneGeometry(50, 20), new THREE.MeshBasicMaterial({color: 0x20ee00}))
             wallBack.position.set(0,8,25)
             wallBack.rotation.y = -Math.PI
-            collisionsWalls.push(wallBack)
+            collisionsWalls.push(wallBack) */
 
             /* const axes = new THREE.AxesHelper(10);
             wallSideLeft.add(axes) */
@@ -114,33 +134,26 @@
             const light = new THREE.HemisphereLight(0xffffbb, 0x080820, 1)
             light.position.set(0, 3, 3)
             
- /*            //*************************** KIRBY 2 ***************************
-            let kirby2 = new Kirby(0xffffff, true, false)
-            kirby2.position_default()
-            kirby2.character.rotation.y = Math.PI / 4
-            scene.add(kirby2.character)
-            //************************ FINAL KIRBY 2 ************************
- */
-            scene.add(wallFront, wallBack, wallSideRight, wallSideLeft, floor, light, kirby.character)
+            scene.add(floor, light, kirby.character/* wallFront, wallBack, wallSideRight, wallSideLeft,  */)
             
             kirby.position_default()
-            kirby.body.geometry.computeBoundingBox();
+            /* kirby.body.geometry.computeBoundingBox();
             wallFront.geometry.computeBoundingBox();
             wallBack.geometry.computeBoundingBox();
             wallSideLeft.geometry.computeBoundingBox();
             wallSideRight.geometry.computeBoundingBox();
-            /* treesColection.forEach(tree => {
+            treesColection.forEach(tree => {
                 tree.treeTronk.geometry.computeBoundingBox();
-            }) */
+            })
 
             bbHelper = new THREE.BoxHelper(kirby.body, 0x00FFFF);
             bbHelper1 = new THREE.BoxHelper(wallFront, 0x00FFFF);
             bbHelper2 = new THREE.BoxHelper(wallBack, 0x00FFFF);
             bbHelper3 = new THREE.BoxHelper(wallSideLeft, 0x00FFFF);
             bbHelper4 = new THREE.BoxHelper(wallSideRight, 0x00FFFF);
-            /* bbtreeTronk = new THREE.BoxHelper(tree.treeTronk, 0x00FFFF);
-            bbtreeTronk.position.set(tree.pivot.position) */
-            scene.add(bbHelper, bbHelper1, bbHelper2, bbHelper3, bbHelper4/* , bbtreeTronk */);
+            bbtreeTronk = new THREE.BoxHelper(tree.treeTronk, 0x00FFFF);
+            bbtreeTronk.position.set(tree.pivot.position)
+            scene.add(bbHelper, bbHelper1, bbHelper2, bbHelper3, bbHelper4, bbtreeTronk); */
 
         //renderer
             renderer.setAnimationLoop(render);
@@ -148,10 +161,21 @@
 
         function render() {
             renderer.render(scene, camera)
-            bbHelper.update()
+            /* bbHelper.update() */
+
+            //treeAnimations
             treesColection.forEach(tree => {
                 tree.animationsTree()
             })
+            //trashAnimations
+            //animationTrashFall(paperBall)
+            
+            trashColection.forEach(trash => {
+                if(trash.animationStart == true){
+                    trash.animation()
+                }
+            })
+
             
             camera.lookAt(kirby.character.position)
 
@@ -159,35 +183,58 @@
         
             oldPosition = {x: kirby.character.position.x, z: kirby.character.position.z} 
             oldRotation = kirby.character.rotation.y
-            console.log(oldRotation, oldPosition)
             kirby.walk(clicked_keys)
-            console.log(kirby.character.rotation.y, kirby.character.position)
             
-            if(checkCollisions()){
-                kirby.character.rotation.y = oldRotation
-                kirby.character.position.x = oldPosition.x
-                kirby.character.position.z = oldPosition.z
-                /* if(Math.sign(kirby.character.position.x) == -1) kirby.character.position.x = oldPosition.x + 0.5
-                else kirby.character.position.x = oldPosition.x -0.5
-                if(Math.sign(kirby.character.position.z) == -1) kirby.character.position.z = oldPosition.z + 0.5
-                else kirby.character.position.z = oldPosition.z -0.5 */
+            /*if(checkCollisionsTree()){
             }            
+             kirby.character.rotation.y = oldRotation
+            kirby.character.position.x = oldPosition.x
+            kirby.character.position.z = oldPosition.z
+            if(Math.sign(kirby.character.position.x) == -1) kirby.character.position.x = oldPosition.x + 0.5
+            else kirby.character.position.x = oldPosition.x -0.5
+            if(Math.sign(kirby.character.position.z) == -1) kirby.character.position.z = oldPosition.z + 0.5
+            else kirby.character.position.z = oldPosition.z -0.5 */
         }
 
     //collisions detector
-        function checkCollisions(){
-            let Bkirby = new THREE.Box3().setFromObject(kirby.body);
-			for (let i = 0; i < collisionsWalls.length; i++) {
-				let obstBox = new THREE.Box3().setFromObject(collisionsWalls[i]);
-				let collision = Bkirby.intersectsBox(obstBox);
-				if (collision) {
-					console.log("HIT")
-					return true;
-				} 
-			}
-            return false;
-        };
 
+        function checkCollisionsTree(){
+            let Bkirby = new THREE.Box3().setFromObject(kirby.body);
+            for (let i = 0; i < treesColection.length; i++) {
+                let obstBox = new THREE.Box3().setFromObject(treesColection[i].pivot);
+                let collision = Bkirby.intersectsBox(obstBox);
+                if (collision) {
+                    console.log("HIT")
+                    return treesColection[i];
+                } 
+            }
+            return false;
+        }
+    
+    //animationTrash fall
+        function animationTrashFall(trash){
+            if(trash.animationFall){
+                trash.body.position.y -= 0.1
+                if(trash.body.position.y <= -0.4) trash.animationFall = false; rotationBody = (Math.random() * 360)*Math.PI / 180, allowRotation = true
+            } else {
+                //insert collision check here
+                if(allowRotation) {
+                    if(trash.body.rotation.y <= rotationBody) {
+                        trash.body.rotation.y += 0.1 
+                        if(trash.body.rotation.y >= rotationBody) allowRotation = false
+                    } else {
+                        trash.body.rotation.y -= 0.1
+                        if(trash.body.rotation.y <= rotationBody) allowRotation = false
+                    }
+                } else {
+                    trash.animationStart = true
+                    trash.body.position.z -= -Math.cos(trash.body.rotation.y) * 0.1 * trash.velocity/2
+                    trash.body.position.x -= -Math.sin(trash.body.rotation.y) * 0.1 * trash.velocity/2
+                }
+                
+                
+            }
+        }
     //kirby section
         // ANIMATION ACTIVATE
         document.addEventListener('keypress', (e) => {

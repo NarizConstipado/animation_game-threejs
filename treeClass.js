@@ -44,11 +44,12 @@ export default class Tree {
         this.treeFolhas5, this.treeFolhas6, this.treeFolhas7, this.geometryTreeFolhas8
     ]
 
-constructor(positionX, positionZ, scale, rotation, velocity) {
+constructor(position, scale, rotation, velocity, trash) {
     this.velocity = velocity
+    this.trash = trash
     this.materialFolhas.color.set('rgb(0,154,23)')
     this.materialTronk.color.set('rgb(78,53,36)')
-    this.pivot.position.set(positionX, -1.1, positionZ)
+    this.pivot.position.set(position.x, position.y, position.z)
     this.pivot.scale.set(scale.x,scale.z,scale.y)
     this.pivot.rotation.y = rotation
     this.pivot.add(this.treeTronk);

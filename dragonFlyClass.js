@@ -1,10 +1,11 @@
 import * as THREE from './libs/three.module.js';
-import * as BufferGeometryUtils from './libs/BufferGeometryUtils.js';
 
 export default class DragonFly {
     materialBottle = new THREE.MeshNormalMaterial({ wireframe: false })
     materialWings = new THREE.MeshNormalMaterial({ wireframe: false })
     
+    body = new THREE.Object3D();
+
     bottle = new THREE.CylinderGeometry(1,1,3,32)
     staticBottle = new THREE.Mesh(this.bottle, this.materialBottle)
     sphere = new THREE.SphereGeometry(1.19,64,32,0,Math.PI*2,0,1)
@@ -63,11 +64,14 @@ export default class DragonFly {
     constructor(position, scale, rotation, velocity) {
         this.materialWings.side = THREE.DoubleSide
         this.wingMovement = 0
-        this.staticBottle.position.set(position.x, position.z, position.y)
-        this.staticBottle.scale.set(scale.x, scale.z, scale.y)
-        this.staticBottle.rotation.set(rotation.x, rotation.z, rotation.y)
+        this.body.position.set(position.x, position.y, position.z)
+        this.body.scale.set(scale.x, scale.y, scale.z)
+        this.body.rotation.set(rotation.x, rotation.y, rotation.z)
         this.velocity = velocity
+        this.animationStart = false
+        this.animationFall = false
 
+        this.body.add(this.staticBottle)
         this.staticBottle.add(this.staticSphere)
         this.staticSphere.add(this.staticNeck)
         this.staticNeck.add(this.staticTop)
@@ -95,7 +99,7 @@ export default class DragonFly {
         this.staticMedLeg5.add(this.staticBotLeg5)
         this.staticMedLeg6.add(this.staticBotLeg6)
         
-        this.staticBottle.rotation.y = 180 * Math.PI / 180
+        this.staticBottle.rotation.y = 90 * Math.PI / 180
         this.staticBottle.rotation.z = 90 * Math.PI / 180
         this.staticSphere.position.set(0,0.85,0)
         this.staticNeck.position.set(0,1,0)
@@ -162,7 +166,7 @@ export default class DragonFly {
         this.staticBotLeg6.rotation.z = -120 * Math.PI / 180
     }
 
-    animationWings() {
+    animation() {
         if(this.wingMovement == 0){
             this.staticWing1.rotation.y += 10 * Math.PI / 180 * this.velocity
             this.staticWing4.rotation.y += 10 * Math.PI / 180 * this.velocity
