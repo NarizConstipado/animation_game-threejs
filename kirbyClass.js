@@ -3,6 +3,9 @@ import { LineSegments2 } from './libs/lines/LineSegments2.js';
 import { LineSegmentsGeometry } from './libs/lines/LineSegmentsGeometry.js';
 import { LineMaterial } from './libs/lines/LineMaterial.js';
 
+const wall_hit = new Audio('./sounds/wall_hit.mp3')
+const sword_swing = new Audio('./sounds/sword_swing.mp3')
+const inhale_sound = new Audio('./sounds/inhale_sound.mp3')
 
 export default class Kirby {
     //MATERIAL
@@ -27,6 +30,8 @@ export default class Kirby {
     points_tornado = []
 
     move = { "max": 0.7, "min": -0.1, "in_out": true, "velocity": 1, "hit": false, "hit_out": false }
+
+    eat_count = 0
 
     constructor(color = "rgb(254,133,230)", npc = false, equipe_sword = true,) {
         //KIRBY
@@ -85,12 +90,13 @@ export default class Kirby {
             this.sword.position.x = -0.6
             this.sword.rotation.set(Math.PI / 180 * -30, Math.PI / 180 * 70, Math.PI / 180 * 30)
             this.sword.scale.set(1, 0.7, 1)
-
+            
             this.arm_right_pivot.add(this.sword)
         }
     }
-
+    
     walk(clicked_keys, objects_eat) {
+        this.check_limit()
         let aready_walk = false
         if (clicked_keys.includes("w")) {
             this.character.position.z -= -Math.cos(this.character.rotation.y) * 0.1 * this.move.velocity
@@ -123,11 +129,21 @@ export default class Kirby {
             }
             else aready_walk = false
         }
-        if (clicked_keys.includes("e")) this.position_eat(objects_eat);
+        if (clicked_keys.includes("e")) {this.position_eat(objects_eat); inhale_sound.play()} else {inhale_sound.pause(); inhale_sound.currentTime = 0.5}
         if (clicked_keys.includes(" ")) this.move.velocity = 3;
         else this.move.velocity = 1;
         if (clicked_keys.includes("f")) this.position_hit();
         this.animation_hit();
+    }
+
+    check_limit() {
+        if ((Math.pow(30, 2)) <= Math.pow(this.character.position.x, 2) + Math.pow(this.character.position.z, 2)) {
+            // let a = Math.acos(((this.character.position.x * 1) + (this.character.position.z * 0)) / (Math.sqrt(Math.pow(this.character.position.x, 2) + Math.pow(this.character.position.z, 2))) * (Math.sqrt(Math.pow(1, 2) + Math.pow(0, 2)))) * 180 / Math.PI;
+            this.character.rotation.y += Math.PI
+            this.character.position.z -= -Math.cos(this.character.rotation.y) * 0.5
+            this.character.position.x -= -Math.sin(this.character.rotation.y) * 0.5
+            wall_hit.play()
+        }
     }
 
     position_default() {
@@ -192,8 +208,6 @@ export default class Kirby {
             let objectBox = new THREE.Box3().setFromObject(object);
             let bodyBox = new THREE.Box3().setFromObject(this.body);
             if (objectBox.intersectsBox(tornadoBox)) {
-                console.log(object.position)
-                console.log(this.character.position.x, this.character.position.z)
                 object.position.x -= Math.sin(this.character.rotation.y) * 0.1
                 object.position.z -= Math.cos(this.character.rotation.y) * 0.1
                 if (objectBox.intersectsBox(bodyBox)) {
@@ -241,6 +255,7 @@ export default class Kirby {
             this.character_up.rotation.y += Math.PI / 24
             if (this.character_up.rotation.y > 2 * Math.PI / 3) {
                 this.move.hit = false
+                sword_swing.play()
                 this.move.hit_out = true
             }
         }

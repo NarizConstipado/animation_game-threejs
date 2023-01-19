@@ -50,10 +50,7 @@
         let directionalLight
 
         //background music
-        const inhale_sound = new Audio('./sounds/inhale_sound.mp3')
         const theme = new Audio('./sounds/theme_song.mp3')
-        const sword_swing = new Audio('./sounds/sword_swing.mp3')
-        const wall_hit = new Audio('./sounds/wall_hit.mp3')
         theme.volume = 0.1
         theme.play();
         theme.loop = true;
@@ -72,7 +69,7 @@
             renderer.shadowMap.enabled = true
             renderer.shadowMap.type = THREE.PCFSoftShadowMap
 
-            renderer.setClearColor("#000000");
+            renderer.setClearColor("#87ceeb");
             document.body.appendChild(renderer.domElement);
 
             controls = new CONTROLS.OrbitControls(camera, renderer.domElement)
@@ -191,7 +188,6 @@
             //trashAnimations
             if (kirby.move.hit_out && checkCollisionTree()) {
                 let treeHit = checkCollisionTree()
-                console.log(!(treeHit.trash.pivot.position.y <= -0.4));
                 if (!(treeHit.trash.pivot.position.y <= -0.4)) {
                     treeHit.trash.animationStart = true
                     treeHit.trash.animationFall = true
@@ -258,6 +254,9 @@
                         if (trash.pivot.rotation.y <= rotationBody) allowRotation = false
                     }
                 } else {
+                    if (checkLimite(trash.pivot.position)) {
+                        trash.pivot.rotation.y += (Math.random() * (285 - 255) + 255) * Math.PI / 180
+                    }
                     trash.pivot.position.z -= -Math.cos(trash.pivot.rotation.y) * 0.5 * trash.velocity / 2
                     trash.pivot.position.x -= -Math.sin(trash.pivot.rotation.y) * 0.5 * trash.velocity / 2
                 }
@@ -308,6 +307,11 @@
             clicked_keys.splice(clicked_keys.indexOf(e.key), 1)
             if (!clicked_keys.includes("e")) kirby.position_default()
         })
+
+        function checkLimite(position) {
+            if ((Math.pow(30, 2)) > Math.pow(position.x, 2) + Math.pow(position.z, 2)) return false
+            else return true
+        }
     </script>
 </body>
 
