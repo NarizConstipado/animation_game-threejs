@@ -6,10 +6,10 @@ import { LineMaterial } from './libs/lines/LineMaterial.js';
 
 export default class Kirby {
     //MATERIAL
-    material_body = new THREE.MeshBasicMaterial({ color: "rgb(254,133,230)", wireframe: false, side: 2 });
-    material_inside_body = new THREE.MeshBasicMaterial({ color: "rgb(200,3,64)", wireframe: false });
-    material_eye = new THREE.MeshBasicMaterial({ color: "rgb(0,0,0)", wireframe: false });
-    material_leg = new THREE.MeshBasicMaterial({ color: "rgb(175,3,64)", wireframe: false });
+    material_body = new THREE.MeshToonMaterial({ color: "rgb(254,133,230)", wireframe: false, side: 2 });
+    material_inside_body = new THREE.MeshToonMaterial({ color: "rgb(200,3,64)", wireframe: false });
+    material_eye = new THREE.MeshToonMaterial({ color: "rgb(0,0,0)", wireframe: false });
+    material_leg = new THREE.MeshToonMaterial({ color: "rgb(175,3,64)", wireframe: false });
 
     character = new THREE.Group();
     character_up = new THREE.Group();
@@ -61,7 +61,7 @@ export default class Kirby {
         //SWORD
         if (equipe_sword) {
             this.sword = new THREE.Mesh();
-            this.material_sword = new THREE.MeshBasicMaterial({ color: 0xdd7744, wireframe: false })
+            this.material_sword = new THREE.MeshToonMaterial({ color: 0xdd7744, wireframe: false })
 
             this.grip = new THREE.Mesh(new THREE.CylinderGeometry(), this.material_sword);
             this.grip.scale.set(0.15, 1, 0.15)
@@ -167,7 +167,7 @@ export default class Kirby {
         this.tornado.visible = false;
     }
 
-    position_eat() {
+    position_eat(objects) {
         let eye_position = [this.eye_left.position.y, this.eye_left.position.z, this.eye_left.rotation.x]
         this.eye_right.position.set(-0.2, (0.033 + eye_position[0]), (eye_position[1] - 0.02))
         this.eye_right.rotation.x = eye_position[2] - (3 * Math.PI / 180)
@@ -181,8 +181,21 @@ export default class Kirby {
             this.eye_left.position.set(0.2, 0.8, 0.5)
             this.eye_left.rotation.x = -58.4 * Math.PI / 180
             mouth = Math.PI / 180 * 130
+            eating(objects)
         }
         this.body.geometry = new THREE.SphereGeometry(1, 32, 16, 0, Math.PI * 2, 0, mouth)
+    }
+
+    eating(objects) {
+        for (let object in objects) {
+            if (object.intersectsBox(this.tornado)) {
+                object.position.x -= Math.sin(this.character.rotation.y) * 0.1
+                object.position.z -= Math.cos(this.character.rotation.y) * 0.1
+                if (object.containsBox(this.character)) {
+                    object.visible = false
+                }
+            }
+        }
     }
 
     position_walk() {
