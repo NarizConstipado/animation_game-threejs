@@ -8,10 +8,10 @@ export default class Spider {
     materialSpider = new THREE.MeshToonMaterial({map: this.spiderFur})
     materialCan = new THREE.MeshToonMaterial({map: this.canCola})
     
-    body = new THREE.Object3D();
+    pivot = new THREE.Object3D();
 
     CAN = new THREE.CylinderGeometry(1,1,4,32)
-    canStatic = new THREE.Mesh(this.CAN, this.materialCan);
+    body = new THREE.Mesh(this.CAN, this.materialCan);
     
     spiderSuperiorLeg1 = new THREE.CylinderGeometry(0.15,0.25,1,32)
     SuperiorLeg1 = new THREE.Mesh(this.spiderSuperiorLeg1, this.materialSpider)
@@ -49,21 +49,27 @@ export default class Spider {
     constructor(position, scale, rotation, velocity){      
         this.legMovement = 0
         this.velocity = velocity
-        this.body.position.set(position.x, position.y, position.z)
-        this.body.scale.set(scale.x, scale.y, scale.z)
-        this.body.rotation.set(rotation.x, rotation.y, rotation.z)
-        this.animationStart = false
+        this.pivot.position.set(position.x, position.y, position.z)
+        this.pivot.scale.set(scale.x, scale.y, scale.z)
+        this.pivot.rotation.set(rotation.x, rotation.y, rotation.z)
+        this.animationStartItems = false
         this.animationFall = false
+        this.animationStart = false
 
-        this.body.add(this.canStatic)
-        this.canStatic.add(this.SuperiorLeg1)
-        this.canStatic.add(this.SuperiorLeg2)
-        this.canStatic.add(this.SuperiorLeg3)
-        this.canStatic.add(this.SuperiorLeg4)
-        this.canStatic.add(this.SuperiorLeg5)
-        this.canStatic.add(this.SuperiorLeg6)
-        this.canStatic.add(this.SuperiorLeg7)
-        this.canStatic.add(this.SuperiorLeg8)
+        this.appendix = [
+            this.SuperiorLeg1, this.SuperiorLeg2, this.SuperiorLeg3, this.SuperiorLeg4, 
+            this.SuperiorLeg5, this.SuperiorLeg6, this.SuperiorLeg7, this.SuperiorLeg8
+        ]   
+
+        this.pivot.add(this.body)
+        this.body.add(this.SuperiorLeg1)
+        this.body.add(this.SuperiorLeg2)
+        this.body.add(this.SuperiorLeg3)
+        this.body.add(this.SuperiorLeg4)
+        this.body.add(this.SuperiorLeg5)
+        this.body.add(this.SuperiorLeg6)
+        this.body.add(this.SuperiorLeg7)
+        this.body.add(this.SuperiorLeg8)
         this.SuperiorLeg1.add(this.InferiorLeg1)
         this.SuperiorLeg2.add(this.InferiorLeg2)
         this.SuperiorLeg3.add(this.InferiorLeg3)
@@ -72,9 +78,9 @@ export default class Spider {
         this.SuperiorLeg6.add(this.InferiorLeg6)
         this.SuperiorLeg7.add(this.InferiorLeg7)
         this.SuperiorLeg8.add(this.InferiorLeg8)
-        //CANsTATIC
-        this.canStatic.rotation.z = 180 * Math.PI / 180
-        this.canStatic.rotation.x = -90 * Math.PI / 180
+        //body
+        this.body.rotation.z = 180 * Math.PI / 180
+        this.body.rotation.x = -90 * Math.PI / 180
         //SUPERIOR LEGS
         this.SuperiorLeg1.position.set(-1,1.011,0)
         this.SuperiorLeg1.rotation.x = 220 * Math.PI / 180

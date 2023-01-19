@@ -3,11 +3,11 @@ import * as THREE from './libs/three.module.js';
 export default class Frog {
     materialBox = new THREE.MeshToonMaterial({ wireframe: false })
     materialBoxTopper = new THREE.MeshToonMaterial({ wireframe: false })
-    body = new THREE.Object3D();
+    pivot = new THREE.Object3D();
     
 
     box = new THREE.BoxGeometry(3, 2, 5)
-    staticBox = new THREE.Mesh(this.box, this.materialBox)
+    body = new THREE.Mesh(this.box, this.materialBox)
     topper1 = new THREE.PlaneGeometry(3, 1)
     staticTopper1 = new THREE.Mesh(this.topper1, this.materialBoxTopper)
     topper2 = new THREE.PlaneGeometry(3, 1)
@@ -69,11 +69,17 @@ export default class Frog {
         this.frogMovement = 0
         this.cont = 0
         this.xFrogCont = 0
-        this.animationStart = false
+        this.animationStartItems = true
         this.animationFall = false
-        this.body.position.set(position.x, position.y, position.z)
-        this.body.scale.set(scale.x, scale.y, scale.z)
-        this.body.rotation.set(rotation.x, rotation.y, rotation.z)
+        this.animationStart = false
+
+        this.appendix = [
+            
+        ]   
+
+        this.pivot.position.set(position.x, position.y, position.z)
+        this.pivot.scale.set(scale.x, scale.y, scale.z)
+        this.pivot.rotation.set(rotation.x, rotation.y, rotation.z)
         this.velocity = velocity
 
         this.animationStartItems = true
@@ -107,10 +113,10 @@ export default class Frog {
         this.staticFoot4.add(this.staticFinger10)
         this.staticFoot4.add(this.staticFinger11)
         this.staticFoot4.add(this.staticFinger12)
-        this.staticBox.position.set(0,0,0)
-        this.staticBox.rotation.x = 0 * Math.PI / 180
-        this.staticBox.rotation.y = 0 * Math.PI / 180
-        this.staticBox.rotation.z = 0 * Math.PI / 180
+        this.body.position.set(0,0,0)
+        this.body.rotation.x = 0 * Math.PI / 180
+        this.body.rotation.y = 0 * Math.PI / 180
+        this.body.rotation.z = 0 * Math.PI / 180
         //TOPPER
         this.staticTopper1.position.set(0,1.258,-2.07)
         this.staticTopper1.rotation.x = 59 * Math.PI / 180

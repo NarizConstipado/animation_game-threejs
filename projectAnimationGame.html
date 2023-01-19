@@ -33,7 +33,7 @@
         //map
         let clicked_keys = []
         let collisionsWalls = [];
-        let treesColection = [], trashColection = []
+        let treesColection = [], treesColectionToHit = [], trashColection = [], trashColectionBodies = []
         let oldPosition, oldRotation
         let kirby
         
@@ -46,7 +46,8 @@
 
         //other
         let camera, scene, renderer;
-        let bbHelper, bbHelper1, bbHelper2, bbHelper3, bbHelper4, bbtreeTronk
+        let bbHelper, bbHelper1, bbHelper2, bbHelper3, bbHelper4, bbHelper5, bbHelper6, bbHelper7, bbHelper8, bbHelper9, bbHelper10, 
+        bbtreeTronk
         let controls
         let directionalLight
 
@@ -75,32 +76,25 @@
             directionalLight.position.set(35,30,20)
             directionalLight.rotation.x = 30 * Math.PI / 180
 
-            console.log(directionalLight.shadow.camera)
             directionalLight.shadow.camera.far = 100;
-             directionalLight.shadow.camera.left = -50;
-              directionalLight.shadow.camera.right = 50
-              directionalLight.shadow.camera.top = -50;
-              directionalLight.shadow.camera.bottom = 50
-              directionalLight.shadow.mapSize.width = 512*2
-              directionalLight.shadow.mapSize.height = 512*2
+            directionalLight.shadow.camera.left = -50;
+            directionalLight.shadow.camera.right = 50
+            directionalLight.shadow.camera.top = -50;
+            directionalLight.shadow.camera.bottom = 50
+            directionalLight.shadow.mapSize.width = 512*2
+            directionalLight.shadow.mapSize.height = 512*2
 
-            console.log( directionalLight.shadow.mapSize)
-
-            let hS = new THREE.CameraHelper(directionalLight.shadow.camera)
-            scene.add(hS)
         //KIRBY
             kirby = new Kirby()
 
         //trashItems
         //dragonFly
         let scaleDragon = {x: 0.4,y: 0.4,z: 0.4}
-        let positionDragon = {x: 10,y: 10,z: 0}
-        let rotationDragon = {x: 0,y: 0,z: 0}
+        let positionDragon = {x: -8.7,y: 10,z: 0}
+        let rotationDragon = {x: -0.5,y: 0.5,z: 0}
         let velocityDragon = 1
         dragonFly = new DragonFly(positionDragon, scaleDragon, rotationDragon, velocityDragon)
         trashColection.push(dragonFly)
-        
-        
         //paperBall
         let scaleBall = {x: 0.4,y: 0.4,z: 0.4}
         let positionBall = {x: 2.6,y: 10,z: 23}
@@ -109,26 +103,28 @@
         paperBall = new PaperBall(positionBall, scaleBall, rotationBall, velocityBall)
         trashColection.push(paperBall)
         //spider
-        /* let scaleSpider = {x: 0.4,y: 0.4,z: 0.4}
-        let positionSpider = {x: -5,y: 10,z: 5}
-        let rotationSpider = {x: 0,y: 0,z: 0}
-        let velocitySpider = 1
-        spider = new Spider(positionSpider, scaleSpider, rotationSpider, velocityBall)
-        trashColection.push(spider) */
         let scaleSpider = {x: 0.4,y: 0.4,z: 0.4}
         let positionSpider = {x: -5,y: 10,z: 5}
         let rotationSpider = {x: 0,y: 0,z: 0}
         let velocitySpider = 1
-        spider = new Frog(positionSpider, scaleSpider, rotationSpider, velocityBall)
+        spider = new Spider(positionSpider, scaleSpider, rotationSpider, velocityBall)
         trashColection.push(spider)
+        //frog
+        let scaleFrog = {x: 0.4,y: 0.4,z: 0.4}
+        let positionFrog = {x: 0,y: 10,z: 0}
+        let rotationFrog = {x: 0,y: 0,z: 0}
+        let velocityFrog = 0.25
+        frog = new Frog(positionFrog, scaleFrog, rotationFrog, velocityFrog)
+        trashColection.push(frog)
 
-        trashColection.forEach(trash => scene.add(trash.body))
+        trashColection.forEach(trash => scene.add(trash.pivot))
+        trashColection.forEach(trash => trashColectionBodies.push(trash.body))
         
             
         //TREES
             let scaleTree = {x: 2.5, y: 2.5, z: 2.5}
-            let positionTree = {x: 0, y: -1.1, z: -10}
-            tree = new Tree(positionTree,scaleTree, 0.5, 1, dragonFly)
+            let positionTree = {x: 2, y: -1.1, z: -10}
+            tree = new Tree(positionTree,scaleTree, 0.5, 1)
             treesColection.push(tree)
 
             let scaleTree2 = {x: 2, y: 2, z: 2}
@@ -141,40 +137,44 @@
             tree3 = new Tree(positionTree3,scaleTree3, 5, 1.5)
             treesColection.push(tree3)
             
-            let scaleTree4 = {x: 3.5, y: 3.5, z: 3.5}
-            let positionTree4 = {x: -15, y: -1.1, z: 0}
-            tree4 = new Tree(positionTree4,scaleTree4, -0.3, 0.5)
-            treesColection.push(tree4)
-
             let scaleTree5 = {x: 3, y: 3, z: 3}
             let positionTree5 = {x: -7, y: -1.1, z: -15}
             tree5 = new Tree(positionTree5,scaleTree5, 0.5, 1)
-            treesColection.push(tree5)
+            treesColection.push(tree5) 
             
             let scaleTree6 = {x: 2.7, y: 2.7, z: 2.7}
             let positionTree6 = {x: 10, y: -1.1, z: 10}
             tree6 = new Tree(positionTree6,scaleTree6, 0.5, 1)
             treesColection.push(tree6)
             
-            let scaleTree7 = {x: 4.5, y: 4.5, z: 4.5}
-            let positionTree7 = {x: 17, y: -1.1, z: -17}
-            tree7 = new Tree(positionTree7,scaleTree7, 3, 1)
-            treesColection.push(tree7)
-            
             let scaleTree8 = {x: 5, y: 5, z: 5}
             let positionTree8 = {x: 20, y: -1.1, z: 13}
             tree8 = new Tree(positionTree8,scaleTree8, 5, 1)
             treesColection.push(tree8)
             
+            let scaleTree4 = {x: 3.5, y: 3.5, z: 3.5}
+            let positionTree4 = {x: -15, y: -1.1, z: 0}
+            tree4 = new Tree(positionTree4,scaleTree4, -0.3, 0.5, dragonFly)
+            treesColection.push(tree4)
+            treesColectionToHit.push(tree4)
+            
+            let scaleTree7 = {x: 4.5, y: 4.5, z: 4.5}
+            let positionTree7 = {x: 17, y: -1.1, z: -17}
+            tree7 = new Tree(positionTree7,scaleTree7, 3, 1)
+            treesColection.push(tree7)
+            treesColectionToHit.push(tree7)
+            
             let scaleTree9 = {x: 3, y: 3, z: 3}
             let positionTree9 = {x: -17, y: -1.1, z: 17}
-            tree9 = new Tree(positionTree9,scaleTree9, 2, 1)
+            tree9 = new Tree(positionTree9,scaleTree9, 2, 1, spider)
             treesColection.push(tree9)
+            treesColectionToHit.push(tree9)
             
             let scaleTree10 = {x: 3.5, y: 3.5, z: 3.5}
             let positionTree10 = {x: 8, y: -1.1, z: 23}
             tree10 = new Tree(positionTree10,scaleTree10, 6, 1, paperBall)
             treesColection.push(tree10)
+            treesColectionToHit.push(tree10)
             /* collisionsWalls.push(tree.treeTronk) */
             treesColection.forEach(tree => {
                 scene.add(tree.pivot)
@@ -184,22 +184,22 @@
             floor.rotation.x = -Math.PI / 2
             floor.position.y = -1.1
             
-            /* let wallSideRight = new THREE.Mesh(new THREE.PlaneGeometry(50, 40), new THREE.MeshBasicMaterial({color: 0x20ee00}))
+            /* let wallSideRight = new THREE.Mesh(new THREE.PlaneGeometry(50, 40), new THREE.MeshToonMaterial({color: 0x20ee00}))
             wallSideRight.position.set(25,18,0)
             wallSideRight.rotation.y = -Math.PI / 2
             collisionsWalls.push(wallSideRight)
             
-            let wallSideLeft = new THREE.Mesh(new THREE.PlaneGeometry(50, 40), new THREE.MeshBasicMaterial({color: 0x20ee00}))
+            let wallSideLeft = new THREE.Mesh(new THREE.PlaneGeometry(50, 40), new THREE.MeshToonMaterial({color: 0x20ee00}))
             wallSideLeft.position.set(-25,18,0)
             wallSideLeft.rotation.y = Math.PI / 2
             collisionsWalls.push(wallSideLeft)
             
-            let wallFront = new THREE.Mesh(new THREE.PlaneGeometry(50, 40), new THREE.MeshBasicMaterial({color: 0x20ee00}))
+            let wallFront = new THREE.Mesh(new THREE.PlaneGeometry(50, 40), new THREE.MeshToonMaterial({color: 0x20ee00}))
             wallFront.position.set(0,18,-25)
             collisionsWalls.push(wallFront)
             
             
-            let wallBack = new THREE.Mesh(new THREE.PlaneGeometry(50, 20), new THREE.MeshBasicMaterial({color: 0x20ee00}))
+            let wallBack = new THREE.Mesh(new THREE.PlaneGeometry(50, 20), new THREE.MeshToonMaterial({color: 0x20ee00}))
             wallBack.position.set(0,8,25)
             wallBack.rotation.y = -Math.PI
             collisionsWalls.push(wallBack) */
@@ -224,10 +224,25 @@
             
             console.log(scene.children)
             kirby.position_default()
-            bbHelper = new THREE.BoxHelper(tree10.pivot, 0x00FFFF);
+            
+            
+            bbHelper4 = new THREE.BoxHelper(tree4.treeTronk, 0x00FFFF);
+            scene.add(bbHelper4)
+            
+            bbHelper7 = new THREE.BoxHelper(tree7.treeTronk, 0x00FFFF);
+            scene.add(bbHelper7)
+            
+            bbHelper9 = new THREE.BoxHelper(tree9.treeTronk, 0x00FFFF);
+            scene.add(bbHelper9)
+            
+            bbHelper10 = new THREE.BoxHelper(tree10.treeTronk, 0x00FFFF);
+            scene.add(bbHelper10)
+            
+            bbHelper = new THREE.BoxHelper(kirby.body, 0x00FFFF);
             scene.add(bbHelper)
-            /* 
+            
             kirby.body.geometry.computeBoundingBox();
+            /* 
             wallFront.geometry.computeBoundingBox();
             wallBack.geometry.computeBoundingBox();
             wallSideLeft.geometry.computeBoundingBox();
@@ -236,7 +251,6 @@
                 tree.treeTronk.geometry.computeBoundingBox();
             })
 
-            bbHelper1 = new THREE.BoxHelper(wallFront, 0x00FFFF);
             bbHelper2 = new THREE.BoxHelper(wallBack, 0x00FFFF);
             bbHelper3 = new THREE.BoxHelper(wallSideLeft, 0x00FFFF);
             bbHelper4 = new THREE.BoxHelper(wallSideRight, 0x00FFFF);
@@ -252,17 +266,30 @@
             renderer.render(scene, camera)
           
             bbHelper.update()
-
+            bbHelper4.update()
+            bbHelper7.update()
+            bbHelper9.update()
+            bbHelper10.update()
             //treeAnimations
             treesColection.forEach(tree => {
                 tree.animationsTree()
             })
             //trashAnimations
+            if(clicked_keys.includes("f") /* &&  checkCollisionTree() */){
+                /* let treeHit = checkCollisionTree()
+                console.log(treeHit) */
+                /* treeHit.trash */dragonFly.animationStart = true
+                /* treeHit.trash */dragonFly.animationFall = true
+            }
             //animationTrashFall(paperBall)
             
+            /* console.log(trashColection) */
             trashColection.forEach(trash => {
                 if(trash.animationStartItems == true){
                     trash.animation()
+                }
+                if(trash.animationStart == true){
+                    animationTrashFall(trash)
                 }
             })
 
@@ -273,7 +300,7 @@
         
             oldPosition = {x: kirby.character.position.x, z: kirby.character.position.z} 
             oldRotation = kirby.character.rotation.y
-            kirby.walk(clicked_keys)
+            kirby.walk(clicked_keys, trashColectionBodies)
             
             /*if(checkCollisionsTree()){
             }            
@@ -287,15 +314,15 @@
         }
 
     //collisions detector
-
-        function checkCollisionsTree(){
+        function checkCollisionTree(){
             let Bkirby = new THREE.Box3().setFromObject(kirby.body);
-            for (let i = 0; i < treesColection.length; i++) {
-                let obstBox = new THREE.Box3().setFromObject(treesColection[i].pivot);
+            for (let i = 0; i < treesColectionToHit.length; i++) {
+                let obstBox = new THREE.Box3().setFromObject(treesColectionToHit[i].pivot);
                 let collision = Bkirby.intersectsBox(obstBox);
                 if (collision) {
+                    console.log(treesColectionToHit[i], i)
                     console.log("HIT")
-                    return treesColection[i];
+                    return treesColectionToHit[i];
                 } 
             }
             return false;
@@ -304,25 +331,28 @@
     //animationTrash fall
         function animationTrashFall(trash){
             if(trash.animationFall){
-                trash.body.position.y -= 0.1
-                if(trash.body.position.y <= -0.4) trash.animationFall = false; rotationBody = (Math.random() * 360)*Math.PI / 180, allowRotation = true
+                if(trash.pivot.rotation.x != 0 && trash.pivot.rotation.x >= 0) trash.pivot.rotation.x -= 0.1
+                else trash.pivot.rotation.x += 0.1
+                if(trash.pivot.rotation.y != 0 && trash.pivot.rotation.y >= 0) trash.pivot.rotation.y -= 0.1
+                else trash.pivot.rotation.y += 0.1
+                if(trash.pivot.rotation.z != 0 && trash.pivot.rotation.z >= 0) trash.pivot.rotation.z -= 0.1
+                else trash.pivot.rotation.z += 0.1
+                trash.pivot.position.y -= 0.1
+                if(trash.pivot.position.y <= -0.4) trash.animationFall = false; trash.animationStartItems = true; rotationBody = (Math.random() * 360)*Math.PI / 180, allowRotation = true
             } else {
                 //insert collision check here
                 if(allowRotation) {
-                    if(trash.body.rotation.y <= rotationBody) {
-                        trash.body.rotation.y += 0.1 
-                        if(trash.body.rotation.y >= rotationBody) allowRotation = false
+                    if(trash.pivot.rotation.y <= rotationBody) {
+                        trash.pivot.rotation.y += 0.1 
+                        if(trash.pivot.rotation.y >= rotationBody) allowRotation = false
                     } else {
-                        trash.body.rotation.y -= 0.1
-                        if(trash.body.rotation.y <= rotationBody) allowRotation = false
+                        trash.pivot.rotation.y -= 0.1
+                        if(trash.pivot.rotation.y <= rotationBody) allowRotation = false
                     }
                 } else {
-                    trash.animationStart = true
-                    trash.body.position.z -= -Math.cos(trash.body.rotation.y) * 0.1 * trash.velocity/2
-                    trash.body.position.x -= -Math.sin(trash.body.rotation.y) * 0.1 * trash.velocity/2
-                }
-                
-                
+                    trash.pivot.position.z -= -Math.cos(trash.pivot.rotation.y) * 0.1 * trash.velocity/2
+                    trash.pivot.position.x -= -Math.sin(trash.pivot.rotation.y) * 0.1 * trash.velocity/2
+                }          
             }
         }
     //kirby section

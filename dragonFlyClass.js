@@ -10,10 +10,10 @@ export default class DragonFly {
     materialLegs = new THREE.MeshToonMaterial({ color: '#B2BEB5'})
     materialTopper = new THREE.MeshToonMaterial({ color: '#8D918D'})
     
-    body = new THREE.Object3D();
+    pivot = new THREE.Object3D();
 
     bottle = new THREE.CylinderGeometry(1,1,3,32)
-    staticBottle = new THREE.Mesh(this.bottle, this.materialBottle)
+    body = new THREE.Mesh(this.bottle, this.materialBottle)
     sphere = new THREE.SphereGeometry(1.19,64,32,0,Math.PI*2,0,1)
     staticSphere = new THREE.Mesh(this.sphere, this.materialBottle)
     bottleNeck = new THREE.CylinderGeometry(0.3, 0.3, 2, 32)
@@ -70,34 +70,40 @@ export default class DragonFly {
     constructor(position, scale, rotation, velocity) {
         this.materialWings.side = THREE.DoubleSide
         this.wingMovement = 0
-        this.body.position.set(position.x, position.y, position.z)
-        this.body.scale.set(scale.x, scale.y, scale.z)
-        this.body.rotation.set(rotation.x, rotation.y, rotation.z)
+        this.pivot.position.set(position.x, position.y, position.z)
+        this.pivot.scale.set(scale.x, scale.y, scale.z)
+        this.pivot.rotation.set(rotation.x, rotation.y, rotation.z)
         this.velocity = velocity
-        this.animationStart = false
+        this.animationStartItems = false
         this.animationFall = false
+        this.animationStart = false
+        this.appendix = [
+            this.staticTopLeg1, this.staticTopLeg2, this.staticTopLeg3, this.staticTopLeg4,
+            this.staticTopLeg5, this.staticTopLeg6, this.staticMedLeg1, this.staticMedLeg2, 
+            this.staticMedLeg3, this.staticMedLeg4, this.staticMedLeg5, this.staticMedLeg6
+        ]   
 
-        this.body.add(this.staticBottle)
-        this.staticBottle.add(this.staticSphere)
+        this.pivot.add(this.body)
+        this.body.add(this.staticSphere)
         this.staticSphere.add(this.staticNeck)
         this.staticNeck.add(this.staticTop)
         this.staticTop.add(this.staticCover)
-        this.staticBottle.add(this.staticWing1)
-        this.staticBottle.add(this.staticWing2)
-        this.staticBottle.add(this.staticWing3)
-        this.staticBottle.add(this.staticWing4)
-        this.staticBottle.add(this.staticTopLeg1)
-        this.staticBottle.add(this.staticTopLeg2)
-        this.staticBottle.add(this.staticTopLeg3)
+        this.body.add(this.staticWing1)
+        this.body.add(this.staticWing2)
+        this.body.add(this.staticWing3)
+        this.body.add(this.staticWing4)
+        this.body.add(this.staticTopLeg1)
+        this.body.add(this.staticTopLeg2)
+        this.body.add(this.staticTopLeg3)
         this.staticTopLeg1.add(this.staticMedLeg1)
         this.staticTopLeg2.add(this.staticMedLeg2)
         this.staticTopLeg3.add(this.staticMedLeg3)
         this.staticMedLeg1.add(this.staticBotLeg1)
         this.staticMedLeg2.add(this.staticBotLeg2)
         this.staticMedLeg3.add(this.staticBotLeg3)
-        this.staticBottle.add(this.staticTopLeg4)
-        this.staticBottle.add(this.staticTopLeg5)
-        this.staticBottle.add(this.staticTopLeg6)
+        this.body.add(this.staticTopLeg4)
+        this.body.add(this.staticTopLeg5)
+        this.body.add(this.staticTopLeg6)
         this.staticTopLeg4.add(this.staticMedLeg4)
         this.staticTopLeg5.add(this.staticMedLeg5)
         this.staticTopLeg6.add(this.staticMedLeg6)
@@ -105,8 +111,8 @@ export default class DragonFly {
         this.staticMedLeg5.add(this.staticBotLeg5)
         this.staticMedLeg6.add(this.staticBotLeg6)
         
-        this.staticBottle.rotation.y = 90 * Math.PI / 180
-        this.staticBottle.rotation.z = 90 * Math.PI / 180
+        this.body.rotation.y = 90 * Math.PI / 180
+        this.body.rotation.z = 90 * Math.PI / 180
         this.staticSphere.position.set(0,0.85,0)
         this.staticNeck.position.set(0,1,0)
         this.staticNeck.rotation.y = 90 * Math.PI / 180

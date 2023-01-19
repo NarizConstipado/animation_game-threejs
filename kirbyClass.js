@@ -90,7 +90,7 @@ export default class Kirby {
         }
     }
 
-    walk(clicked_keys) {
+    walk(clicked_keys, objects_eat) {
         let aready_walk = false
         if (clicked_keys.includes("w")) {
             this.character.position.z -= -Math.cos(this.character.rotation.y) * 0.1 * this.move.velocity
@@ -123,7 +123,7 @@ export default class Kirby {
             }
             else aready_walk = false
         }
-        if (clicked_keys.includes("e")) this.position_eat();
+        if (clicked_keys.includes("e")) this.position_eat(objects_eat);
         if (clicked_keys.includes(" ")) this.move.velocity = 3;
         else this.move.velocity = 1;
         if (clicked_keys.includes("f")) this.position_hit();
@@ -181,14 +181,16 @@ export default class Kirby {
             this.eye_left.position.set(0.2, 0.8, 0.5)
             this.eye_left.rotation.x = -58.4 * Math.PI / 180
             mouth = Math.PI / 180 * 130
-            eating(objects)
+            this.eating(objects)
         }
         this.body.geometry = new THREE.SphereGeometry(1, 32, 16, 0, Math.PI * 2, 0, mouth)
     }
 
     eating(objects) {
         for (let object in objects) {
-            if (object.intersectsBox(this.tornado)) {
+            let tornadoBox = new THREE.Box3().setFromObject(this.tornado);
+            let objectBox = new THREE.Box3().setFromObject(object);
+            if (objectBox.intersectsBox(tornadoBox)) {
                 object.position.x -= Math.sin(this.character.rotation.y) * 0.1
                 object.position.z -= Math.cos(this.character.rotation.y) * 0.1
                 if (object.containsBox(this.character)) {
