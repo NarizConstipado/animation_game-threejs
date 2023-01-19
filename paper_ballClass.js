@@ -1,9 +1,9 @@
 import * as THREE from './libs/three.module.js';
 
 export default class PaperBall {
-    materialKnot = new THREE.MeshNormalMaterial({ wireframe: false })
-    
-    body = new THREE.Object3D()
+
+    materialKnot = new THREE.MeshBasicMaterial({ color: '#f2eecb' })
+    materialLegsArms = new THREE.MeshBasicMaterial({ color: '#000000' })
 
     torus1 = new THREE.TorusKnotGeometry(1,0.4,64,8,10.36,2.26)
     staticTorus1 = new THREE.Mesh(this.torus1, this.materialKnot)
@@ -14,17 +14,17 @@ export default class PaperBall {
     torus4 = new THREE.TorusKnotGeometry(1,0.4,64,8,10.16,2.26)
     staticTorus4 = new THREE.Mesh(this.torus4, this.materialKnot)
     topperLeg1 = new THREE.BoxGeometry(0.5,1.2,0.5)
-    staticTopperLeg1 = new THREE.Mesh(this.topperLeg1, this.materialKnot)
+    staticTopperLeg1 = new THREE.Mesh(this.topperLeg1, this.materialLegsArms)
     topperLeg2 = new THREE.BoxGeometry(0.5,1.2,0.5)
-    staticTopperLeg2 = new THREE.Mesh(this.topperLeg2, this.materialKnot)
+    staticTopperLeg2 = new THREE.Mesh(this.topperLeg2, this.materialLegsArms)
     bottomLeg1 = new THREE.BoxGeometry(0.5,1.2,0.5)
-    staticBottomLeg1 = new THREE.Mesh(this.bottomLeg1, this.materialKnot)
+    staticBottomLeg1 = new THREE.Mesh(this.bottomLeg1, this.materialLegsArms)
     bottomLeg2 = new THREE.BoxGeometry(0.5,1.2,0.5)
-    staticBottomLeg2 = new THREE.Mesh(this.bottomLeg2, this.materialKnot)
+    staticBottomLeg2 = new THREE.Mesh(this.bottomLeg2, this.materialLegsArms)
     arm1 = new THREE.BoxGeometry(0.5,2.5,0.5)
-    staticArm1 = new THREE.Mesh(this.arm1, this.materialKnot)
+    staticArm1 = new THREE.Mesh(this.arm1, this.materialLegsArms)
     arm2 = new THREE.BoxGeometry(0.5,2.5,0.5)
-    staticArm2 = new THREE.Mesh(this.arm2, this.materialKnot)
+    staticArm2 = new THREE.Mesh(this.arm2, this.materialLegsArms)
 
     constructor(position, scale, rotation, velocity) {
         this.legMovement1 = 0

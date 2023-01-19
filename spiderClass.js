@@ -2,46 +2,49 @@ import * as THREE from './libs/three.module.js';
 
 export default class Spider {
     
-    materialCAN = new THREE.MeshNormalMaterial({ wireframe: false });
-    materialSpiderLeg = new THREE.MeshNormalMaterial({ wireframe: false });
+    spiderFur = new THREE.TextureLoader().load("./textures/fur.jpg")
+    canCola = new THREE.TextureLoader().load("./textures/cola_unfold.jpg")
+
+    materialSpider = new THREE.MeshBasicMaterial({map: this.spiderFur})
+    materialCan = new THREE.MeshBasicMaterial({map: this.canCola})
     
     body = new THREE.Object3D();
 
     CAN = new THREE.CylinderGeometry(1,1,4,32)
-    canStatic = new THREE.Mesh(this.CAN, this.materialCAN);
+    canStatic = new THREE.Mesh(this.CAN, this.materialCan);
     
     spiderSuperiorLeg1 = new THREE.CylinderGeometry(0.15,0.25,1,32)
-    SuperiorLeg1 = new THREE.Mesh(this.spiderSuperiorLeg1, this.materialSpiderLeg)
+    SuperiorLeg1 = new THREE.Mesh(this.spiderSuperiorLeg1, this.materialSpider)
     spiderSuperiorLeg2 = new THREE.CylinderGeometry(0.15,0.25,1,32)
-    SuperiorLeg2 = new THREE.Mesh(this.spiderSuperiorLeg2, this.materialSpiderLeg) 
+    SuperiorLeg2 = new THREE.Mesh(this.spiderSuperiorLeg2, this.materialSpider) 
     spiderSuperiorLeg3 = new THREE.CylinderGeometry(0.15,0.25,1,32)
-    SuperiorLeg3 = new THREE.Mesh(this.spiderSuperiorLeg2, this.materialSpiderLeg) 
+    SuperiorLeg3 = new THREE.Mesh(this.spiderSuperiorLeg2, this.materialSpider) 
     spiderSuperiorLeg4 = new THREE.CylinderGeometry(0.15,0.25,1,32)
-    SuperiorLeg4 = new THREE.Mesh(this.spiderSuperiorLeg2, this.materialSpiderLeg) 
+    SuperiorLeg4 = new THREE.Mesh(this.spiderSuperiorLeg2, this.materialSpider) 
     spiderSuperiorLeg5 = new THREE.CylinderGeometry(0.15,0.25,1,32)
-    SuperiorLeg5 = new THREE.Mesh(this.spiderSuperiorLeg1, this.materialSpiderLeg)
+    SuperiorLeg5 = new THREE.Mesh(this.spiderSuperiorLeg1, this.materialSpider)
     spiderSuperiorLeg6 = new THREE.CylinderGeometry(0.15,0.25,1,32)
-    SuperiorLeg6 = new THREE.Mesh(this.spiderSuperiorLeg1, this.materialSpiderLeg)
+    SuperiorLeg6 = new THREE.Mesh(this.spiderSuperiorLeg1, this.materialSpider)
     spiderSuperiorLeg7 = new THREE.CylinderGeometry(0.15,0.25,1,32)
-    SuperiorLeg7 = new THREE.Mesh(this.spiderSuperiorLeg2, this.materialSpiderLeg) 
+    SuperiorLeg7 = new THREE.Mesh(this.spiderSuperiorLeg2, this.materialSpider) 
     spiderSuperiorLeg8 = new THREE.CylinderGeometry(0.15,0.25,1,32)
-    SuperiorLeg8 = new THREE.Mesh(this.spiderSuperiorLeg2, this.materialSpiderLeg) 
+    SuperiorLeg8 = new THREE.Mesh(this.spiderSuperiorLeg2, this.materialSpider) 
     spiderInferiorLeg1 = new THREE.CylinderGeometry(0.12, 0.03, 1.8, 32)
-    InferiorLeg1 = new THREE.Mesh(this.spiderInferiorLeg1, this.materialSpiderLeg)
+    InferiorLeg1 = new THREE.Mesh(this.spiderInferiorLeg1, this.materialSpider)
     spiderInferiorLeg2 = new THREE.CylinderGeometry(0.12, 0.03, 1.8, 32)
-    InferiorLeg2 = new THREE.Mesh(this.spiderInferiorLeg2, this.materialSpiderLeg)
+    InferiorLeg2 = new THREE.Mesh(this.spiderInferiorLeg2, this.materialSpider)
     spiderInferiorLeg3 = new THREE.CylinderGeometry(0.12, 0.03, 1.8, 32)
-    InferiorLeg3 = new THREE.Mesh(this.spiderInferiorLeg2, this.materialSpiderLeg)
+    InferiorLeg3 = new THREE.Mesh(this.spiderInferiorLeg2, this.materialSpider)
     spiderInferiorLeg4 = new THREE.CylinderGeometry(0.12, 0.03, 1.8, 32)
-    InferiorLeg4 = new THREE.Mesh(this.spiderInferiorLeg2, this.materialSpiderLeg)
+    InferiorLeg4 = new THREE.Mesh(this.spiderInferiorLeg2, this.materialSpider)
     spiderInferiorLeg5 = new THREE.CylinderGeometry(0.12, 0.03, 1.8, 32)
-    InferiorLeg5 = new THREE.Mesh(this.spiderInferiorLeg1, this.materialSpiderLeg)
+    InferiorLeg5 = new THREE.Mesh(this.spiderInferiorLeg1, this.materialSpider)
     spiderInferiorLeg6 = new THREE.CylinderGeometry(0.12, 0.03, 1.8, 32)
-    InferiorLeg6 = new THREE.Mesh(this.spiderInferiorLeg1, this.materialSpiderLeg)
+    InferiorLeg6 = new THREE.Mesh(this.spiderInferiorLeg1, this.materialSpider)
     spiderInferiorLeg7 = new THREE.CylinderGeometry(0.12, 0.03, 1.8, 32)
-    InferiorLeg7 = new THREE.Mesh(this.spiderInferiorLeg2, this.materialSpiderLeg)
+    InferiorLeg7 = new THREE.Mesh(this.spiderInferiorLeg2, this.materialSpider)
     spiderInferiorLeg8 = new THREE.CylinderGeometry(0.12, 0.03, 1.8, 32)
-    InferiorLeg8 = new THREE.Mesh(this.spiderInferiorLeg2, this.materialSpiderLeg)
+    InferiorLeg8 = new THREE.Mesh(this.spiderInferiorLeg2, this.materialSpider)
     
     constructor(position, scale, rotation, velocity){      
         this.legMovement = 0

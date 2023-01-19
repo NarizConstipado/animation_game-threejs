@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Basic ThreeJS APP</title>
+    <style>
+        body {
+            /* set margin to 0 and overflow to hidden, to use the complete page */
+            margin: 0;
+            overflow: hidden;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- HTML body will hold the Output -->
+
+    <script type="module">
+        import * as THREE from './libs/three.module.js';
+        import * as CONTROLS from './libs/OrbitControls.js';
+        import * as BufferGeometryUtils from './libs/BufferGeometryUtils.js';
+
+        let camera, scene, renderer;
+
+        let canStatic, materialCAN
+
+        let controls
+        
+        let staticWing1, staticWing2, staticWing3, staticWing4;
+        let wingMovement = 0
+
+        window.onload = function init() {
+            
+            scene = new THREE.Scene();
+            
+            const aspect = window.innerWidth / window.innerHeight;
+            camera = new THREE.PerspectiveCamera(75, aspect, 0.1, 10);
+            camera.position.y = 2;
+            camera.position.z = 8;
+            camera.lookAt(scene.position);
+            
+            
+            renderer = new THREE.WebGLRenderer({ antialias: false }); 
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            
+            controls = new CONTROLS.OrbitControls(camera, renderer.domElement)
+            
+            renderer.setClearColor("#000000");
+            document.body.appendChild(renderer.domElement);
+            
+            const axesHelper = new THREE.AxesHelper( 5 );
+            
+            //LIGHTS
+
+            const ambientLight = new THREE.AmbientLight('#722F37')
+
+
+            //TEXTURES
+            const backgroundTexture = new THREE.TextureLoader().load('./textures/bg.webp')
+            const wingTexture = new THREE.TextureLoader().load('./textures/wing2_0.jpg')
+            const winePaper = new THREE.TextureLoader().load('./textures/wine_paper.jpg')
+            
+            let materialBottle = new THREE.MeshBasicMaterial({ color: '#092E20',  transparent: true, opacity: 0.955/* , map: winePaper */ })
+            let materialWings = new THREE.MeshBasicMaterial({map : wingTexture, transparent : true, opacity : 0.5 })
+            let materialLegs = new THREE.MeshBasicMaterial({ color: '#1f5f9f'})
+            let materialTopper = new THREE.MeshBasicMaterial({ color: '#8D918D'})
+            materialWings.side = THREE.DoubleSide
+
+            //BOTTLE
+            //CYLINDER
+
+            let bottle = new THREE.CylinderGeometry(1,1,3,32)
+            let staticBottle = new THREE.Mesh(bottle, materialBottle)
+            staticBottle.position.set(0,2,0)
+            staticBottle.rotation.y = 180 * Math.PI / 180
+            staticBottle.rotation.z = 90 * Math.PI / 180
+
+            //SPHERE
+
+            let sphere = new THREE.SphereGeometry(1.19,64,32,0,Math.PI*2,0,1)
+            let staticSphere = new THREE.Mesh(sphere, materialBottle)
+            staticSphere.position.set(0,0.85,0)
+            staticBottle.add(staticSphere)
+
+            //BOTTLENECK
+        
+            let bottleNeck = new THREE.CylinderGeometry(0.3, 0.3, 2, 32)
+            let staticNeck = new THREE.Mesh(bottleNeck, materialBottle)
+            staticNeck.position.set(0,1,0)
+            staticSphere.add(staticNeck)
+            staticNeck.rotation.y = 90 * Math.PI / 180
+
+            //BOTTLENECK TOP
+
+            let bottleTop = new THREE.TorusGeometry(0.3,0.09,30,50)
+            let staticTop = new THREE.Mesh(bottleTop, materialTopper)
+            staticTop.position.set(0,1,0)
+            staticNeck.add(staticTop)
+            staticTop.rotation.x = 90 * Math.PI / 180
+
+            //BOTTLENECK TOP COVER
+
+            let coverTop = new THREE.CylinderGeometry(0.3,0.3,0.18,32)
+            let staticCover = new THREE.Mesh(coverTop, materialTopper)
+            staticCover.position.set(0,0,0)
+            staticTop.add(staticCover)
+            staticCover.rotation.x = 90 * Math.PI / 180
+
+            //WINGS
+            let wing1 = new THREE.CircleGeometry(2,32)
+            staticWing1 = new THREE.Mesh(wing1, materialWings)
+            staticWing1.position.set(0.7,-0.7,-1.5)
+            staticBottle.add(staticWing1)
+            staticWing1.rotation.x = 180 * Math.PI / 180
+            staticWing1.rotation.y = 90 * Math.PI / 180
+            staticWing1.rotation.z = 90 * Math.PI / 180
+            staticWing1.scale.set(0.200,0.800,1)
+
+            let wing2 = new THREE.CircleGeometry(2,32)
+            staticWing2 = new THREE.Mesh(wing2, materialWings)
+            staticWing2.position.set(0.7,0.3,-1.5)
+            staticBottle.add(staticWing2)
+            staticWing2.rotation.x = 180 * Math.PI / 180
+            staticWing2.rotation.y = 90 * Math.PI / 180
+            staticWing2.rotation.z = 90 * Math.PI / 180
+            staticWing2.scale.set(0.200,0.800,1)
+
+            let wing3 = new THREE.CircleGeometry(2,32)
+            staticWing3 = new THREE.Mesh(wing3, materialWings)
+            staticWing3.position.set(0.7,-0.7,1.5)
+            staticBottle.add(staticWing3)
+            staticWing3.rotation.x = -180 * Math.PI / 180
+            staticWing3.rotation.y = -90 * Math.PI / 180
+            staticWing3.rotation.z = -90 * Math.PI / 180
+            staticWing3.scale.set(0.200,0.800,1)
+
+            let wing4 = new THREE.CircleGeometry(2,32)
+            staticWing4 = new THREE.Mesh(wing4, materialWings)
+            staticWing4.position.set(0.7,0.3,1.5)
+            staticBottle.add(staticWing4)
+            staticWing4.rotation.x = -180 * Math.PI / 180
+            staticWing4.rotation.y = -90 * Math.PI / 180
+            staticWing4.rotation.z = -90 * Math.PI / 180
+            staticWing4.scale.set(0.200,0.800,1)
+
+            //TOP LEGS
+            let topLeg1 = new THREE.CylinderGeometry(0.06, 0.12, 0.6, 32)
+            let staticTopLeg1 = new THREE.Mesh(topLeg1, materialLegs)
+            staticTopLeg1.position.set(-1,-1,0.4)
+            staticBottle.add(staticTopLeg1)
+            staticTopLeg1.rotation.z = 45 * Math.PI / 180
+
+            let topLeg2 = new THREE.CylinderGeometry(0.06, 0.12, 0.6, 32)
+            let staticTopLeg2 = new THREE.Mesh(topLeg2, materialLegs)
+            staticTopLeg2.position.set(-1,-0.5,0.4)
+            staticBottle.add(staticTopLeg2)
+            staticTopLeg2.rotation.z = 45 * Math.PI / 180
+
+            let topLeg3 = new THREE.CylinderGeometry(0.08, 0.14, 1, 32)
+            let staticTopLeg3 = new THREE.Mesh(topLeg3, materialLegs)
+            staticTopLeg3.position.set(-1,0,0.4)
+            staticBottle.add(staticTopLeg3)
+            staticTopLeg3.rotation.z = 45 * Math.PI / 180
+
+            //MIDDLE LEGS
+            let medLeg1 = new THREE.CylinderGeometry(0.06, 0.03, 0.4, 32)
+            let staticMedLeg1 = new THREE.Mesh(medLeg1, materialLegs)
+            staticMedLeg1.position.set(-0.2,0.18,0)
+            staticTopLeg1.add(staticMedLeg1)
+            staticMedLeg1.rotation.z = -70 * Math.PI / 180
+
+            let medLeg2 = new THREE.CylinderGeometry(0.06, 0.03, 0.4, 32)
+            let staticMedLeg2 = new THREE.Mesh(medLeg2, materialLegs)
+            staticMedLeg2.position.set(-0.2,0.18,0)
+            staticTopLeg2.add(staticMedLeg2)
+            staticMedLeg2.rotation.z = -70 * Math.PI / 180
+
+            let medLeg3 = new THREE.CylinderGeometry(0.06, 0.03, 0.7, 32)
+            let staticMedLeg3 = new THREE.Mesh(medLeg3, materialLegs)
+            staticMedLeg3.position.set(-0.3,0.34,0)
+            staticTopLeg3.add(staticMedLeg3)
+            staticMedLeg3.rotation.z = -70 * Math.PI / 180
+            
+            //BOTTOM LEGS
+            let botLeg1 = new THREE.CylinderGeometry(0.03, 0.01, 0.2, 32)
+            let staticBotLeg1 = new THREE.Mesh(botLeg1, materialLegs)
+            staticBotLeg1.position.set(-0.1,-0.12,0)
+            staticMedLeg1.add(staticBotLeg1)
+            staticBotLeg1.rotation.z = -120 * Math.PI / 180
+
+            let botLeg2 = new THREE.CylinderGeometry(0.03, 0.01, 0.2, 32)
+            let staticBotLeg2 = new THREE.Mesh(botLeg2, materialLegs)
+            staticBotLeg2.position.set(-0.1,-0.12,0)
+            staticMedLeg2.add(staticBotLeg2)
+            staticBotLeg2.rotation.z = -120 * Math.PI / 180
+
+            let botLeg3 = new THREE.CylinderGeometry(0.03, 0.01, 0.4, 32)
+            let staticBotLeg3 = new THREE.Mesh(botLeg3, materialLegs)
+            staticBotLeg3.position.set(-0.18,-0.22,0)
+            staticMedLeg3.add(staticBotLeg3)
+            staticBotLeg3.rotation.z = -120 * Math.PI / 180
+
+            //OTHER SIDE
+            //TOP LEGS
+            let topLeg4 = new THREE.CylinderGeometry(0.06, 0.12, 0.6, 32)
+            let staticTopLeg4 = new THREE.Mesh(topLeg4, materialLegs)
+            staticTopLeg4.position.set(-1,-1,-0.4)
+            staticBottle.add(staticTopLeg4)
+            staticTopLeg4.rotation.z = 45 * Math.PI / 180
+
+            let topLeg5 = new THREE.CylinderGeometry(0.06, 0.12, 0.6, 32)
+            let staticTopLeg5 = new THREE.Mesh(topLeg5, materialLegs)
+            staticTopLeg5.position.set(-1,-0.5,-0.4)
+            staticBottle.add(staticTopLeg5)
+            staticTopLeg5.rotation.z = 45 * Math.PI / 180
+
+            let topLeg6 = new THREE.CylinderGeometry(0.08, 0.14, 1, 32)
+            let staticTopLeg6 = new THREE.Mesh(topLeg6, materialLegs)
+            staticTopLeg6.position.set(-1,0,-0.4)
+            staticBottle.add(staticTopLeg6)
+            staticTopLeg6.rotation.z = 45 * Math.PI / 180
+
+            //MIDDLE LEGS
+            let medLeg4 = new THREE.CylinderGeometry(0.06, 0.03, 0.4, 32)
+            let staticMedLeg4 = new THREE.Mesh(medLeg4, materialLegs)
+            staticMedLeg4.position.set(-0.2,0.18,0)
+            staticTopLeg4.add(staticMedLeg4)
+            staticMedLeg4.rotation.z = -70 * Math.PI / 180
+
+            let medLeg5 = new THREE.CylinderGeometry(0.06, 0.03, 0.4, 32)
+            let staticMedLeg5 = new THREE.Mesh(medLeg5, materialLegs)
+            staticMedLeg5.position.set(-0.2,0.18,0)
+            staticTopLeg5.add(staticMedLeg5)
+            staticMedLeg5.rotation.z = -70 * Math.PI / 180
+
+            let medLeg6 = new THREE.CylinderGeometry(0.06, 0.03, 0.7, 32)
+            let staticMedLeg6 = new THREE.Mesh(medLeg6, materialLegs)
+            staticMedLeg6.position.set(-0.3,0.34,0)
+            staticTopLeg6.add(staticMedLeg6)
+            staticMedLeg6.rotation.z = -70 * Math.PI / 180
+
+            //BOTTOM LEGS
+            let botLeg4 = new THREE.CylinderGeometry(0.03, 0.01, 0.2, 32)
+            let staticBotLeg4 = new THREE.Mesh(botLeg4, materialLegs)
+            staticBotLeg4.position.set(-0.1,-0.12,0)
+            staticMedLeg4.add(staticBotLeg4)
+            staticBotLeg4.rotation.z = -120 * Math.PI / 180
+
+            let botLeg5 = new THREE.CylinderGeometry(0.03, 0.01, 0.2, 32)
+            let staticBotLeg5 = new THREE.Mesh(botLeg5, materialLegs)
+            staticBotLeg5.position.set(-0.1,-0.12,0)
+            staticMedLeg5.add(staticBotLeg5)
+            staticBotLeg5.rotation.z = -120 * Math.PI / 180
+
+            let botLeg6 = new THREE.CylinderGeometry(0.03, 0.01, 0.4, 32)
+            let staticBotLeg6 = new THREE.Mesh(botLeg6, materialLegs)
+            staticBotLeg6.position.set(-0.18,-0.22,0)
+            staticMedLeg6.add(staticBotLeg6)
+            staticBotLeg6.rotation.z = -120 * Math.PI / 180
+
+            scene.background = backgroundTexture
+
+            scene.add(staticBottle)
+            scene.add( axesHelper )
+            scene.add(ambientLight)
+
+            renderer.setAnimationLoop(render);
+        }
+
+        function render() {
+            renderer.render(scene, camera)
+            controls.update()
+
+            // animation loop galhos
+
+        }
+
+
+        //MOVEMENT
+        
+        document.addEventListener('keypress', (e) => {
+            if('f' == e.key) {
+                
+            if(wingMovement == 0){
+                    staticWing1.rotation.y += 10 * Math.PI / 180
+                    staticWing4.rotation.y += 10 * Math.PI / 180
+                    
+                    staticWing2.rotation.y -= 10 * Math.PI / 180
+                    staticWing3.rotation.y -= 10 * Math.PI / 180
+
+                    console.log(staticWing1.rotation.y)
+
+                    staticWing1.position.x += 0.2
+                    staticWing4.position.x -= 0.2
+
+
+                    staticWing2.position.x -= 0.2
+                    staticWing3.position.x += 0.2
+
+                if(staticWing1.rotation.y == 2.4434609527920608){
+                    wingMovement = 1
+                }
+            }
+            if(wingMovement == 1){
+                staticWing1.rotation.y -= 10 * Math.PI / 180
+                staticWing2.rotation.y += 10 * Math.PI / 180
+                staticWing3.rotation.y += 10 * Math.PI / 180
+                staticWing4.rotation.y -= 10 * Math.PI / 180
+
+                    console.log(staticWing1.rotation.y)
+                    staticWing1.position.x -= 0.2
+                    staticWing2.position.x += 0.2
+                    staticWing3.position.x -= 0.2
+                    staticWing4.position.x += 0.2
+                
+                if(staticWing1.rotation.y == 0.8726646259971644){
+                    wingMovement = 0
+                }
+            }
+            
+        }
+    })
+
+    </script>
+</body>
+
+</html>
