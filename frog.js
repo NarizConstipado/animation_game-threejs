@@ -3,9 +3,9 @@ import * as THREE from './libs/three.module.js';
 export default class Frog {
     materialBox = new THREE.MeshToonMaterial({ wireframe: false })
     materialBoxTopper = new THREE.MeshToonMaterial({ wireframe: false })
+    
     pivot = new THREE.Object3D();
     
-
     box = new THREE.BoxGeometry(3, 2, 5)
     body = new THREE.Mesh(this.box, this.materialBox)
     topper1 = new THREE.PlaneGeometry(3, 1)
@@ -69,7 +69,7 @@ export default class Frog {
         this.frogMovement = 0
         this.cont = 0
         this.xFrogCont = 0
-        this.animationStartItems = true
+        this.animationStartItems = false
         this.animationFall = false
         this.animationStart = false
 
@@ -82,17 +82,15 @@ export default class Frog {
         this.pivot.rotation.set(rotation.x, rotation.y, rotation.z)
         this.velocity = velocity
 
-        this.animationStartItems = true
-
-        this.body.add(this.staticBox)
-        this.staticBox.add(this.staticTopper1)
-        this.staticBox.add(this.staticTopper2)
-        this.staticBox.add(this.staticTopper3)
-        this.staticBox.add(this.staticTopper4)
-        this.staticBox.add(this.staticTopperLeg1)
-        this.staticBox.add(this.staticTopperLeg2)
-        this.staticBox.add(this.staticTopperLeg3)
-        this.staticBox.add(this.staticTopperLeg4)
+        this.pivot.add(this.body)
+        this.body.add(this.staticTopper1)
+        this.body.add(this.staticTopper2)
+        this.body.add(this.staticTopper3)
+        this.body.add(this.staticTopper4)
+        this.body.add(this.staticTopperLeg1)
+        this.body.add(this.staticTopperLeg2)
+        this.body.add(this.staticTopperLeg3)
+        this.body.add(this.staticTopperLeg4)
         this.staticTopperLeg1.add(this.staticBottomLeg1)
         this.staticTopperLeg2.add(this.staticBottomLeg2)
         this.staticTopperLeg3.add(this.staticBottomLeg3)
@@ -212,20 +210,20 @@ export default class Frog {
             if(this.xFrogCont != 3) {
             //BOX
             //BOX ROTATION
-            this.staticBox.rotation.x -= 10 * Math.PI / 180
+            this.body.rotation.x -= (10 * Math.PI / 180)
 
             //BOX POSITION
-            this.staticBox.position.y += 0.625
+            this.body.position.y += 0.625
 
             } else {
-                this.staticBox.rotation.x = 0
+                this.body.rotation.x = 0
             }
             
         //TOP LEGS
         //TOPPER LEG ROTATION
         this.staticTopperLeg3.rotation.z -= 16 * Math.PI / 180 
         
-        this.staticTopperLeg3.rotation.y += 8 * Math.PI / 180 
+        this.staticTopperLeg3.rotation.y += 8 * Math.PI / 180
 
         this.staticTopperLeg4.rotation.z -= 16 * Math.PI / 180
 
@@ -234,7 +232,7 @@ export default class Frog {
         //BOTTOM LEG ROTATION
         this.staticBottomLeg3.rotation.x -= 2 * Math.PI / 180
 
-        this.staticBottomLeg4.rotation.x += 2 * Math.PI / 180              
+        this.staticBottomLeg4.rotation.x += 2 * Math.PI / 180     
 
         this.staticBottomLeg3.rotation.y += 6 * Math.PI / 180
 
@@ -284,13 +282,13 @@ export default class Frog {
         if(this.xFrogCont != 3) {
             //BOX
             //BOX ROTATION
-            this.staticBox.rotation.x += 10 * Math.PI / 180
+            this.body.rotation.x += 10 * Math.PI / 180
 
             //BOX POSITION
-            this.staticBox.position.y -= 0.625
+            this.body.position.y -= 0.625
 
             } else {
-                this.staticBox.rotation.x = 0
+                this.body.rotation.x = 0
             }
 
         //TOP LEGS

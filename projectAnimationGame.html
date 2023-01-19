@@ -113,14 +113,13 @@
         let scaleFrog = {x: 0.4,y: 0.4,z: 0.4}
         let positionFrog = {x: 0,y: 10,z: 0}
         let rotationFrog = {x: 0,y: 0,z: 0}
-        let velocityFrog = 0.25
+        let velocityFrog = 1
         frog = new Frog(positionFrog, scaleFrog, rotationFrog, velocityFrog)
         trashColection.push(frog)
 
         trashColection.forEach(trash => scene.add(trash.pivot))
         trashColection.forEach(trash => trashColectionBodies.push(trash.body))
         
-            
         //TREES
             let scaleTree = {x: 2.5, y: 2.5, z: 2.5}
             let positionTree = {x: 2, y: -1.1, z: -10}
@@ -160,7 +159,7 @@
             
             let scaleTree7 = {x: 4.5, y: 4.5, z: 4.5}
             let positionTree7 = {x: 17, y: -1.1, z: -17}
-            tree7 = new Tree(positionTree7,scaleTree7, 3, 1)
+            tree7 = new Tree(positionTree7,scaleTree7, 3, 1, frog)
             treesColection.push(tree7)
             treesColectionToHit.push(tree7)
             
@@ -221,8 +220,6 @@
                     child.receiveShadow = true
                 }
             })
-            
-            console.log(scene.children)
             kirby.position_default()
             
             
@@ -275,11 +272,10 @@
                 tree.animationsTree()
             })
             //trashAnimations
-            if(clicked_keys.includes("f") /* &&  checkCollisionTree() */){
-                /* let treeHit = checkCollisionTree()
-                console.log(treeHit) */
-                /* treeHit.trash */dragonFly.animationStart = true
-                /* treeHit.trash */dragonFly.animationFall = true
+            if(clicked_keys.includes("f") &&  checkCollisionTree()){
+                let treeHit = checkCollisionTree()
+                treeHit.trash.animationStart = true
+                treeHit.trash.animationFall = true
             }
             //animationTrashFall(paperBall)
             
