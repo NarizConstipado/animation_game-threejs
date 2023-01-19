@@ -80,8 +80,9 @@ export default class DragonFly {
         this.appendix = [
             this.staticTopLeg1, this.staticTopLeg2, this.staticTopLeg3, this.staticTopLeg4,
             this.staticTopLeg5, this.staticTopLeg6, this.staticMedLeg1, this.staticMedLeg2, 
-            this.staticMedLeg3, this.staticMedLeg4, this.staticMedLeg5, this.staticMedLeg6
-        ]   
+            this.staticMedLeg3, this.staticMedLeg4, this.staticMedLeg5, this.staticMedLeg6,
+            this.staticWing1, this.staticWing2, this.staticWing3, this.staticWing4
+        ] 
 
         this.pivot.add(this.body)
         this.body.add(this.staticSphere)
