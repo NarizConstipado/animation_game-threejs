@@ -1,8 +1,13 @@
 import * as THREE from './libs/three.module.js';
 
 export default class Frog {
-    materialBox = new THREE.MeshToonMaterial({ wireframe: false })
-    materialBoxTopper = new THREE.MeshToonMaterial({ wireframe: false })
+    froggieSkin = new THREE.TextureLoader().load("./textures/froggie.jpg")
+    boxTexture = new THREE.TextureLoader().load("./textures/boxTexture.webp")
+
+    materialBox = new THREE.MeshToonMaterial({ map: this.boxTexture })
+    materialBoxTopper = new THREE.MeshToonMaterial({ map: this.boxTexture })
+    materialLegs = new THREE.MeshToonMaterial({ color: '#6d9d72', map: this.forggieSkin })
+    body = new THREE.Object3D();
     
     pivot = new THREE.Object3D();
     
@@ -17,53 +22,53 @@ export default class Frog {
     topper4 = new THREE.PlaneGeometry(5, 1)
     staticTopper4 = new THREE.Mesh(this.topper4, this.materialBoxTopper)
     topperLeg2 = new THREE.CylinderGeometry(0.3,0.2,1)
-    staticTopperLeg2 = new THREE.Mesh(this.topperLeg2, this.materialBox)
+    staticTopperLeg2 = new THREE.Mesh(this.topperLeg2, this.materialLegs)
     topperLeg1 = new THREE.CylinderGeometry(0.3,0.2,1)
-    staticTopperLeg1 = new THREE.Mesh(this.topperLeg1, this.materialBox)
+    staticTopperLeg1 = new THREE.Mesh(this.topperLeg1, this.materialLegs)
     topperLeg3 = new THREE.CylinderGeometry(0.4,0.7,1.5)
-    staticTopperLeg3 = new THREE.Mesh(this.topperLeg3, this.materialBox)
+    staticTopperLeg3 = new THREE.Mesh(this.topperLeg3, this.materialLegs)
     topperLeg4 = new THREE.CylinderGeometry(0.4,0.7,1.5)
-    staticTopperLeg4 = new THREE.Mesh(this.topperLeg4, this.materialBox)
+    staticTopperLeg4 = new THREE.Mesh(this.topperLeg4, this.materialLegs)
     bottomLeg1 = new THREE.CylinderGeometry(0.1, 0.2, 0.85)
-    staticBottomLeg1 = new THREE.Mesh(this.bottomLeg1, this.materialBox)
+    staticBottomLeg1 = new THREE.Mesh(this.bottomLeg1, this.materialLegs)
     bottomLeg2 = new THREE.CylinderGeometry(0.1, 0.2, 0.95)
-    staticBottomLeg2 = new THREE.Mesh(this.bottomLeg2, this.materialBox)
+    staticBottomLeg2 = new THREE.Mesh(this.bottomLeg2, this.materialLegs)
     bottomLeg3 = new THREE.CylinderGeometry(0.2, 0.4, 2)
-    staticBottomLeg3 = new THREE.Mesh(this.bottomLeg3, this.materialBox)
+    staticBottomLeg3 = new THREE.Mesh(this.bottomLeg3, this.materialLegs)
     bottomLeg4 = new THREE.CylinderGeometry(0.2, 0.4, 2)
-    staticBottomLeg4 = new THREE.Mesh(this.bottomLeg4, this.materialBox)
+    staticBottomLeg4 = new THREE.Mesh(this.bottomLeg4, this.materialLegs)
     foot1 = new THREE.BoxGeometry(0.2,0.1,0.3)
-    staticFoot1 = new THREE.Mesh(this.foot1, this.materialBox)
+    staticFoot1 = new THREE.Mesh(this.foot1, this.materialLegs)
     foot2 = new THREE.BoxGeometry(0.2,0.1,0.3)
-    staticFoot2 = new THREE.Mesh(this.foot2, this.materialBox)
+    staticFoot2 = new THREE.Mesh(this.foot2, this.materialLegs)
     foot3 = new THREE.BoxGeometry(0.5,0.3,0.5)
-    staticFoot3 = new THREE.Mesh(this.foot3, this.materialBox)
+    staticFoot3 = new THREE.Mesh(this.foot3, this.materialLegs)
     foot4 = new THREE.BoxGeometry(0.5,0.3,0.5)
-    staticFoot4 = new THREE.Mesh(this.foot4, this.materialBox)
+    staticFoot4 = new THREE.Mesh(this.foot4, this.materialLegs)
     finger1 = new THREE.CylinderGeometry(0.05,0.05,0.09);
-    staticFinger1 = new THREE.Mesh(this.finger1, this.materialBox)
+    staticFinger1 = new THREE.Mesh(this.finger1, this.materialLegs)
     finger2 = new THREE.CylinderGeometry(0.05,0.05,0.09);
-    staticFinger2 = new THREE.Mesh(this.finger2, this.materialBox)
+    staticFinger2 = new THREE.Mesh(this.finger2, this.materialLegs)
     finger3 = new THREE.CylinderGeometry(0.05,0.05,0.09);
-    staticFinger3 = new THREE.Mesh(this.finger3, this.materialBox)
+    staticFinger3 = new THREE.Mesh(this.finger3, this.materialLegs)
     finger4 = new THREE.CylinderGeometry(0.05,0.05,0.09);
-    staticFinger4 = new THREE.Mesh(this.finger4, this.materialBox)
+    staticFinger4 = new THREE.Mesh(this.finger4, this.materialLegs)
     finger5 = new THREE.CylinderGeometry(0.05,0.05,0.09);
-    staticFinger5 = new THREE.Mesh(this.finger5, this.materialBox)
+    staticFinger5 = new THREE.Mesh(this.finger5, this.materialLegs)
     finger6 = new THREE.CylinderGeometry(0.05,0.05,0.09);
-    staticFinger6 = new THREE.Mesh(this.finger6, this.materialBox)
+    staticFinger6 = new THREE.Mesh(this.finger6, this.materialLegs)
     finger7 = new THREE.CylinderGeometry(0.15,0.15,0.5);
-    staticFinger7 = new THREE.Mesh(this.finger7, this.materialBox)
+    staticFinger7 = new THREE.Mesh(this.finger7, this.materialLegs)
     finger8 = new THREE.CylinderGeometry(0.15,0.15,0.5);
-    staticFinger8 = new THREE.Mesh(this.finger8, this.materialBox)
+    staticFinger8 = new THREE.Mesh(this.finger8, this.materialLegs)
     finger9 = new THREE.CylinderGeometry(0.15,0.15,0.5);
-    staticFinger9 = new THREE.Mesh(this.finger9, this.materialBox)
+    staticFinger9 = new THREE.Mesh(this.finger9, this.materialLegs)
     finger10 = new THREE.CylinderGeometry(0.15,0.15,0.5);
-    staticFinger10 = new THREE.Mesh(this.finger10, this.materialBox)
+    staticFinger10 = new THREE.Mesh(this.finger10, this.materialLegs)
     finger11 = new THREE.CylinderGeometry(0.15,0.15,0.5);
-    staticFinger11 = new THREE.Mesh(this.finger11, this.materialBox)
+    staticFinger11 = new THREE.Mesh(this.finger11, this.materialLegs)
     finger12 = new THREE.CylinderGeometry(0.15,0.15,0.5);
-    staticFinger12 = new THREE.Mesh(this.finger12, this.materialBox)
+    staticFinger12 = new THREE.Mesh(this.finger12, this.materialLegs)
 
     constructor(position, scale, rotation, velocity) {
         this.frogMovement = 0
@@ -213,13 +218,13 @@ export default class Frog {
     }
     animation() {
         if(this.frogMovement == 0) {
-            if(this.xFrogCont != 3) {
+            if(this.xFrogCont != 5) {
             //BOX
             //BOX ROTATION
-            this.body.rotation.x -= (10 * Math.PI / 180)
+            this.body.rotation.x -= 5 * Math.PI / 180
 
             //BOX POSITION
-            this.body.position.y += 0.625
+            this.body.position.y += 0.3125
 
             } else {
                 this.body.rotation.x = 0
@@ -227,71 +232,71 @@ export default class Frog {
             
         //TOP LEGS
         //TOPPER LEG ROTATION
-        this.staticTopperLeg3.rotation.z -= 16 * Math.PI / 180 
+        this.staticTopperLeg3.rotation.z -= 8 * Math.PI / 180 
         
-        this.staticTopperLeg3.rotation.y += 8 * Math.PI / 180
+        this.staticTopperLeg3.rotation.y += 4 * Math.PI / 180
 
-        this.staticTopperLeg4.rotation.z -= 16 * Math.PI / 180
+        this.staticTopperLeg4.rotation.z -= 8 * Math.PI / 180
 
-        this.staticTopperLeg4.rotation.y += 8 * Math.PI / 180 
+        this.staticTopperLeg4.rotation.y += 4 * Math.PI / 180 
 
         //BOTTOM LEG ROTATION
-        this.staticBottomLeg3.rotation.x -= 2 * Math.PI / 180
+        this.staticBottomLeg3.rotation.x -= 1 * Math.PI / 180
 
-        this.staticBottomLeg4.rotation.x += 2 * Math.PI / 180     
+        this.staticBottomLeg4.rotation.x += 1 * Math.PI / 180     
 
-        this.staticBottomLeg3.rotation.y += 6 * Math.PI / 180
+        this.staticBottomLeg3.rotation.y += 3 * Math.PI / 180
 
-        this.staticBottomLeg4.rotation.y -= 6 * Math.PI / 180
+        this.staticBottomLeg4.rotation.y -= 3 * Math.PI / 180
 
-        this.staticBottomLeg3.rotation.z -= 18 * Math.PI / 180
+        this.staticBottomLeg3.rotation.z -= 9 * Math.PI / 180
 
-        this.staticBottomLeg4.rotation.z -= 18 * Math.PI / 180
+        this.staticBottomLeg4.rotation.z -= 9 * Math.PI / 180
 
         //BOTTOM LEG POSITION
-        this.staticBottomLeg3.position.x += 0.05
-        this.staticBottomLeg3.position.y += 0.32
-        this.staticBottomLeg3.position.z -= 0.023
+        this.staticBottomLeg3.position.x += 0.025
+        this.staticBottomLeg3.position.y += 0.16
+        this.staticBottomLeg3.position.z -= 0.0115
 
-        this.staticBottomLeg4.position.x += 0.05
-        this.staticBottomLeg4.position.y += 0.32
-        this.staticBottomLeg4.position.z -= 0.023
+        this.staticBottomLeg4.position.x += 0.025
+        this.staticBottomLeg4.position.y += 0.16
+        this.staticBottomLeg4.position.z -= 0.0115
 
         //FOOT ROTATION
-        this.staticFoot3.rotation.z -= 20 * Math.PI / 180
+        this.staticFoot3.rotation.z -= 10 * Math.PI / 180
 
-        this.staticFoot4.rotation.z += 20 * Math.PI / 180
+        this.staticFoot4.rotation.z += 10 * Math.PI / 180
 
         //FOOT POSITION
-        this.staticFoot3.position.y += 0.06
+        this.staticFoot3.position.y += 0.03
 
-        this.staticFoot4.position.y += 0.06
+        this.staticFoot4.position.y += 0.03
 
         //FRONT LEGS
         //BOTTOM LEG ROTATION
-        this.staticBottomLeg1.rotation.x += 9 * Math.PI / 180
-        this.staticBottomLeg2.rotation.x += 9 * Math.PI / 180
+        this.staticBottomLeg1.rotation.x += 4.5 * Math.PI / 180
+        this.staticBottomLeg2.rotation.x += 4.5 * Math.PI / 180
 
         //BOTTOM LEG POSITION
-        this.staticBottomLeg1.position.y -= 0.04
-        this.staticBottomLeg2.position.y -= 0.04
+        this.staticBottomLeg1.position.y -= 0.02
+        this.staticBottomLeg2.position.y -= 0.02
 
         this.xFrogCont  += 1
         this.cont += 1
-        if(this.cont == 5){
+        if(this.cont == 10){
             this.frogMovement = 1
             this.cont = 0
             this.xFrogCont = 0
         }
     }
     if(this.frogMovement == 1){
-        if(this.xFrogCont != 3) {
+        if(this.xFrogCont != 5) {
             //BOX
             //BOX ROTATION
-            this.body.rotation.x += 10 * Math.PI / 180
+            this.body.rotation.x += 5 * Math.PI / 180
 
             //BOX POSITION
-            this.body.position.y -= 0.625
+            this.body.position.y -= 0.3125
 
             } else {
                 this.body.rotation.x = 0
@@ -299,58 +304,58 @@ export default class Frog {
 
         //TOP LEGS
         //TOPPER LEG ROTATION
-        this.staticTopperLeg3.rotation.z += 16 * Math.PI / 180 
+        this.staticTopperLeg3.rotation.z += 8 * Math.PI / 180 
         
-        this.staticTopperLeg3.rotation.y -= 8 * Math.PI / 180 
+        this.staticTopperLeg3.rotation.y -= 4 * Math.PI / 180 
 
-        this.staticTopperLeg4.rotation.z += 16 * Math.PI / 180
+        this.staticTopperLeg4.rotation.z += 8 * Math.PI / 180
 
-        this.staticTopperLeg4.rotation.y -= 8 * Math.PI / 180 
+        this.staticTopperLeg4.rotation.y -= 4 * Math.PI / 180 
 
         //BOTTOM LEG ROTATION
-        this.staticBottomLeg3.rotation.x += 2 * Math.PI / 180
+        this.staticBottomLeg3.rotation.x += 1 * Math.PI / 180
 
-        this.staticBottomLeg4.rotation.x -= 2 * Math.PI / 180              
+        this.staticBottomLeg4.rotation.x -= 1 * Math.PI / 180              
 
-        this.staticBottomLeg3.rotation.y -= 6 * Math.PI / 180
+        this.staticBottomLeg3.rotation.y -= 3 * Math.PI / 180
 
-        this.staticBottomLeg4.rotation.y += 6 * Math.PI / 180
+        this.staticBottomLeg4.rotation.y += 3 * Math.PI / 180
 
-        this.staticBottomLeg3.rotation.z += 18 * Math.PI / 180
+        this.staticBottomLeg3.rotation.z += 9 * Math.PI / 180
 
-        this.staticBottomLeg4.rotation.z += 18 * Math.PI / 180
+        this.staticBottomLeg4.rotation.z += 9 * Math.PI / 180
 
         //BOTTOM LEG POSITION
-        this.staticBottomLeg3.position.x -= 0.05
-        this.staticBottomLeg3.position.y -= 0.32
-        this.staticBottomLeg3.position.z += 0.023
+        this.staticBottomLeg3.position.x -= 0.025
+        this.staticBottomLeg3.position.y -= 0.16
+        this.staticBottomLeg3.position.z += 0.0115
 
-        this.staticBottomLeg4.position.x -= 0.05
-        this.staticBottomLeg4.position.y -= 0.32
-        this.staticBottomLeg4.position.z += 0.023
+        this.staticBottomLeg4.position.x -= 0.025
+        this.staticBottomLeg4.position.y -= 0.16
+        this.staticBottomLeg4.position.z += 0.0115
 
         //FOOT ROTATION
-        this.staticFoot3.rotation.z += 20 * Math.PI / 180
+        this.staticFoot3.rotation.z += 10 * Math.PI / 180
 
-        this.staticFoot4.rotation.z -= 20 * Math.PI / 180
+        this.staticFoot4.rotation.z -= 10 * Math.PI / 180
 
         //FOOT POSITION
-        this.staticFoot3.position.y -= 0.06
+        this.staticFoot3.position.y -= 0.03
 
-        this.staticFoot4.position.y -= 0.06
+        this.staticFoot4.position.y -= 0.03
 
         //FRONT LEGS
         //BOTTOM LEG ROTATION
-        this.staticBottomLeg1.rotation.x -= 9 * Math.PI / 180
-        this.staticBottomLeg2.rotation.x -= 9 * Math.PI / 180
+        this.staticBottomLeg1.rotation.x -= 4.5 * Math.PI / 180
+        this.staticBottomLeg2.rotation.x -= 4.5 * Math.PI / 180
 
         //BOTTOM LEG POSITION
-        this.staticBottomLeg1.position.y += 0.04
-        this.staticBottomLeg2.position.y += 0.04
+        this.staticBottomLeg1.position.y += 0.02
+        this.staticBottomLeg2.position.y += 0.02
 
         this.xFrogCont += 1
         this.cont += 1
-        if(this.cont == 5){
+        if(this.cont == 10){
             this.frogMovement = 0
             this.cont = 0
             this.xFrogCont = 0

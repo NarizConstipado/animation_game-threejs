@@ -49,6 +49,15 @@
         let controls
         let directionalLight
 
+        //background music
+        const inhale_sound = new Audio('./sounds/inhale_sound.mp3')
+        const theme = new Audio('./sounds/theme_song.mp3')
+        const sword_swing = new Audio('./sounds/sword_swing.mp3')
+        const wall_hit = new Audio('./sounds/wall_hit.mp3')
+        theme.volume = 0.1
+        theme.play();
+        theme.loop = true;
+
         window.onload = () => {
             scene = new THREE.Scene();
 
@@ -68,7 +77,7 @@
 
             controls = new CONTROLS.OrbitControls(camera, renderer.domElement)
 
-            directionalLight = new THREE.DirectionalLight('#ffffff', 0.7)
+            directionalLight = new THREE.DirectionalLight('#f9d71c', 0.7)
             directionalLight.castShadow = true
             directionalLight.position.set(35, 30, 20)
             directionalLight.rotation.x = 30 * Math.PI / 180
@@ -267,14 +276,14 @@
             let scaleBall = { x: 0.4, y: 0.4, z: 0.4 }
             let positionBall = { x: 2.6, y: 10, z: 23 }
             let rotationBall = { x: 0, y: 0, z: 0 }
-            let velocityBall = 1
+            let velocityBall = 0.5
             paperBall = new PaperBall(positionBall, scaleBall, rotationBall, velocityBall)
             trashColection.push(paperBall)
             //spider
             let scaleSpider = { x: 0.4, y: 0.4, z: 0.4 }
             let positionSpider = { x: -14.2, y: 10, z: 17 }
             let rotationSpider = { x: -0.7, y: 0, z: 0.2 }
-            let velocitySpider = 1
+            let velocitySpider = 1.2
             spider = new Spider(positionSpider, scaleSpider, rotationSpider, velocityBall)
             trashColection.push(spider)
             //frog
