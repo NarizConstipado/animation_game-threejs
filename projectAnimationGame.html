@@ -37,7 +37,7 @@
         let kirby
         
         //trees
-        let tree
+        let tree, tree2, tree3, tree4, tree5, tree6, tree7, tree8, tree9, tree10
         
         //junk
         let dragonFly, paperBall, spider
@@ -94,12 +94,57 @@
         trashColection.forEach(trash => scene.add(trash.body))
         
             
-        //TREE
+        //TREES
             let scaleTree = {x: 2.5, y: 2.5, z: 2.5}
             let positionTree = {x: 0, y: -1.1, z: -10}
             tree = new Tree(positionTree,scaleTree, 0.5, 1, dragonFly)
-            /* collisionsWalls.push(tree.treeTronk) */
             treesColection.push(tree)
+
+            let scaleTree2 = {x: 2, y: 2, z: 2}
+            let positionTree2 = {x: 8, y: -1.5, z: -12}
+            tree2 = new Tree(positionTree2,scaleTree2, 3.5, 2)
+            treesColection.push(tree2)
+            
+            let scaleTree3 = {x: 2, y: 2, z: 2}
+            let positionTree3 = {x: -3, y: -1.1, z: 18}
+            tree3 = new Tree(positionTree3,scaleTree3, 5, 1.5)
+            treesColection.push(tree3)
+            
+            let scaleTree4 = {x: 3.5, y: 3.5, z: 3.5}
+            let positionTree4 = {x: -15, y: -1.1, z: 0}
+            tree4 = new Tree(positionTree4,scaleTree4, -0.3, 0.5)
+            treesColection.push(tree4)
+
+            let scaleTree5 = {x: 3, y: 3, z: 3}
+            let positionTree5 = {x: -7, y: -1.1, z: -15}
+            tree5 = new Tree(positionTree5,scaleTree5, 0.5, 1)
+            treesColection.push(tree5)
+            
+            let scaleTree6 = {x: 2.7, y: 2.7, z: 2.7}
+            let positionTree6 = {x: 10, y: -1.1, z: 10}
+            tree6 = new Tree(positionTree6,scaleTree6, 0.5, 1)
+            treesColection.push(tree6)
+            
+            let scaleTree7 = {x: 4.5, y: 4.5, z: 4.5}
+            let positionTree7 = {x: 17, y: -1.1, z: -17}
+            tree7 = new Tree(positionTree7,scaleTree7, 3, 1)
+            treesColection.push(tree7)
+            
+            let scaleTree8 = {x: 5, y: 5, z: 5}
+            let positionTree8 = {x: 20, y: -1.1, z: 13}
+            tree8 = new Tree(positionTree8,scaleTree8, 5, 1)
+            treesColection.push(tree8)
+            
+            let scaleTree9 = {x: 3, y: 3, z: 3}
+            let positionTree9 = {x: -17, y: -1.1, z: 17}
+            tree9 = new Tree(positionTree9,scaleTree9, 2, 1)
+            treesColection.push(tree9)
+            
+            let scaleTree10 = {x: 3.5, y: 3.5, z: 3.5}
+            let positionTree10 = {x: 8, y: -1.1, z: 23}
+            tree10 = new Tree(positionTree10,scaleTree10, 6, 1)
+            treesColection.push(tree10)
+            /* collisionsWalls.push(tree.treeTronk) */
             treesColection.forEach(tree => {
                 scene.add(tree.pivot)
             })
