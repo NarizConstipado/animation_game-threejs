@@ -46,8 +46,6 @@
 
         //other
         let camera, scene, renderer;
-        let bbHelper, bbHelper1, bbHelper2, bbHelper3, bbHelper4, bbHelper5, bbHelper6, bbHelper7, bbHelper8, bbHelper9, bbHelper10,
-            bbtreeTronk
         let controls
         let directionalLight
 
@@ -72,7 +70,6 @@
 
             directionalLight = new THREE.DirectionalLight('#ffffff', 0.7)
             directionalLight.castShadow = true
-            let h = new THREE.DirectionalLightHelper(directionalLight)
             directionalLight.position.set(35, 30, 20)
             directionalLight.rotation.x = 30 * Math.PI / 180
 
@@ -87,36 +84,7 @@
             //KIRBY
             kirby = new Kirby()
 
-            //trashItems
-            //dragonFly
-            let scaleDragon = { x: 0.4, y: 0.4, z: 0.4 }
-            let positionDragon = { x: -8.7, y: 10, z: 0 }
-            let rotationDragon = { x: -0.5, y: 0.5, z: 0 }
-            let velocityDragon = 1
-            dragonFly = new DragonFly(positionDragon, scaleDragon, rotationDragon, velocityDragon)
-            trashColection.push(dragonFly)
-            //paperBall
-            let scaleBall = { x: 0.4, y: 0.4, z: 0.4 }
-            let positionBall = { x: 2.6, y: 10, z: 23 }
-            let rotationBall = { x: 0, y: 0, z: 0 }
-            let velocityBall = 1
-            paperBall = new PaperBall(positionBall, scaleBall, rotationBall, velocityBall)
-            trashColection.push(paperBall)
-            console.log(paperBall.pivot.position);
-            //spider
-            let scaleSpider = { x: 0.4, y: 0.4, z: 0.4 }
-            let positionSpider = { x: -5, y: 10, z: 5 }
-            let rotationSpider = { x: 0, y: 0, z: 0 }
-            let velocitySpider = 1
-            spider = new Spider(positionSpider, scaleSpider, rotationSpider, velocityBall)
-            trashColection.push(spider)
-            //frog
-            let scaleFrog = { x: 0.4, y: 0.4, z: 0.4 }
-            let positionFrog = { x: 0, y: 10, z: 0 }
-            let rotationFrog = { x: 0, y: 0, z: 0 }
-            let velocityFrog = 1
-            frog = new Frog(positionFrog, scaleFrog, rotationFrog, velocityFrog)
-            trashColection.push(frog)
+            resetTrash()
 
             trashColection.forEach(trash => scene.add(trash.pivot))
             trashColection.forEach(trash => trashColectionBodies.push(trash.pivot))
@@ -186,7 +154,7 @@
             const light = new THREE.HemisphereLight(0xffffbb, 0x080820, 1)
             light.position.set(0, 3, 3)
 
-            scene.add(floor, light, kirby.character, directionalLight, h)
+            scene.add(floor, light, kirby.character, directionalLight)
 
             floor.name = "floor"
             floor.receiveShadow = true
@@ -199,22 +167,6 @@
             })
             kirby.position_default()
 
-
-            bbHelper4 = new THREE.BoxHelper(tree4.treeTronk, 0x00FFFF);
-            scene.add(bbHelper4)
-
-            bbHelper7 = new THREE.BoxHelper(tree7.treeTronk, 0x00FFFF);
-            scene.add(bbHelper7)
-
-            bbHelper9 = new THREE.BoxHelper(tree9.treeTronk, 0x00FFFF);
-            scene.add(bbHelper9)
-
-            bbHelper10 = new THREE.BoxHelper(tree10.treeTronk, 0x00FFFF);
-            scene.add(bbHelper10)
-
-            bbHelper = new THREE.BoxHelper(kirby.body, 0x00FFFF);
-            scene.add(bbHelper)
-
             kirby.body.geometry.computeBoundingBox();
 
             //renderer
@@ -223,12 +175,6 @@
 
         function render() {
             renderer.render(scene, camera)
-
-            bbHelper.update()
-            bbHelper4.update()
-            bbHelper7.update()
-            bbHelper9.update()
-            bbHelper10.update()
             //treeAnimations
             treesColection.forEach(tree => {
                 tree.animationsTree()
@@ -285,7 +231,13 @@
                 if (trash.pivot.rotation.z != 0 && trash.pivot.rotation.z >= 0) trash.pivot.rotation.z -= 0.1
                 else trash.pivot.rotation.z += 0.1
                 trash.pivot.position.y -= 0.1
-                if (trash.pivot.position.y <= -0.4) trash.animationFall = false; trash.animationStartItems = true; rotationBody = (Math.random() * 360) * Math.PI / 180, allowRotation = true, trash.animationStart = true
+                if (trash.pivot.position.y <= -0.4) {
+                    trash.animationFall = false
+                    trash.animationStartItems = true
+                    allowRotation = true
+                    rotationBody = (Math.random() * 360) * Math.PI / 180
+                    trash.appendix.forEach(appendix => appendix.visible = true)
+                }
             } else {
                 //insert collision check here
                 if (allowRotation) {
@@ -301,6 +253,41 @@
                     trash.pivot.position.x -= -Math.sin(trash.pivot.rotation.y) * 0.5 * trash.velocity / 2
                 }
             }
+        }
+        function resetTrash() {
+            //trashItems
+            //dragonFly
+            let scaleDragon = { x: 0.4, y: 0.4, z: 0.4 }
+            let positionDragon = { x: -8.7, y: 10, z: 0 }
+            let rotationDragon = { x: -0.5, y: 0.5, z: 0 }
+            let velocityDragon = 1
+            dragonFly = new DragonFly(positionDragon, scaleDragon, rotationDragon, velocityDragon)
+            trashColection.push(dragonFly)
+            //paperBall
+            let scaleBall = { x: 0.4, y: 0.4, z: 0.4 }
+            let positionBall = { x: 2.6, y: 10, z: 23 }
+            let rotationBall = { x: 0, y: 0, z: 0 }
+            let velocityBall = 1
+            paperBall = new PaperBall(positionBall, scaleBall, rotationBall, velocityBall)
+            trashColection.push(paperBall)
+            //spider
+            let scaleSpider = { x: 0.4, y: 0.4, z: 0.4 }
+            let positionSpider = { x: -14.2, y: 10, z: 17 }
+            let rotationSpider = { x: -0.7, y: 0, z: 0.2 }
+            let velocitySpider = 1
+            spider = new Spider(positionSpider, scaleSpider, rotationSpider, velocityBall)
+            trashColection.push(spider)
+            //frog
+            let scaleFrog = { x: 0.4, y: 0.4, z: 0.4 }
+            let positionFrog = { x: 11.5, y: 15, z: -14.5 }
+            let rotationFrog = { x: 0.5, y: 0.5, z: 0 }
+            let velocityFrog = 1
+            frog = new Frog(positionFrog, scaleFrog, rotationFrog, velocityFrog)
+            trashColection.push(frog)
+
+            trashColection.forEach(trash => {
+                trash.appendix.forEach(appendixItem => appendixItem.visible = false)
+            })
         }
         //kirby section
         // ANIMATION ACTIVATE

@@ -74,7 +74,13 @@ export default class Frog {
         this.animationStart = false
 
         this.appendix = [
-            
+            this.staticTopperLeg1, this.staticTopperLeg2, this.staticTopperLeg3, this.staticTopperLeg4,
+            this.staticBottomLeg1, this.staticBottomLeg2, this.staticBottomLeg3, this.staticBottomLeg4,
+            this.staticFoot1, this.staticFoot2, this.staticFoot3, this.staticFoot4,
+            this.staticFinger1, this.staticFinger2, this.staticFinger3, this.staticFinger4,
+            this.staticFinger5, this.staticFinger6, this.staticFinger7, this.staticFinger8,
+            this.staticFinger9, this.staticFinger10, this.staticFinger11, this.staticFinger12,
+            this.staticFoot1, this.staticFoot2, this.staticFoot3, this.staticFoot4
         ]   
 
         this.pivot.position.set(position.x, position.y, position.z)
