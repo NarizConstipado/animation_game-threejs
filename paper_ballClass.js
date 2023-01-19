@@ -4,6 +4,8 @@ export default class PaperBall {
 
     materialKnot = new THREE.MeshBasicMaterial({ color: '#f2eecb' })
     materialLegsArms = new THREE.MeshBasicMaterial({ color: '#000000' })
+    body = new THREE.Object3D();
+
 
     torus1 = new THREE.TorusKnotGeometry(1,0.4,64,8,10.36,2.26)
     staticTorus1 = new THREE.Mesh(this.torus1, this.materialKnot)

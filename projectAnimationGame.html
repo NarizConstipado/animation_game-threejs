@@ -20,6 +20,7 @@
         import Spider from './spiderClass.js';
         import PaperBall from './paper_ballClass.js';
         import DragonFly from './dragonFlyClass.js';
+        import Frog from './frog.js';
         import Tree from './treeClass.js';
         import Kirby from './kirbyClass.js'; 
         import * as THREE from './libs/three.module.js';
@@ -40,7 +41,7 @@
         let tree, tree2, tree3, tree4, tree5, tree6, tree7, tree8, tree9, tree10
         
         //junk
-        let dragonFly, paperBall, spider
+        let dragonFly, paperBall, spider, frog
         let rotationBody, allowRotation = false
 
         //other
@@ -76,6 +77,8 @@
         let velocityDragon = 1
         dragonFly = new DragonFly(positionDragon, scaleDragon, rotationDragon, velocityDragon)
         trashColection.push(dragonFly)
+        
+        
         //paperBall
         let scaleBall = {x: 0.4,y: 0.4,z: 0.4}
         let positionBall = {x: 2.6,y: 10,z: 23}
