@@ -2,8 +2,11 @@ import * as THREE from './libs/three.module.js';
 
 export default class PaperBall {
     materialKnot = new THREE.MeshNormalMaterial({ wireframe: false })
+    
+    body = new THREE.Object3D()
+
     torus1 = new THREE.TorusKnotGeometry(1,0.4,64,8,10.36,2.26)
-    body = new THREE.Mesh(this.torus1, this.materialKnot)
+    staticTorus1 = new THREE.Mesh(this.torus1, this.materialKnot)
     torus2 = new THREE.TorusKnotGeometry(1,0.4,64,8,10.16,2.26)
     staticTorus2 = new THREE.Mesh(this.torus2, this.materialKnot)
     torus3 = new THREE.TorusKnotGeometry(1,0.4,64,8,10.16,2.26)
@@ -35,15 +38,18 @@ export default class PaperBall {
         this.body.scale.set(scale.x, scale.y, scale.z)
         this.body.rotation.set(rotation.x, rotation.y, rotation.z)
         
-        this.body.add(this.staticTorus2)
-        this.body.add(this.staticTorus3)
-        this.body.add(this.staticTorus4)
-        this.body.add(this.staticTopperLeg1)
-        this.body.add(this.staticTopperLeg2)
+        this.body.add(this.staticTorus1)
+        this.staticTorus1.add(this.staticTorus2)
+        this.staticTorus1.add(this.staticTorus3)
+        this.staticTorus1.add(this.staticTorus4)
+        this.staticTorus1.add(this.staticTopperLeg1)
+        this.staticTorus1.add(this.staticTopperLeg2)
         this.staticTopperLeg1.add(this.staticBottomLeg1)
         this.staticTopperLeg2.add(this.staticBottomLeg2)
-        this.body.add(this.staticArm1)
-        this.body.add(this.staticArm2)
+        this.staticTorus1.add(this.staticArm1)
+        this.staticTorus1.add(this.staticArm2)
+        //TORUS 1
+        this.staticTorus1.position.set(0,1,0)
         //TORUS 2
         this.staticTorus2.position.set(0,0,0)
         this.staticTorus2.rotation.x = 90 * Math.PI / 180 

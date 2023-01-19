@@ -78,18 +78,18 @@
         trashColection.push(dragonFly)
         //paperBall
         let scaleBall = {x: 0.4,y: 0.4,z: 0.4}
-        let positionBall = {x: -5,y: 10,z: 0}
+        let positionBall = {x: 2.6,y: 10,z: 23}
         let rotationBall = {x: 0,y: 0,z: 0}
         let velocityBall = 1
         paperBall = new PaperBall(positionBall, scaleBall, rotationBall, velocityBall)
         trashColection.push(paperBall)
         //spider
-        let scaleSpider = {x: 0.4,y: 0.4,z: 0.4}
+        /* let scaleSpider = {x: 0.4,y: 0.4,z: 0.4}
         let positionSpider = {x: -5,y: 10,z: 5}
         let rotationSpider = {x: 0,y: 0,z: 0}
         let velocitySpider = 1
         spider = new Spider(positionSpider, scaleSpider, rotationSpider, velocityBall)
-        trashColection.push(spider)
+        trashColection.push(spider) */
 
         trashColection.forEach(trash => scene.add(trash.body))
         
@@ -142,14 +142,14 @@
             
             let scaleTree10 = {x: 3.5, y: 3.5, z: 3.5}
             let positionTree10 = {x: 8, y: -1.1, z: 23}
-            tree10 = new Tree(positionTree10,scaleTree10, 6, 1)
+            tree10 = new Tree(positionTree10,scaleTree10, 6, 1, paperBall)
             treesColection.push(tree10)
             /* collisionsWalls.push(tree.treeTronk) */
             treesColection.forEach(tree => {
                 scene.add(tree.pivot)
             })
         //map
-            const floor = new THREE.Mesh(new THREE.PlaneGeometry(50, 50), new THREE.MeshBasicMaterial({ color: 0x60ee60 }))
+            const floor = new THREE.Mesh(new THREE.CircleGeometry(30, 64), new THREE.MeshBasicMaterial({ color: 0x60ee60 }))
             floor.rotation.x = -Math.PI / 2
             floor.position.y = -1.1
             
@@ -182,7 +182,10 @@
             scene.add(floor, light, kirby.character/* wallFront, wallBack, wallSideRight, wallSideLeft,  */)
             
             kirby.position_default()
-            /* kirby.body.geometry.computeBoundingBox();
+            bbHelper = new THREE.BoxHelper(tree10.pivot, 0x00FFFF);
+            scene.add(bbHelper)
+            /* 
+            kirby.body.geometry.computeBoundingBox();
             wallFront.geometry.computeBoundingBox();
             wallBack.geometry.computeBoundingBox();
             wallSideLeft.geometry.computeBoundingBox();
@@ -191,7 +194,6 @@
                 tree.treeTronk.geometry.computeBoundingBox();
             })
 
-            bbHelper = new THREE.BoxHelper(kirby.body, 0x00FFFF);
             bbHelper1 = new THREE.BoxHelper(wallFront, 0x00FFFF);
             bbHelper2 = new THREE.BoxHelper(wallBack, 0x00FFFF);
             bbHelper3 = new THREE.BoxHelper(wallSideLeft, 0x00FFFF);
@@ -206,7 +208,7 @@
 
         function render() {
             renderer.render(scene, camera)
-            /* bbHelper.update() */
+            bbHelper.update()
 
             //treeAnimations
             treesColection.forEach(tree => {
