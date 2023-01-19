@@ -76,6 +76,8 @@ export default class Frog {
         this.body.rotation.set(rotation.x, rotation.y, rotation.z)
         this.velocity = velocity
 
+        this.animationStartItems = true
+
         this.body.add(this.staticBox)
         this.staticBox.add(this.staticTopper1)
         this.staticBox.add(this.staticTopper2)
@@ -204,70 +206,71 @@ export default class Frog {
             if(this.xFrogCont != 3) {
             //BOX
             //BOX ROTATION
-            this.staticBox.rotation.x -= 10 * Math.PI / 180 * this.velocity
+            this.staticBox.rotation.x -= 10 * Math.PI / 180
 
             //BOX POSITION
-            this.staticBox.position.y += 0.625 * this.velocity
+            this.staticBox.position.y += 0.625
 
             } else {
-                this.staticBox.rotation.x = 0 * this.velocity
+                this.staticBox.rotation.x = 0
             }
             
         //TOP LEGS
         //TOPPER LEG ROTATION
-        this.staticTopperLeg3.rotation.z -= 16 * Math.PI / 180 * this.velocity
+        this.staticTopperLeg3.rotation.z -= 16 * Math.PI / 180 
         
-        this.staticTopperLeg3.rotation.y += 8 * Math.PI / 180 * this.velocity
+        this.staticTopperLeg3.rotation.y += 8 * Math.PI / 180 
 
-        this.staticTopperLeg4.rotation.z -= 16 * Math.PI / 180 * this.velocity
+        this.staticTopperLeg4.rotation.z -= 16 * Math.PI / 180
 
-        this.staticTopperLeg4.rotation.y += 8 * Math.PI / 180 * this.velocity
+        this.staticTopperLeg4.rotation.y += 8 * Math.PI / 180 
 
         //BOTTOM LEG ROTATION
-        this.staticBottomLeg3.rotation.x -= 2 * Math.PI / 180 * this.velocity
+        this.staticBottomLeg3.rotation.x -= 2 * Math.PI / 180
 
-        this.staticBottomLeg4.rotation.x += 2 * Math.PI / 180 * this.velocity
+        this.staticBottomLeg4.rotation.x += 2 * Math.PI / 180              
 
-        this.staticBottomLeg3.rotation.y += 6 * Math.PI / 180 * this.velocity
+        this.staticBottomLeg3.rotation.y += 6 * Math.PI / 180
 
-        this.staticBottomLeg4.rotation.y -= 6 * Math.PI / 180 * this.velocity
+        this.staticBottomLeg4.rotation.y -= 6 * Math.PI / 180
 
-        this.staticBottomLeg3.rotation.z -= 18 * Math.PI / 180 * this.velocity
+        this.staticBottomLeg3.rotation.z -= 18 * Math.PI / 180
 
-        this.staticBottomLeg4.rotation.z -= 18 * Math.PI / 180 * this.velocity
+        this.staticBottomLeg4.rotation.z -= 18 * Math.PI / 180
 
         //BOTTOM LEG POSITION
-        this.staticBottomLeg3.position.x += 0.05 * this.velocity
-        this.staticBottomLeg3.position.y += 0.32 * this.velocity
-        this.staticBottomLeg3.position.z -= 0.023 * this.velocity
+        this.staticBottomLeg3.position.x += 0.05
+        this.staticBottomLeg3.position.y += 0.32
+        this.staticBottomLeg3.position.z -= 0.023
 
-        this.staticBottomLeg4.position.x += 0.05 * this.velocity
-        this.staticBottomLeg4.position.y += 0.32 * this.velocity
-        this.staticBottomLeg4.position.z -= 0.023 * this.velocity
+        this.staticBottomLeg4.position.x += 0.05
+        this.staticBottomLeg4.position.y += 0.32
+        this.staticBottomLeg4.position.z -= 0.023
 
         //FOOT ROTATION
-        this.staticFoot3.rotation.z -= 20 * Math.PI / 180 * this.velocity
+        this.staticFoot3.rotation.z -= 20 * Math.PI / 180
 
-        this.staticFoot4.rotation.z += 20 * Math.PI / 180 * this.velocity
+        this.staticFoot4.rotation.z += 20 * Math.PI / 180
 
         //FOOT POSITION
-        this.staticFoot3.position.y += 0.06 * this.velocity
+        this.staticFoot3.position.y += 0.06
 
-        this.staticFoot4.position.y += 0.06 * this.velocity
+        this.staticFoot4.position.y += 0.06
 
         //FRONT LEGS
         //BOTTOM LEG ROTATION
-        this.staticBottomLeg1.rotation.x += 9 * Math.PI / 180 * this.velocity
-        this.staticBottomLeg2.rotation.x += 9 * Math.PI / 180 * this.velocity
+        this.staticBottomLeg1.rotation.x += 9 * Math.PI / 180
+        this.staticBottomLeg2.rotation.x += 9 * Math.PI / 180
 
         //BOTTOM LEG POSITION
-        this.staticBottomLeg1.position.y -= 0.04 * this.velocity
-        this.staticBottomLeg2.position.y -= 0.04 * this.velocity
+        this.staticBottomLeg1.position.y -= 0.04
+        this.staticBottomLeg2.position.y -= 0.04
 
         this.xFrogCont  += 1
         this.cont += 1
         if(this.cont == 5){
             this.frogMovement = 1
+            this.cont = 0
             this.xFrogCont = 0
         }
     }
@@ -275,65 +278,65 @@ export default class Frog {
         if(this.xFrogCont != 3) {
             //BOX
             //BOX ROTATION
-            this.staticBox.rotation.x += 10 * Math.PI / 180 * this.velocity
+            this.staticBox.rotation.x += 10 * Math.PI / 180
 
             //BOX POSITION
-            this.staticBox.position.y -= 0.625 * this.velocity
+            this.staticBox.position.y -= 0.625
 
             } else {
-                this.staticBox.rotation.x = 0 * this.velocity
+                this.staticBox.rotation.x = 0
             }
 
         //TOP LEGS
         //TOPPER LEG ROTATION
-        this.staticTopperLeg3.rotation.z += 16 * Math.PI / 180 * this.velocity 
+        this.staticTopperLeg3.rotation.z += 16 * Math.PI / 180 
+        
+        this.staticTopperLeg3.rotation.y -= 8 * Math.PI / 180 
 
-        this.staticTopperLeg3.rotation.y -= 8 * Math.PI / 180 * this.velocity
+        this.staticTopperLeg4.rotation.z += 16 * Math.PI / 180
 
-        this.staticTopperLeg4.rotation.z += 16 * Math.PI / 180 * this.velocity
-
-        this.staticTopperLeg4.rotation.y -= 8 * Math.PI / 180 * this.velocity
+        this.staticTopperLeg4.rotation.y -= 8 * Math.PI / 180 
 
         //BOTTOM LEG ROTATION
-        this.staticBottomLeg3.rotation.x += 2 * Math.PI / 180 * this.velocity
+        this.staticBottomLeg3.rotation.x += 2 * Math.PI / 180
 
-        this.staticBottomLeg4.rotation.x -= 2 * Math.PI / 180 * this.velocity
+        this.staticBottomLeg4.rotation.x -= 2 * Math.PI / 180              
 
-        this.staticBottomLeg3.rotation.y -= 6 * Math.PI / 180 * this.velocity
+        this.staticBottomLeg3.rotation.y -= 6 * Math.PI / 180
 
-        this.staticBottomLeg4.rotation.y += 6 * Math.PI / 180 * this.velocity
+        this.staticBottomLeg4.rotation.y += 6 * Math.PI / 180
 
-        this.staticBottomLeg3.rotation.z += 18 * Math.PI / 180 * this.velocity
+        this.staticBottomLeg3.rotation.z += 18 * Math.PI / 180
 
-        this.staticBottomLeg4.rotation.z += 18 * Math.PI / 180 * this.velocity
+        this.staticBottomLeg4.rotation.z += 18 * Math.PI / 180
 
         //BOTTOM LEG POSITION
-        this.staticBottomLeg3.position.x -= 0.05 * this.velocity
-        this.staticBottomLeg3.position.y -= 0.32 * this.velocity
-        this.staticBottomLeg3.position.z += 0.023 * this.velocity
+        this.staticBottomLeg3.position.x -= 0.05
+        this.staticBottomLeg3.position.y -= 0.32
+        this.staticBottomLeg3.position.z += 0.023
 
-        this.staticBottomLeg4.position.x -= 0.05 * this.velocity
-        this.staticBottomLeg4.position.y -= 0.32 * this.velocity
-        this.staticBottomLeg4.position.z += 0.023 * this.velocity
+        this.staticBottomLeg4.position.x -= 0.05
+        this.staticBottomLeg4.position.y -= 0.32
+        this.staticBottomLeg4.position.z += 0.023
 
         //FOOT ROTATION
-        this.staticFoot3.rotation.z += 20 * Math.PI / 180 * this.velocity
+        this.staticFoot3.rotation.z += 20 * Math.PI / 180
 
-        this.staticFoot4.rotation.z -= 20 * Math.PI / 180 * this.velocity
+        this.staticFoot4.rotation.z -= 20 * Math.PI / 180
 
         //FOOT POSITION
-        this.staticFoot3.position.y -= 0.06 * this.velocity
+        this.staticFoot3.position.y -= 0.06
 
-        this.staticFoot4.position.y -= 0.06 * this.velocity
+        this.staticFoot4.position.y -= 0.06
 
         //FRONT LEGS
         //BOTTOM LEG ROTATION
-        this.staticBottomLeg1.rotation.x -= 9 * Math.PI / 180 * this.velocity
-        this.staticBottomLeg2.rotation.x -= 9 * Math.PI / 180 * this.velocity
+        this.staticBottomLeg1.rotation.x -= 9 * Math.PI / 180
+        this.staticBottomLeg2.rotation.x -= 9 * Math.PI / 180
 
         //BOTTOM LEG POSITION
-        this.staticBottomLeg1.position.y += 0.04 * this.velocity
-        this.staticBottomLeg2.position.y += 0.04 * this.velocity
+        this.staticBottomLeg1.position.y += 0.04
+        this.staticBottomLeg2.position.y += 0.04
 
         this.xFrogCont += 1
         this.cont += 1
@@ -343,6 +346,4 @@ export default class Frog {
             this.xFrogCont = 0
         }
     }
-    } 
-
-}
+    }}

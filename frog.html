@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Basic ThreeJS APP</title>
+    <style>
+        body {
+            /* set margin to 0 and overflow to hidden, to use the complete page */
+            margin: 0;
+            overflow: hidden;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- HTML body will hold the Output -->
+
+    <script type="module">
+        import * as THREE from './libs/three.module.js';
+        import * as CONTROLS from './libs/OrbitControls.js';
+        import * as BufferGeometryUtils from './libs/BufferGeometryUtils.js';
+
+        let camera, scene, renderer;
+
+        let canStatic, materialCAN
+
+        let controls
+        
+
+        let staticTopperLeg1, staticTopperLeg2, staticTopperLeg3, staticTopperLeg4
+        let staticBottomLeg1, staticBottomLeg2, staticBottomLeg3, staticBottomLeg4
+        let staticFoot1, staticFoot2, staticFoot3, staticFoot4
+        let staticBox
+        let frogMovement = 0
+        let cont = 0
+        let xFrogCont = 0
+
+        window.onload = function init() {
+            
+            scene = new THREE.Scene();
+            
+            const aspect = window.innerWidth / window.innerHeight;
+            camera = new THREE.PerspectiveCamera(75, aspect, 0.1, 10);
+            camera.position.y = 2;
+            camera.position.z = 8;
+            camera.lookAt(scene.position);
+            
+            
+            renderer = new THREE.WebGLRenderer({ antialias: false }); 
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            
+            controls = new CONTROLS.OrbitControls(camera, renderer.domElement)
+            
+            renderer.setClearColor("#000000");
+            document.body.appendChild(renderer.domElement);
+            
+            const axesHelper = new THREE.AxesHelper( 5 );
+            
+
+            //TEXTURES
+            const backgroundTexture = new THREE.TextureLoader().load('./maxresdefault.jpg')
+            
+            let materialBox = new THREE.MeshNormalMaterial({ wireframe: false })
+            let materialBoxTopper = new THREE.MeshNormalMaterial({ wireframe: false })
+            materialBoxTopper.side = THREE.DoubleSide
+
+            //BOX
+            let box = new THREE.BoxGeometry(3, 2, 5)
+            staticBox = new THREE.Mesh(box, materialBox)
+            staticBox.position.set(0,0,0)
+            staticBox.rotation.x = 0 * Math.PI / 180
+            staticBox.rotation.y = 0 * Math.PI / 180
+            staticBox.rotation.z = 0 * Math.PI / 180
+
+            //TOPPER
+            let topper1 = new THREE.PlaneGeometry(3, 1)
+            let staticTopper1 = new THREE.Mesh(topper1, materialBoxTopper)
+            staticBox.add(staticTopper1)
+            staticTopper1.position.set(0,1.258,-2.07)
+            staticTopper1.rotation.x = 59 * Math.PI / 180
+
+            let topper2 = new THREE.PlaneGeometry(3, 1)
+            let staticTopper2 = new THREE.Mesh(topper2, materialBoxTopper)
+            staticBox.add(staticTopper2)
+            staticTopper2.position.set(0,1.258,2.07)
+            staticTopper2.rotation.x = -59 * Math.PI / 180
+
+            let topper3 = new THREE.PlaneGeometry(5, 1)
+            let staticTopper3 = new THREE.Mesh(topper3, materialBoxTopper)
+            staticBox.add(staticTopper3)
+            staticTopper3.position.set(1.5,1.258,0)
+            staticTopper3.rotation.y = -90 * Math.PI / 180
+
+            let topper4 = new THREE.PlaneGeometry(5, 1)
+            let staticTopper4 = new THREE.Mesh(topper4, materialBoxTopper)
+            staticBox.add(staticTopper4)
+            staticTopper4.position.set(-1.5,1.258,0)
+            staticTopper4.rotation.y = -90 * Math.PI / 180
+
+            // FRONT LEGS
+            // TOPPER LEG
+            let topperLeg1 = new THREE.CylinderGeometry(0.3,0.2,1)
+            staticTopperLeg1 = new THREE.Mesh(topperLeg1, materialBox)
+            staticBox.add(staticTopperLeg1)
+            staticTopperLeg1.position.set(1.7,-0.5,2.32)
+            staticTopperLeg1.rotation.y = -50 * Math.PI / 180
+            staticTopperLeg1.rotation.z = 90 * Math.PI / 180
+
+            let topperLeg2 = new THREE.CylinderGeometry(0.3,0.2,1)
+            staticTopperLeg2 = new THREE.Mesh(topperLeg2, materialBox)
+            staticBox.add(staticTopperLeg2)
+            staticTopperLeg2.position.set(-1.7,-0.5,2.32)
+            staticTopperLeg2.rotation.y = 50 * Math.PI / 180
+            staticTopperLeg2.rotation.z = -90 * Math.PI / 180
+
+            let topperLeg3 = new THREE.CylinderGeometry(0.4,0.7,1.5)
+            staticTopperLeg3 = new THREE.Mesh(topperLeg3, materialBox)
+            staticBox.add(staticTopperLeg3)
+            staticTopperLeg3.position.set(1.5,0,-1.3)
+            staticTopperLeg3.rotation.x = 70 * Math.PI / 180
+            staticTopperLeg3.rotation.z = -40 * Math.PI / 180
+
+            let topperLeg4 = new THREE.CylinderGeometry(0.4,0.7,1.5)
+            staticTopperLeg4 = new THREE.Mesh(topperLeg4, materialBox)
+            staticBox.add(staticTopperLeg4)
+            staticTopperLeg4.position.set(-1.5,0,-1.3)
+            staticTopperLeg4.rotation.x = 250 * Math.PI / 180
+            staticTopperLeg4.rotation.z = -220 * Math.PI / 180
+
+            // BOTTOM LEG
+            let bottomLeg1 = new THREE.CylinderGeometry(0.1, 0.2, 0.85)
+            staticBottomLeg1 = new THREE.Mesh(bottomLeg1, materialBox)
+            staticTopperLeg1.add(staticBottomLeg1)
+            staticBottomLeg1.position.set(-0.2,-0.2,0.35)
+            staticBottomLeg1.rotation.x = 85 * Math.PI / 180
+            staticBottomLeg1.rotation.y = -60 * Math.PI / 180
+            staticBottomLeg1.rotation.z = 60 * Math.PI / 180
+
+            let bottomLeg2 = new THREE.CylinderGeometry(0.1, 0.2, 0.95)
+            staticBottomLeg2 = new THREE.Mesh(bottomLeg2, materialBox)
+            staticTopperLeg2.add(staticBottomLeg2)
+            staticBottomLeg2.position.set(0.3,-0.2,0.35)
+            staticBottomLeg2.rotation.x = 85 * Math.PI / 180
+            staticBottomLeg2.rotation.y = 60 * Math.PI / 180
+            staticBottomLeg2.rotation.z = -60 * Math.PI / 180
+
+            let bottomLeg3 = new THREE.CylinderGeometry(0.2, 0.4, 2)
+            staticBottomLeg3 = new THREE.Mesh(bottomLeg3, materialBox)
+            staticTopperLeg3.add(staticBottomLeg3)
+            staticBottomLeg3.position.set(0.4,-0.1,0.265)
+            staticBottomLeg3.rotation.x = 160 * Math.PI / 180
+            staticBottomLeg3.rotation.z = -30 * Math.PI / 180
+
+            let bottomLeg4 = new THREE.CylinderGeometry(0.2, 0.4, 2)
+            staticBottomLeg4 = new THREE.Mesh(bottomLeg4, materialBox)
+            staticTopperLeg4.add(staticBottomLeg4)
+            staticBottomLeg4.position.set(0.4,-0.1,-0.265)
+            staticBottomLeg4.rotation.x = 190 * Math.PI / 180
+            staticBottomLeg4.rotation.z = -30 * Math.PI / 180
+
+            // FEET
+            let foot1 = new THREE.BoxGeometry(0.2,0.1,0.3)
+            let staticFoot1 = new THREE.Mesh(foot1, materialBox)
+            staticBottomLeg1.add(staticFoot1)
+            staticFoot1.position.set(0,0.4,0.05)
+            staticFoot1.rotation.x = 65 * Math.PI / 180
+            staticFoot1.rotation.y = 0 * Math.PI / 180
+            staticFoot1.rotation.z = 7 * Math.PI / 180
+
+            let foot2 = new THREE.BoxGeometry(0.2,0.1,0.3)
+            staticFoot2 = new THREE.Mesh(foot2, materialBox)
+            staticBottomLeg2.add(staticFoot2)
+            staticFoot2.position.set(0,0.4,0.05)
+            staticFoot2.rotation.x = 65 * Math.PI / 180
+            staticFoot2.rotation.y = 0 * Math.PI / 180
+            staticFoot2.rotation.z = -7 * Math.PI / 180
+
+            let foot3 = new THREE.BoxGeometry(0.5,0.3,0.5)
+            staticFoot3 = new THREE.Mesh(foot3, materialBox)
+            staticBottomLeg3.add(staticFoot3)
+            staticFoot3.position.set(0,0.8,-0.1)
+            staticFoot3.rotation.x = -60 * Math.PI / 180
+            staticFoot3.rotation.y = -90 * Math.PI / 180
+            staticFoot3.rotation.z = 0 * Math.PI / 180
+
+            let foot4 = new THREE.BoxGeometry(0.5,0.3,0.5)
+            staticFoot4 = new THREE.Mesh(foot4, materialBox)
+            staticBottomLeg4.add(staticFoot4)
+            staticFoot4.position.set(0,0.8,0.1)
+            staticFoot4.rotation.x = 60 * Math.PI / 180
+            staticFoot4.rotation.y = -90 * Math.PI / 180
+            staticFoot4.rotation.z = 0 * Math.PI / 180
+
+            //FINGERS
+            let finger1 = new THREE.CylinderGeometry(0.05,0.05,0.09);
+            let staticFinger1 = new THREE.Mesh(finger1, materialBox)
+            staticFoot1.add(staticFinger1)
+            staticFinger1.position.set(0.1,0,0)
+            staticFinger1.rotation.z = 90 * Math.PI / 180
+
+            let finger2 = new THREE.CylinderGeometry(0.05,0.05,0.09);
+            let staticFinger2 = new THREE.Mesh(finger2, materialBox)
+            staticFoot1.add(staticFinger2)
+            staticFinger2.position.set(0.08,0,0.09)
+            staticFinger2.rotation.x = 90 * Math.PI / 180
+            staticFinger2.rotation.z = -45 * Math.PI / 180
+
+            let finger3 = new THREE.CylinderGeometry(0.05,0.05,0.09);
+            let staticFinger3 = new THREE.Mesh(finger3, materialBox)
+            staticFoot1.add(staticFinger3)
+            staticFinger3.position.set(0.08,0,-0.09)
+            staticFinger3.rotation.x = 90 * Math.PI / 180
+            staticFinger3.rotation.z = 45 * Math.PI / 180
+
+            let finger4 = new THREE.CylinderGeometry(0.05,0.05,0.09);
+            let staticFinger4 = new THREE.Mesh(finger4, materialBox)
+            staticFoot2.add(staticFinger4)
+            staticFinger4.position.set(-0.1,0,0)
+            staticFinger4.rotation.z = 90 * Math.PI / 180
+
+            let finger5 = new THREE.CylinderGeometry(0.05,0.05,0.09);
+            let staticFinger5 = new THREE.Mesh(finger5, materialBox)
+            staticFoot2.add(staticFinger5)
+            staticFinger5.position.set(-0.08,0,0.09)
+            staticFinger5.rotation.x = 90 * Math.PI / 180
+            staticFinger5.rotation.z = 45 * Math.PI / 180
+
+            let finger6 = new THREE.CylinderGeometry(0.05,0.05,0.09);
+            let staticFinger6 = new THREE.Mesh(finger6, materialBox)
+            staticFoot2.add(staticFinger6)
+            staticFinger6.position.set(-0.08,0,-0.09)
+            staticFinger6.rotation.x = 90 * Math.PI / 180
+            staticFinger6.rotation.z = -45 * Math.PI / 180
+
+            let finger7 = new THREE.CylinderGeometry(0.15,0.15,0.5);
+            let staticFinger7 = new THREE.Mesh(finger7, materialBox)
+            staticFoot3.add(staticFinger7)
+            staticFinger7.position.set(-0.08,0,-0.09)
+            staticFinger7.rotation.x = 90 * Math.PI / 180
+            staticFinger7.rotation.z = -45 * Math.PI / 180
+
+            let finger8 = new THREE.CylinderGeometry(0.15,0.15,0.5);
+            let staticFinger8 = new THREE.Mesh(finger8, materialBox)
+            staticFoot3.add(staticFinger8)
+            staticFinger8.position.set(-0.08,0,0.09)
+            staticFinger8.rotation.x = 90 * Math.PI / 180
+            staticFinger8.rotation.z = 45 * Math.PI / 180
+
+            let finger9 = new THREE.CylinderGeometry(0.15,0.15,0.5);
+            let staticFinger9 = new THREE.Mesh(finger9, materialBox)
+            staticFoot3.add(staticFinger9)
+            staticFinger9.position.set(-0.08,0,0)
+            staticFinger9.rotation.z = 90 * Math.PI / 180
+
+            let finger10 = new THREE.CylinderGeometry(0.15,0.15,0.5);
+            let staticFinger10 = new THREE.Mesh(finger10, materialBox)
+            staticFoot4.add(staticFinger10)
+            staticFinger10.position.set(0.08,0,-0.09)
+            staticFinger10.rotation.x = 90 * Math.PI / 180
+            staticFinger10.rotation.z = 45 * Math.PI / 180
+
+            let finger11 = new THREE.CylinderGeometry(0.15,0.15,0.5);
+            let staticFinger11 = new THREE.Mesh(finger11, materialBox)
+            staticFoot4.add(staticFinger11)
+            staticFinger11.position.set(0.08,0,0.09)
+            staticFinger11.rotation.x = 90 * Math.PI / 180
+            staticFinger11.rotation.z = -45 * Math.PI / 180
+
+            let finger12 = new THREE.CylinderGeometry(0.15,0.15,0.5);
+            let staticFinger12 = new THREE.Mesh(finger12, materialBox)
+            staticFoot4.add(staticFinger12)
+            staticFinger12.position.set(0.08,0,0)
+            staticFinger12.rotation.z = 90 * Math.PI / 180
+
+            scene.background = backgroundTexture
+
+            scene.add(staticBox)
+            scene.add( axesHelper )
+
+            renderer.setAnimationLoop(render);
+        }
+
+        function render() {
+            renderer.render(scene, camera)
+            controls.update()
+
+            // animation loop galhos
+
+        }
+
+
+        //MOVEMENT
+        
+        document.addEventListener('keypress', (e) => {
+            if('f' == e.key) {
+                
+                if(frogMovement == 0) {
+                    if(xFrogCont != 3) {
+                    //BOX
+                    //BOX ROTATION
+                    staticBox.rotation.x -= 10 * Math.PI / 180
+    
+                    //BOX POSITION
+                    staticBox.position.y += 0.625
+
+                    } else {
+                        staticBox.rotation.x = 0
+                    }
+                    
+                //TOP LEGS
+                //TOPPER LEG ROTATION
+                staticTopperLeg3.rotation.z -= 16 * Math.PI / 180 
+                
+                staticTopperLeg3.rotation.y += 8 * Math.PI / 180 
+
+                staticTopperLeg4.rotation.z -= 16 * Math.PI / 180
+
+                staticTopperLeg4.rotation.y += 8 * Math.PI / 180 
+
+                //BOTTOM LEG ROTATION
+                staticBottomLeg3.rotation.x -= 2 * Math.PI / 180
+
+                staticBottomLeg4.rotation.x += 2 * Math.PI / 180              
+
+                staticBottomLeg3.rotation.y += 6 * Math.PI / 180
+
+                staticBottomLeg4.rotation.y -= 6 * Math.PI / 180
+
+                staticBottomLeg3.rotation.z -= 18 * Math.PI / 180
+
+                staticBottomLeg4.rotation.z -= 18 * Math.PI / 180
+
+                //BOTTOM LEG POSITION
+                staticBottomLeg3.position.x += 0.05
+                staticBottomLeg3.position.y += 0.32
+                staticBottomLeg3.position.z -= 0.023
+
+                staticBottomLeg4.position.x += 0.05
+                staticBottomLeg4.position.y += 0.32
+                staticBottomLeg4.position.z -= 0.023
+
+                //FOOT ROTATION
+                staticFoot3.rotation.z -= 20 * Math.PI / 180
+
+                staticFoot4.rotation.z += 20 * Math.PI / 180
+
+                //FOOT POSITION
+                staticFoot3.position.y += 0.06
+
+                staticFoot4.position.y += 0.06
+
+                //FRONT LEGS
+                //BOTTOM LEG ROTATION
+                staticBottomLeg1.rotation.x += 9 * Math.PI / 180
+                staticBottomLeg2.rotation.x += 9 * Math.PI / 180
+
+                //BOTTOM LEG POSITION
+                staticBottomLeg1.position.y -= 0.04
+                staticBottomLeg2.position.y -= 0.04
+
+                xFrogCont  += 1
+                cont += 1
+                if(cont == 5){
+                    frogMovement = 1
+                    cont = 0
+                    xFrogCont = 0
+                }
+            }
+            if(frogMovement == 1){
+                if(xFrogCont != 3) {
+                    //BOX
+                    //BOX ROTATION
+                    staticBox.rotation.x += 10 * Math.PI / 180
+    
+                    //BOX POSITION
+                    staticBox.position.y -= 0.625
+
+                    } else {
+                        staticBox.rotation.x = 0
+                    }
+
+                //TOP LEGS
+                //TOPPER LEG ROTATION
+                staticTopperLeg3.rotation.z += 16 * Math.PI / 180 
+                
+                staticTopperLeg3.rotation.y -= 8 * Math.PI / 180 
+
+                staticTopperLeg4.rotation.z += 16 * Math.PI / 180
+
+                staticTopperLeg4.rotation.y -= 8 * Math.PI / 180 
+
+                //BOTTOM LEG ROTATION
+                staticBottomLeg3.rotation.x += 2 * Math.PI / 180
+
+                staticBottomLeg4.rotation.x -= 2 * Math.PI / 180              
+
+                staticBottomLeg3.rotation.y -= 6 * Math.PI / 180
+
+                staticBottomLeg4.rotation.y += 6 * Math.PI / 180
+
+                staticBottomLeg3.rotation.z += 18 * Math.PI / 180
+
+                staticBottomLeg4.rotation.z += 18 * Math.PI / 180
+
+                //BOTTOM LEG POSITION
+                staticBottomLeg3.position.x -= 0.05
+                staticBottomLeg3.position.y -= 0.32
+                staticBottomLeg3.position.z += 0.023
+
+                staticBottomLeg4.position.x -= 0.05
+                staticBottomLeg4.position.y -= 0.32
+                staticBottomLeg4.position.z += 0.023
+
+                //FOOT ROTATION
+                staticFoot3.rotation.z += 20 * Math.PI / 180
+
+                staticFoot4.rotation.z -= 20 * Math.PI / 180
+
+                //FOOT POSITION
+                staticFoot3.position.y -= 0.06
+
+                staticFoot4.position.y -= 0.06
+
+                //FRONT LEGS
+                //BOTTOM LEG ROTATION
+                staticBottomLeg1.rotation.x -= 9 * Math.PI / 180
+                staticBottomLeg2.rotation.x -= 9 * Math.PI / 180
+
+                //BOTTOM LEG POSITION
+                staticBottomLeg1.position.y += 0.04
+                staticBottomLeg2.position.y += 0.04
+
+                xFrogCont += 1
+                cont += 1
+                if(cont == 5){
+                    frogMovement = 0
+                    cont = 0
+                    xFrogCont = 0
+                }
+            }
+            
+        }
+    })
+
+    </script>
+</body>
+
+</html>
+
+
+<!-- VALORES PARA A ROTAÇÃO DAS PATAS --> 
+<!-- 
+perna grande -> z = -120
+		y = 40
+
+perna pequena ->	x = 150
+			y = 30
+			z = -120
+			posição -> 	x = 0.65
+					y = 1.5
+					z = 0.15
+
+pé ->	z = -100
+	posição ->	y = 1.1
+			z = -0.1
+
+
+valores atuais:
+top -> z - -40 /
+	y - 0
+bot -> x - 160
+	y - 0
+	z - -30
+	posição -> x - 0.4
+			y - -0.1
+			z - 0.265
+
+foot -> z - 0
+	posição -> y = 0.8
+			z=-0.1 -->
