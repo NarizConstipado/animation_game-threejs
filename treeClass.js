@@ -2,8 +2,8 @@ import * as THREE from './libs/three.module.js';
 
 export default class Tree {
     //materials
-    materialTronk = new THREE.MeshBasicMaterial({color: 'rgb(78,53,36)'},{ wireframe: false }, {shading: THREE.FlatShading});
-    materialFolhas = new THREE.MeshBasicMaterial({color: 'rgb(0,154,23)'},{ wireframe: false }, {shading: THREE.FlatShading});
+    materialTronk = new THREE.MeshToonMaterial({color: 'rgb(78,53,36)'},{ wireframe: false }, {shading: THREE.FlatShading});
+    materialFolhas = new THREE.MeshToonMaterial({color: 'rgb(0,154,23)'},{ wireframe: false }, {shading: THREE.FlatShading});
     //tronco
     pivot = new THREE.Object3D();
     geometryTronk1 = new THREE.CylinderGeometry(0.1,0.15,1.5,7)

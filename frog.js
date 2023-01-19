@@ -1,8 +1,8 @@
 import * as THREE from './libs/three.module.js';
 
 export default class Frog {
-    materialBox = new THREE.MeshNormalMaterial({ wireframe: false })
-    materialBoxTopper = new THREE.MeshNormalMaterial({ wireframe: false })
+    materialBox = new THREE.MeshToonMaterial({ wireframe: false })
+    materialBoxTopper = new THREE.MeshToonMaterial({ wireframe: false })
     body = new THREE.Object3D();
     
 

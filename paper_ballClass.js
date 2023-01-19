@@ -2,8 +2,8 @@ import * as THREE from './libs/three.module.js';
 
 export default class PaperBall {
 
-    materialKnot = new THREE.MeshBasicMaterial({ color: '#f2eecb' })
-    materialLegsArms = new THREE.MeshBasicMaterial({ color: '#000000' })
+    materialKnot = new THREE.MeshToonMaterial({ color: '#f2eecb' })
+    materialLegsArms = new THREE.MeshToonMaterial({ color: '#000000' })
     body = new THREE.Object3D();
 
 

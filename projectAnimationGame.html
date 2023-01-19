@@ -48,6 +48,7 @@
         let camera, scene, renderer;
         let bbHelper, bbHelper1, bbHelper2, bbHelper3, bbHelper4, bbtreeTronk
         let controls
+        let directionalLight
 
         window.onload = () => {
             scene = new THREE.Scene();
@@ -60,12 +61,33 @@
 
             renderer = new THREE.WebGLRenderer({ antilias: false });
             renderer.setSize(window.innerWidth, window.innerHeight);
+              renderer.shadowMap.enabled = true
+              renderer.shadowMap.type = THREE.PCFSoftShadowMap
 
             renderer.setClearColor("#000000");
             document.body.appendChild(renderer.domElement);
             
             controls = new CONTROLS.OrbitControls(camera, renderer.domElement)
             
+            directionalLight =  new THREE.DirectionalLight('#ffffff', 0.7)
+            directionalLight.castShadow = true
+            let h = new THREE.DirectionalLightHelper(directionalLight)
+            directionalLight.position.set(35,30,20)
+            directionalLight.rotation.x = 30 * Math.PI / 180
+
+            console.log(directionalLight.shadow.camera)
+            directionalLight.shadow.camera.far = 100;
+             directionalLight.shadow.camera.left = -50;
+              directionalLight.shadow.camera.right = 50
+              directionalLight.shadow.camera.top = -50;
+              directionalLight.shadow.camera.bottom = 50
+              directionalLight.shadow.mapSize.width = 512*2
+              directionalLight.shadow.mapSize.height = 512*2
+
+            console.log( directionalLight.shadow.mapSize)
+
+            let hS = new THREE.CameraHelper(directionalLight.shadow.camera)
+            scene.add(hS)
         //KIRBY
             kirby = new Kirby()
 
@@ -152,7 +174,7 @@
                 scene.add(tree.pivot)
             })
         //map
-            const floor = new THREE.Mesh(new THREE.CircleGeometry(30, 64), new THREE.MeshBasicMaterial({ color: 0x60ee60 }))
+            const floor = new THREE.Mesh(new THREE.CircleGeometry(30, 64), new THREE.MeshToonMaterial({ color: 0x60ee60 }))
             floor.rotation.x = -Math.PI / 2
             floor.position.y = -1.1
             
@@ -182,8 +204,19 @@
             const light = new THREE.HemisphereLight(0xffffbb, 0x080820, 1)
             light.position.set(0, 3, 3)
             
-            scene.add(floor, light, kirby.character/* wallFront, wallBack, wallSideRight, wallSideLeft,  */)
+            scene.add(floor, light, kirby.character/* wallFront, wallBack, wallSideRight, wallSideLeft,  */, directionalLight, h)
+
+            floor.name = "floor"
+            floor.receiveShadow = true
+
+            scene.traverse(function (child){
+                if(child instanceof THREE.Mesh && child.name == ""){
+                    child.castShadow = true
+                    child.receiveShadow = true
+                }
+            })
             
+            console.log(scene.children)
             kirby.position_default()
             bbHelper = new THREE.BoxHelper(tree10.pivot, 0x00FFFF);
             scene.add(bbHelper)
@@ -211,6 +244,7 @@
 
         function render() {
             renderer.render(scene, camera)
+          
             bbHelper.update()
 
             //treeAnimations

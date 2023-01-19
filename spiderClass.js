@@ -5,8 +5,8 @@ export default class Spider {
     spiderFur = new THREE.TextureLoader().load("./textures/fur.jpg")
     canCola = new THREE.TextureLoader().load("./textures/cola_unfold.jpg")
 
-    materialSpider = new THREE.MeshBasicMaterial({map: this.spiderFur})
-    materialCan = new THREE.MeshBasicMaterial({map: this.canCola})
+    materialSpider = new THREE.MeshToonMaterial({map: this.spiderFur})
+    materialCan = new THREE.MeshToonMaterial({map: this.canCola})
     
     body = new THREE.Object3D();
 

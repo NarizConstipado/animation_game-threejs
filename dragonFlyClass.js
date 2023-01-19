@@ -5,10 +5,10 @@ export default class DragonFly {
     wingTexture = new THREE.TextureLoader().load('./textures/wing2_0.jpg')
     winePaper = new THREE.TextureLoader().load('./textures/wine_paper.jpg')
 
-    materialBottle = new THREE.MeshBasicMaterial({ color: '#092E20',  transparent: true, opacity: 0.955/* , map: winePaper */ })
-    materialWings = new THREE.MeshBasicMaterial({map : this.wingTexture, transparent : true, opacity : 0.5 })
-    materialLegs = new THREE.MeshBasicMaterial({ color: '#B2BEB5'})
-    materialTopper = new THREE.MeshBasicMaterial({ color: '#8D918D'})
+    materialBottle = new THREE.MeshToonMaterial({ color: '#092E20',  transparent: true, opacity: 0.955/* , map: winePaper */ })
+    materialWings = new THREE.MeshToonMaterial({map : this.wingTexture, transparent : true, opacity : 0.5 })
+    materialLegs = new THREE.MeshToonMaterial({ color: '#B2BEB5'})
+    materialTopper = new THREE.MeshToonMaterial({ color: '#8D918D'})
     
     body = new THREE.Object3D();
 
