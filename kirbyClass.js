@@ -187,13 +187,16 @@ export default class Kirby {
     }
 
     eating(objects) {
-        for (let object in objects) {
+        for (let object of objects) {
             let tornadoBox = new THREE.Box3().setFromObject(this.tornado);
             let objectBox = new THREE.Box3().setFromObject(object);
+            let bodyBox = new THREE.Box3().setFromObject(this.body);
             if (objectBox.intersectsBox(tornadoBox)) {
+                console.log(object.position)
+                console.log(this.character.position.x, this.character.position.z)
                 object.position.x -= Math.sin(this.character.rotation.y) * 0.1
                 object.position.z -= Math.cos(this.character.rotation.y) * 0.1
-                if (object.containsBox(this.character)) {
+                if (objectBox.intersectsBox(bodyBox)) {
                     object.visible = false
                 }
             }
